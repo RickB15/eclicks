@@ -1,0 +1,77 @@
+:root {
+  --vcal-bg-color: #{$background};
+  --vcal-border-radius: #{$border-radius};
+  --vcal-border-color: #{$border-color};
+  --vcal-today-bg-color: #{theme-color('primary')};
+  --vcal-today-color: #{$white};
+  --vcal-selected-bg-color: #{gray('300')};
+  --vcal-selected-color: #{$white};
+}
+
+#v-cal {
+    padding: 2.5rem;
+    padding-top: 1rem;
+    background-color: transparent !important;
+}
+
+.vcal {
+    &-header {
+        background-color: var(--vcal-today-bg-color) !important;
+        padding: .5rem !important;
+        color: var(--vcal-today-color) !important;        
+        border: 1px solid var(--vcal-border-color) !important;
+        border-bottom: 0 !important;
+        border-radius: var(--vcal-border-radius) var(--vcal-border-radius) 0 0 !important;
+    }
+    &-btn {
+        color: $white;
+        border-radius: var(--vcal-border-radius);
+        &:active {
+            box-shadow: 0 0 2px 1px rgba(theme-color('primary'), .1);
+        }
+        & svg {
+            fill: var(--vcal-today-color) !important;
+            &:hover,
+            &:focus {
+                fill: var(--vcal-selected-bg-color) !important;
+            }
+            &:active {
+                fill: var(--vcal-border-color) !important;
+            }
+        }
+    }
+    &-week {
+        background-color: rgba(theme-color('primary'), .5) !important;
+        color: var(--vcal-today-color) !important;
+        border-left: 1px solid var(--vcal-border-color) !important;
+        border-right: 1px solid var(--vcal-border-color) !important;
+        & .day {
+            flex: 0 0 14.28571428% !important;
+            font-size: .9rem !important;
+            max-width: 14.28571428% !important;
+            padding: 0.6rem 0.8rem !important;
+            font-weight: normal !important;
+        }
+    }
+    &-body {
+        background-color: var(--vcal-bg-color) !important;
+        border: 1px solid var(--vcal-border-color) !important;
+        border-top: 0 !important;
+        border-radius: 0 0 var(--vcal-border-radius) var(--vcal-border-radius) !important;
+    }
+    &-date {
+        background-color: $white;
+        flex: 0 0 14.28571428% !important;
+        max-width: 14.28571428% !important;
+        padding: .8rem !important;
+        &--today {
+            background-color: rgba(theme-color('primary'), .5) !important;
+        }
+        &--active:not(.vcal-date--selected):hover {
+            background-color: gray('200') !important;
+        }
+        &--selected {
+            background-color: var(--vcal-selected-bg-color) !important;
+        }
+    }
+}

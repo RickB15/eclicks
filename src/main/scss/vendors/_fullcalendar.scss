@@ -1,0 +1,62 @@
+.fc {
+    border-radius: $border_radius;
+    &-toolbar {
+        background-color: gray('600');
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        color: $white;
+        padding: .5rem;
+        font-size: .9rem;
+    }
+    &-view-container {
+        background-color: $white;
+    }
+    &-head {
+        background-color: gray('400');
+        color: $white;
+        font-size: .8rem;
+    }
+    &-day {
+        &-grid {
+            font-weight: bold;
+            background-color: gray('200');
+        }
+        &-group {
+            background-color: theme-color('secondary') !important;
+        }
+    }
+    &-timeGrid-view .fc-day-grid .fc-row {
+        min-height: 1.5rem;
+    }
+    &-time-grid .fc-slats td {
+        height: .8rem;
+    }
+    &-axis {
+        background-color: gray('200');
+        font-size: .8rem;
+        width: 3rem !important;
+        min-width: 3rem;
+        max-width: 3rem;
+    }
+    &-disabled-day {
+        background-color: gray('200');
+        opacity: .5;
+    }
+    &-event {
+        background-color: theme-color('primary');
+        &:hover {
+            cursor: pointer !important;
+        }
+    }
+}
+
+#schedular {
+    & .fc-today {
+        background-color: inherit !important;
+    }
+    &-specific {
+        & .fc-today {
+            background-color: rgba(theme-color('secondary'), .3);
+        }
+    }
+}

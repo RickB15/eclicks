@@ -1,0 +1,216 @@
+@mixin animation($x...) {
+	-webkit-animation: $x;
+			animation: $x;
+}
+
+@mixin appearance($x...) {
+	-webkit-appearance: $x;
+	   -moz-appearance: $x;
+			appearance: $x;
+}
+
+@mixin background-clip($x...) {
+	-webkit-background-clip: $x;
+			background-clip: $x;
+}
+
+@mixin box-reflect($x...) {
+	-webkit-box-refelect: $x;
+}
+
+@mixin column-count($x...) {
+	-webkit-column-count: $x;
+	   -moz-column-count: $x;
+}
+
+@mixin column-gap($x...) {
+	-webkit-column-gap: $x;
+	   -moz-column-gap: $x;
+}
+
+@mixin column-rule($x...) {
+	-webkit-column-rule: $x;
+	   -moz-column-rule: $x;
+}
+
+@mixin filter($filter_name, $x...) {
+	-webkit-filter: $filter_name($x);
+			filter: $filter_name($x);
+}
+
+/* For navbar and sidenav */
+@mixin flex-bar($x...) {
+	-webkit-box-flex: 1;
+	flex: 1;
+}
+
+@mixin flow-form($x...) {
+	-webkit-flow-form: $x;
+	    -ms-flow-form: $x;
+}
+
+@mixin flow-into($x...) {
+	-webkit-flow-into: $x;
+	    -ms-flow-into: $x;
+}
+
+@mixin font-feature-settings-liga-dlig($x...) {
+	-webkit-font-feature-settings: "liga" off, "dlig";
+	        	font-feature-settings: "liga", "dlig";
+}
+
+@mixin gradient($x...) {
+	-webkit-background-image: gradient($x);
+	   -moz-background-image: gradient($x);
+		-ms-background-image: gradient($x);
+		 -o-background-image: gradient($x);
+			background-image: gradient($x);
+}
+
+@mixin grid($x...) {
+	display: -ms-grid;
+  	display:     grid;
+}
+
+@mixin hyphens($x...) {
+	-webkit-hyphens: auto;
+    	-ms-hyphens: auto;
+    		hyphens: auto;
+}
+
+@mixin keyframes($name) {
+	@-webkit-keyframes #{$name}
+	{ 
+		@content; 
+	}
+	@keyframes #{$name}
+	{ 
+		@content; 
+	}
+}
+
+@mixin linear-gradient($x...) {
+	-webkit-background-image: linear-gradient($x);
+	   -moz-background-image: linear-gradient($x);
+		-ms-background-image: linear-gradient($x);
+		 -o-background-image: linear-gradient($x);
+			background-image: linear-gradient($x);
+}
+
+@mixin mask-image($x...) {
+	-webkit-mask-image: url($x);
+}
+
+@mixin object-fit($x...) {
+	-o-object-fit: $x;
+	   object-fit: $x;
+}
+
+@mixin text-decoration($x...) {
+	-webkit-text-decoration: $x;
+			text-decoration: $x;
+}
+@mixin text-decoration-line($x...) {
+	-webkit-text-decoration-line: $x;
+			text-decoration-line: $x;
+}
+@mixin text-decoration-color($x...) {
+	-webkit-text-decoration-color: $x;
+			text-decoration-color: $x;
+}
+@mixin text-decoration-style($x...) {
+	-webkit-text-decoration-style: $x;
+			text-decoration-style: $x;
+}
+
+@mixin text-size-adjust($x...) {
+	-webkit-text-size-adjust: $x;
+	   -moz-text-size-adjust: $x;
+		-ms-text-size-adjust: $x;
+		 -o-text-size-adjust: $x;
+			text-size-adjust: $x;
+}
+
+// Transform options
+@mixin transform($transform) {
+	-webkit-transform: $transform;	
+	        transform: $transform;
+}
+@mixin matrix($n...) {
+	@include transform(matrix($n));
+}
+@mixin matrix3d($n...) {
+	@include transform(matrix3d($n));
+}
+@mixin translate($x,$y) {
+	@include transform(translate($x,$y));
+}
+@mixin translate3d($x,$y,$z) {
+	@include transform(translate3d($x,$y,$z));
+}
+@mixin translateX($x) {
+	@include transform(translateX($x));
+}
+@mixin translateY($y) {
+	@include transform(translateY($y));
+}
+@mixin translateZ($z) {
+	@include transform(translateZ($z));
+}
+@mixin scale($x,$y) {
+	@include transform(scale($x,$y));
+}
+@mixin scale3d($x,$y,$z) {
+	@include transform(scale3d($x,$y,$z));
+}
+@mixin scaleX($x) {
+	@include transform(scaleX($x));
+}
+@mixin scaleY($y) {
+	@include transform(scaleY($y));
+}
+@mixin scaleZ($z) {
+	@include transform(scaleZ($z));
+}
+@mixin rotate($angle) {
+	@include transform(rotate($angle));
+}
+@mixin rotate3d($x,$y,$z,$angle) {
+	@include transform(rotate3d($x,$y,$z,$angle));
+}
+@mixin rotateX($angle) {
+	@include transform(rotateX($angle));
+}
+@mixin rotateY($angle) {
+	@include transform(rotateY($angle));
+}
+@mixin skew($x-angle,$y-angle) {
+	@include transform(skew($x-angle,$y-angle));
+}
+@mixin skewX($angle) {
+	@include transform(skewX($angle));
+}
+@mixin skewY($angle) {
+	@include transform(skewY($angle));
+}
+@mixin perspective($n) {
+	@include transform(perspective($n));
+}
+
+@mixin unicode-bidi($x...) {
+	unicode-bidi: -webkit-$x;
+	unicode-bidi: $x;
+}
+
+@mixin user-select($x...) {
+	-webkit-user-select: $x;
+	   -moz-user-select: $x;
+		-ms-user-select: $x;
+		 -o-user-select: $x;
+			user-select: $x;
+}
+
+@mixin word-break($x...) {
+	-ms-word-break: $x;
+		word-break: $x;
+}

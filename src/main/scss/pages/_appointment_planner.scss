@@ -1,0 +1,106 @@
+#target-content {    
+    box-shadow: 1px 0px 7px 3px rgba(0,0,0,.2) inset;
+}
+
+.demo-picker {
+    text-align: center;
+    font-size: .8rem;
+    &__picked {
+        font-style: italic;
+    }
+}
+
+.progress {
+    height: .2rem;
+    background-color: $black;
+    overflow: hidden;
+    width: 100%;
+    &-bar {
+        background-color: theme-color('primary');
+        color: $white;
+        width: 0;
+        &--animation__to-half {
+            -webkit-animation: bar-animation__to-half 1500ms ease forwards;
+            animation: bar-animation__to-half 1500ms ease forwards;
+        }
+        &--animation__to-full {
+            -webkit-animation: bar-animation__to-full 1500ms ease forwards;
+            animation: bar-animation__to-full 1500ms ease forwards;
+        }
+        &--animation__from-full {
+            -webkit-animation: bar-animation__from-full 1500ms ease forwards;
+            animation: bar-animation__from-full 1500ms ease forwards;
+        }
+    }
+}
+
+.carousel {
+    &-nav {
+        min-height: 3rem;
+        position: relative;
+        &:last-child {
+            margin-top: 2rem;
+        }
+    }
+    &-control {
+        &-next,
+        &-prev,
+        &-next .arrow-icon,
+        &-prev .arrow-icon {
+            opacity: 1;
+            transition: 
+                fill 300ms ease,
+                color 300ms ease;
+        }
+        &-next {
+            padding: 0;
+            & .arrow-icon {
+                fill: $white;
+            }
+        }
+        &-prev {
+            text-align: left;
+            color: $black !important;
+            &:hover {
+                color: $surface !important;
+                & .arrow-icon {
+                    fill: $surface;
+                }
+            }
+            & .arrow-icon {
+                fill: $black;
+            }
+        }
+    }
+}
+
+.info-list-item {
+    position: absolute;
+    top: .25rem;
+    right: .25rem;
+}
+
+@keyframes bar-animation__to-half {
+    from {
+        width: 0;
+    }
+    to {
+        width: 50%;
+    }
+}
+@keyframes bar-animation__to-full {
+    from {
+        width: 50%;
+    }
+    to {
+        width: 100%;
+    }
+}
+@keyframes bar-animation__from-full {
+    from {
+        width: 100%;
+    }
+    to {
+        width: 50%;
+    }
+}

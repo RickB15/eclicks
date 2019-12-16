@@ -1,0 +1,93 @@
+.btn {
+    border-color: $surface !important;
+    transition: border-color 200ms ease-in-out;
+    &:hover {
+        border-color: $border-color !important;
+    }
+    &-primary {
+        background-color: theme-color('primary') !important;
+        border-color: theme-color('primary') !important;
+        color: $white !important;
+        &:hover,
+        &:focus {
+            background-color: lighten(theme-color('primary'), 10%) !important;
+            border-color: theme-color('primary') !important;
+        }
+        &:active {
+            background-color: lighten(theme-color('primary'), 20%) !important;
+            border-color: theme-color('primary') !important;
+        }
+    }
+    &-secondary {
+        background-color: theme-color('secondary') !important;
+        border-color: theme-color('secondary') !important;
+        color: $white !important;
+        &:hover,
+        &:focus {
+            background-color: lighten(theme-color('secondary'), 10%) !important;
+            border-color: theme-color('secondary') !important;
+        }
+        &:active {
+            background-color: lighten(theme-color('secondary'), 20%) !important;
+            border-color: theme-color('secondary') !important;
+        }
+    }
+    &-black {
+        background-color: $black;
+        border-color: $black;
+        color: $white;
+        &:hover,
+        &:focus {
+            background-color: lighten($black, 10%);
+            border-color: $black;
+        }
+        &:active {
+            background-color: lighten($black, 20%);
+            border-color: $black;
+        }
+    }
+    &-add {
+        margin: auto;
+    }
+    &-social {
+        padding: .3rem 1rem;
+        min-width: 9rem;
+        color: $white;
+        text-align: left;
+        &:hover {
+            opacity: .7;
+            color: $white;
+        }
+        &__icon {
+            color: $white !important;
+            margin-right: 1rem;
+            & > svg {
+                vertical-align: middle;
+            }
+        }
+        &-facebook {
+            background-color: rgba(66,103,178, 1);
+        }
+        &-windows {
+            background-color: rgba(#006FC1, 1);
+        }
+    }
+    &-outline-dark {
+        border: 1px solid $black;
+        &:hover {
+            background-color: $black;
+            color: $white;
+        }
+    }
+    &-focused {
+        background-color: $black;
+        color: $white;
+    }
+}
+
+.alert-link {
+    &:hover,
+    &:focus {
+        color: theme-color('primary') !important;
+    }
+}

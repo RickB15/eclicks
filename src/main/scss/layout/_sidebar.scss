@@ -1,0 +1,44 @@
+#side-nav {
+    color: $black;
+    width: 100%;
+    .nav {
+        &-link {
+            color: $black;
+            padding: .8rem;
+            text-align: center;
+            &:hover {
+                text-decoration: none;
+                cursor: pointer;                
+                background-color: darken($white, 10%);
+            }
+            &:focus {
+                background-color: darken($white, 10%);
+            }
+            &:focus {
+                box-shadow: none !important;
+            }
+        }
+    }
+    .active {
+        background-color: theme-color('primary');
+        color: $white;
+        &:hover,
+        &:focus {
+            background-color: lighten(theme-color('primary'), 20%);
+        }
+        & .nav-link {
+            &:focus {
+                background-color: lighten(theme-color('primary'), 20%);
+            }
+            &:focus {
+                box-shadow: none !important;
+            }
+        }
+    }
+}
+
+@media all and (min-width: 992px) {
+    #side-nav .nav-link {
+        text-align: left;
+    }
+}

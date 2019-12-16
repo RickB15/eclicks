@@ -1,0 +1,74 @@
+.form {
+    position: relative;
+    & input,
+    & select {
+        border: 1px solid $surface;
+        &:hover {
+            border-color: $border-color;
+        }
+    }
+    & input[type=checkbox],
+    & input[type=ratio],
+    & select {
+        cursor: pointer;
+    }
+    &-login {
+        align-items: center;
+        display: grid;
+        justify-items: center;
+    }
+    &-login,
+    &-register {
+        height: auto;
+        min-height: calc(100vh - 14.1rem);
+        & form {
+            min-width: 40vw;
+            width: auto;     
+            padding: 4rem;
+            background-color: $white;
+            align-items: center;
+            display: grid;
+            justify-items: center;            
+        }
+        & .form-submit {
+            position: absolute;
+            right: 0;
+        }
+    }
+}
+
+.form-row .success {
+    border: 2px solid theme-color('success');
+}
+
+.i-symbol {
+    margin-right: 1rem;
+    color: $black;
+}
+
+.submit {
+    &:focus {
+        box-shadow: none !important;
+        & .i-background {
+            box-shadow: $focus;
+            border-radius: $rounded;
+        }
+    }
+    &-button {
+        border: none;
+        background-color: transparent;
+        background-image: none;
+        position: relative;
+    }
+    &-icon {
+        cursor: pointer;
+        position: relative;
+        & .i-background {
+            color: theme-color('primary');
+        }
+        & .i-symbol {
+            color: $white;
+            margin: auto;
+        }
+    }
+}

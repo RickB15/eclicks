@@ -1,0 +1,537 @@
+//|
+//| Color system
+//|
+
+// Grays
+$white-base: 	#ffffff !default;
+$white: 		  #fdfefe !default;
+$gray-100: 		#e7e8e8 !default;
+$gray-200: 		#d1d2d2 !default;
+$gray-300: 		#bbbbbb !default;
+$gray-400: 		#a5a5a5 !default;
+$gray-500: 		#8f8f8f !default;
+$gray-600: 		#787979 !default;
+$gray-700: 		#626363 !default;
+$gray-800: 		#4c4c4c !default;
+$gray-900: 		#363636 !default;
+$black: 	   	#202020 !default;
+$black-base: 	#000000 !default;
+$silver: 		  #Bfc9cA !default;
+
+$grays: () !default;
+$grays: map-merge(
+  (
+    "100": $gray-100,
+    "200": $gray-200,
+    "300": $gray-300,
+    "400": $gray-400,
+    "500": $gray-500,
+    "600": $gray-600,
+    "700": $gray-700,
+    "800": $gray-800,
+    "900": $gray-900
+  ),
+  $grays
+);
+
+// Colors
+$red-100:           #fbcdcc !default;
+$red-200:           #f79b99 !default;
+$red-300:           #f26a66 !default;
+$red-400:           #ee3833 !default;
+$red-500:	          #ea0600 !default;
+$red-600:           #bb0500 !default;
+$red-700:           #8c0400 !default;
+$red-800:           #5e0200 !default;
+$red-900:           #2f0100 !default;
+
+$maroon-100:        #edcdcc !default;
+$maroon-200:        #db9b99 !default;
+$maroon-300:        #c86866 !default;
+$maroon-400:        #b63633 !default;
+$maroon-500:        #a40400 !default;
+$maroon-600:        #830300 !default;
+$maroon-700:        #620200 !default;
+$maroon-800:        #420200 !default;
+$maroon-900:        #210100 !default;
+
+$orange-100:        #ffdbcc !default;
+$orange-200:        #ffb899 !default;
+$orange-300:        #ff9466 !default;
+$orange-400:        #ff7133 !default;
+$orange-500:        #ff4d00 !default;
+$orange-600:        #cc3e00 !default;
+$orange-700:        #992e00 !default;
+$orange-800:        #661f00 !default;
+$orange-900:        #330f00 !default;
+
+$yellow-100:        #fff6d1 !default;
+$yellow-200:        #ffeda3 !default;
+$yellow-300:        #ffe476 !default;
+$yellow-400:        #ffdb48 !default;
+$yellow-500:        #ffd21a !default;
+$yellow-600:        #cca815 !default;
+$yellow-700:        #997e10 !default;
+$yellow-800:        #66540a !default;
+$yellow-900:        #332a05 !default;
+
+$olive-100:         #e1e4d8 !default;
+$olive-200:         #c2c8b1 !default;
+$olive-300:         #a4ad8b !default;
+$olive-400:         #859164 !default;
+$olive-500:         #67763d !default;
+$olive-600:         #525e31 !default;
+$olive-700:         #3e4725 !default;
+$olive-800:         #292f18 !default;
+$olive-900:         #15180c !default;
+
+$lime-100:          #d5ff76 !default;
+$lime-200:          #d5ff76 !default;
+$lime-300:          #d5ff76 !default;
+$lime-400:          #c7ff48 !default;
+$lime-500:          #b9ff1a !default;
+$lime-600:          #94cc15 !default;
+$lime-700:          #6f9910 !default;
+$lime-800:          #4a660a !default;
+$lime-900:          #253305 !default;
+
+$green-100:         #ccf0d6 !default;
+$green-200:         #99e1ad !default;
+$green-300:         #66d185 !default;
+$green-400:         #33c25c !default;
+$green-500:         #00b333 !default;
+$green-600:         #008f29 !default;
+$green-700:         #006b1f !default;
+$green-800:         #004814 !default;
+$green-900:         #00240a !default;
+
+$cyan-100:          #d2fff3 !default;
+$cyan-200:          #a5ffe7 !default;
+$cyan-300:          #77ffdc !default;
+$cyan-400:          #4affd0 !default;
+$cyan-500:          #1dffc4 !default;
+$cyan-600:          #17cc9d !default;
+$cyan-700:          #119976 !default;
+$cyan-800:          #0c664e !default;
+$cyan-900:          #063327 !default;
+
+$teal-100:          #d8e4e1 !default;
+$teal-200:          #b1c8c3 !default;
+$teal-300:          #8bada5 !default;
+$teal-400:          #649187 !default;
+$teal-500:          #3d7669 !default;
+$teal-600:          #315e54 !default;
+$teal-700:          #25473f !default;
+$teal-800:          #182f2a !default;
+$teal-900:          #0c1815 !default;
+
+$aqua-100:          #d2f4ff !default;
+$aqua-200:          #a5e9ff !default;
+$aqua-300:          #77dfff !default;
+$aqua-400:          #4ad4ff !default;
+$aqua-500:          #1dc9ff !default;
+$aqua-600:          #17a1cc !default;
+$aqua-700:          #117999 !default;
+$aqua-800:          #0c5066 !default;
+$aqua-900:          #062833 !default;
+
+$blue-100:          #d2deff !default;
+$blue-200:          #a5bcff !default;
+$blue-300:          #779bff !default;
+$blue-400:          #4a79ff !default;
+$blue-500:          #1d58ff !default;
+$blue-600:          #1746cc !default;
+$blue-700:          #113599 !default;
+$blue-800:          #0c2366 !default;
+$blue-900:          #061233 !default;
+
+$navy-100:          #d2d6e4 !default;
+$navy-200:          #a4adc9 !default;
+$navy-300:          #7783ad !default;
+$navy-400:          #495a92 !default;
+$navy-500:          #1c3177 !default;
+$navy-600:          #16275f !default;
+$navy-700:          #111d47 !default;
+$navy-800:          #0b1430 !default;
+$navy-900:          #060a18 !default;
+
+$pink-100:          #ffe8f3 !default;
+$pink-200:          #ffd1e7 !default;
+$pink-300:          #febbda !default;
+$pink-400:          #fea4ce !default;
+$pink-500:          #fe8dc2 !default;
+$pink-600:          #cb719b !default;
+$pink-700:          #985574 !default;
+$pink-800:          #66384e !default;
+$pink-900:          #331c27 !default;
+
+$fuchsia-100:       #ffd2f4 !default;
+$fuchsia-200:       #ffa5e9 !default;
+$fuchsia-300:       #ff77df !default;
+$fuchsia-400:       #ff4ad4 !default;
+$fuchsia-500:       #ff1dc9 !default;
+$fuchsia-600:       #cc17a1 !default;
+$fuchsia-700:       #991179 !default;
+$fuchsia-800:       #660c50 !default;
+$fuchsia-900:       #330628 !default;
+
+$purple-100:        #f3d2ff !default;
+$purple-200:        #e7a5ff !default;
+$purple-300:        #dc77ff !default;
+$purple-400:        #d04aff !default;
+$purple-500:        #c41dff !default;
+$purple-600:        #9d17cc !default;
+$purple-700:        #761199 !default;
+$purple-800:        #4e0c66 !default;
+$purple-900:        #270633 !default;
+
+//red
+$reds: () !default;
+$reds: map-merge(
+  (
+    "100": $red-100,
+    "200": $red-200,
+    "300": $red-300,
+    "400": $red-400,
+    "500": $red-500,
+    "600": $red-600,
+    "700": $red-700,
+    "800": $red-800,
+    "900": $red-900,
+  ),
+  $reds
+);
+
+//maroon
+$maroons: () !default;
+$maroons: map-merge(
+  (
+    "100": $maroon-100,
+    "200": $maroon-200,
+    "300": $maroon-300,
+    "400": $maroon-400,
+    "500": $maroon-500,
+    "600": $maroon-600,
+    "700": $maroon-700,
+    "800": $maroon-800,
+    "900": $maroon-900,
+  ),
+  $maroons
+);
+
+//orange
+$oranges: () !default;
+$oranges: map-merge(
+  (
+    "100": $orange-100,
+    "200": $orange-200,
+    "300": $orange-300,
+    "400": $orange-400,
+    "500": $orange-500,
+    "600": $orange-600,
+    "700": $orange-700,
+    "800": $orange-800,
+    "900": $orange-900,
+  ),
+  $oranges
+);
+
+//yellow
+$yellows: () !default;
+$yellows: map-merge(
+  (
+    "100": $yellow-100,
+    "200": $yellow-200,
+    "300": $yellow-300,
+    "400": $yellow-400,
+    "500": $yellow-500,
+    "600": $yellow-600,
+    "700": $yellow-700,
+    "800": $yellow-800,
+    "900": $yellow-900,
+  ),
+  $yellows
+);
+
+//olive
+$olives: () !default;
+$olives: map-merge(
+  (
+    "100": $olive-100,
+    "200": $olive-200,
+    "300": $olive-300,
+    "400": $olive-400,
+    "500": $olive-500,
+    "600": $olive-600,
+    "700": $olive-700,
+    "800": $olive-800,
+    "900": $olive-900,
+  ),
+  $olives
+);
+
+//lime
+$limes: () !default;
+$limes: map-merge(
+  (
+    "100": $lime-100,
+    "200": $lime-200,
+    "300": $lime-300,
+    "400": $lime-400,
+    "500": $lime-500,
+    "600": $lime-600,
+    "700": $lime-700,
+    "800": $lime-800,
+    "900": $lime-900,
+  ),
+  $limes
+);
+
+//green
+$greens: () !default;
+$greens: map-merge(
+  (
+    "100": $green-100,
+    "200": $green-200,
+    "300": $green-300,
+    "400": $green-400,
+    "500": $green-500,
+    "600": $green-600,
+    "700": $green-700,
+    "800": $green-800,
+    "900": $green-900,
+  ),
+  $greens
+);
+
+//cyan
+$cyans: () !default;
+$cyans: map-merge(
+  (
+    "100": $cyan-100,
+    "200": $cyan-200,
+    "300": $cyan-300,
+    "400": $cyan-400,
+    "500": $cyan-500,
+    "600": $cyan-600,
+    "700": $cyan-700,
+    "800": $cyan-800,
+    "900": $cyan-900,
+  ),
+  $cyans
+);
+
+//teal
+$teals: () !default;
+$teals: map-merge(
+  (
+    "100": $teal-100,
+    "200": $teal-200,
+    "300": $teal-300,
+    "400": $teal-400,
+    "500": $teal-500,
+    "600": $teal-600,
+    "700": $teal-700,
+    "800": $teal-800,
+    "900": $teal-900,
+  ),
+  $teals
+);
+
+//aqua
+$aquas: () !default;
+$aquas: map-merge(
+  (
+    "100": $aqua-100,
+    "200": $aqua-200,
+    "300": $aqua-300,
+    "400": $aqua-400,
+    "500": $aqua-500,
+    "600": $aqua-600,
+    "700": $aqua-700,
+    "800": $aqua-800,
+    "900": $aqua-900,
+  ),
+  $aquas
+);
+
+//blue
+$blues: () !default;
+$blues: map-merge(
+  (
+    "100": $blue-100,
+    "200": $blue-200,
+    "300": $blue-300,
+    "400": $blue-400,
+    "500": $blue-500,
+    "600": $blue-600,
+    "700": $blue-700,
+    "800": $blue-800,
+    "900": $blue-900,
+  ),
+  $blues
+);
+
+//navy
+$navys: () !default;
+$navys: map-merge(
+  (
+    "100": $navy-100,
+    "200": $navy-200,
+    "300": $navy-300,
+    "400": $navy-400,
+    "500": $navy-500,
+    "600": $navy-600,
+    "700": $navy-700,
+    "800": $navy-800,
+    "900": $navy-900,
+  ),
+  $navys
+);
+
+//pink
+$pinks: () !default;
+$pinks: map-merge(
+  (
+    "100": $pink-100,
+    "200": $pink-200,
+    "300": $pink-300,
+    "400": $pink-400,
+    "500": $pink-500,
+    "600": $pink-600,
+    "700": $pink-700,
+    "800": $pink-800,
+    "900": $pink-900,
+  ),
+  $pinks
+);
+
+//fuchsia
+$fuchsias: () !default;
+$fuchsias: map-merge(
+  (
+    "100": $fuchsia-100,
+    "200": $fuchsia-200,
+    "300": $fuchsia-300,
+    "400": $fuchsia-400,
+    "500": $fuchsia-500,
+    "600": $fuchsia-600,
+    "700": $fuchsia-700,
+    "800": $fuchsia-800,
+    "900": $fuchsia-900,
+  ),
+  $fuchsias
+);
+
+//purple
+$purples: () !default;
+$purples: map-merge(
+  (
+    "100": $purple-100,
+    "200": $purple-200,
+    "300": $purple-300,
+    "400": $purple-400,
+    "500": $purple-500,
+    "600": $purple-600,
+    "700": $purple-700,
+    "800": $purple-800,
+    "900": $purple-900,
+  ),
+  $purples
+);
+
+$colors: () !default;
+$colors: map-merge(
+  (
+    "red":        $red-500,
+    "maroon":     $maroon-500,
+    "orange":     $orange-500,
+    "yellow":     $yellow-500,
+    "olive":      $olive-500,
+    "lime":       $lime-500,
+    "green":      $green-500,
+    "cyan":       $cyan-500,
+    "teal":       $teal-500,
+    "aqua":       $aqua-500,
+    "blue":       $blue-500,
+    "navy":       $navy-500,
+    "pink":       $pink-500,
+    "fuchsia":    $fuchsia-500,
+    "purple":     $purple-500,
+    "gray":       $gray-600,
+    "gray-dark":  $gray-900
+  ),
+  $colors
+);
+
+// Background colors
+$red-bg: 		  #ee3833 !default;
+$maroon-bg: 	#b63633 !default;
+$orange-bg: 	#ff7133 !default;
+$yellow-bg: 	#ffdc4d !default;
+$olive-bg: 		#899568 !default;
+$lime-bg: 		#ceff5f !default;
+$green-bg: 		#4dca70 !default;
+$cyan-bg: 		#77ffdc !default;
+$teal-bg:     #779f96 !default;
+$aqua-bg: 		#77dfff !default;
+$blue-bg: 		#618aff !default;
+$navy-bg: 		#606fa0 !default;
+$pink-bg: 		#feafd4 !default;
+$fuchsia-bg: 	#ff77df !default;
+$purple-bg: 	#d661ff !default;
+
+$colors-bg: () !default;
+$colors-bg: map-merge(
+  (
+    "red":      $red-bg,
+    "maroon":   $maroon-bg,
+    "orange":   $orange-bg,
+    "yellow":   $yellow-bg,
+    "olive":    $olive-bg,
+    "lime":     $lime-bg,
+    "green":    $green-bg,
+    "cyan":     $cyan-bg,
+    "teal":     $teal-bg,
+    "aqua":     $aqua-bg,
+    "blue":     $blue-bg,
+    "navy":     $navy-bg,
+    "pink":     $pink-bg,
+    "fuchsia":  $fuchsia-bg,
+    "purple":   $purple-bg
+  ),
+  $colors-bg
+);
+
+// Theme colors
+$primary: rgba(0,179,227,1);
+$primary-variant: rgba(0,179,227,.8);
+$secondary: rgba(215,106,1,1);
+$secondary-variant: rgba(215,106,1,.8);
+$success: $green-500;
+$info: $aqua-500;
+$warning: $yellow-500;
+$error: $red-500;
+$light: $white;
+$dark: $black;
+$background: $gray-100;
+$surface: $gray-200;
+
+$theme-colors: () !default;
+$theme-colors: map-merge(
+  (
+    "primary":            $primary,
+    "primary-variant":    $primary-variant,
+    "secondary":          $secondary,
+    "secondary-variant":  $secondary-variant,
+    "success":            $success,
+    "info":               $info,
+    "warning":            $warning,
+    "error":              $error,
+    "light":              $light,
+    "dark":               $dark,
+    "background":         $background,
+    "surface":            $surface,
+  ),
+  $theme-colors
+);

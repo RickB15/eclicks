@@ -1,0 +1,1198 @@
+/*!
+ * Stencil standard tags v0.0.1
+. */
+
+/* The <a> tag defines a hyperlink, which is used to link
+from one page to another. */
+a {
+	color: $link-color;
+	cursor: $cursor;
+	outline: none;
+	transition: 
+		color 200ms ease-in-out,
+		transform 250ms ease;
+	&:not([href]) {
+		color: $text-color;
+	}
+	&:not([href]):hover,
+	&:not([href]):focus,
+	&:not([href]):active,
+	&:not([href]):hover:active,
+	&:not([href]):focus:active	{
+		color: $text-color;
+		cursor: $cursor-not-allowed;
+		@include text-decoration($link-hover-decoration);
+	}
+	&:link,
+	&:visited {
+		@include text-decoration($link-decoration);
+	}
+	&:hover,
+	&:hover:focus,
+	&:link:hover,
+	&:link:hover:focus,
+	&:visited:hover,
+	&:visited:hover:focus,
+	&:focus,
+	&:link:focus {
+		color: darken($link-color, 10%);
+		cursor: $cursor-hover;
+		@include text-decoration($link-hover-decoration);
+	}
+	&:focus,
+	&:link:focus,
+	&:visited:focus {
+		outline: $link-outline;
+		outline-offset: -2px;
+	}
+	&:visited,
+	&:visited:focus {
+		color: darken($link-color, 20%);
+	}
+	&:active,
+	&:hover:active,
+	&:focus:active,
+	&:hover:focus:active,
+	&:link:active,
+	&:link:hover:active,
+	&:link:hover:focus:active,
+	&:visited:active,
+	&:visited:hover:active,
+	&:visited:hover:focus:active {
+		color: lighten($link-color, 20%);
+		transition: none;
+	}
+	&[href^="#"]::after,
+	&[href^="javascript:"]::after {
+		content: "";
+	}
+}
+
+/* The <abbr> tag defines an abbreviation or an acronym, like "Mr.", "Dec.",
+"ASAP", "ATM". */
+abbr[title] {
+	border-bottom: none;
+	@include text-decoration(dotted);
+	@include text-decoration(underline dotted);
+	cursor: help;
+}
+
+/* The <address> tag defines the contact information for the author/owner
+of a document or an article. */
+address {
+	color: $text-color;
+	display: block;
+	font-style: italic;
+	user-select: all;
+}
+
+/* The <area> tag defines an area inside an image-map
+(an image-map is an image with clickable areas). Use the <map> tag for this. */
+area {
+	display: none;
+}
+
+/* The <article> tag specifies independent, self-contained content. */
+article {
+	display: block;
+	position: relative;
+}
+
+/* The <aside> tag defines some content aside
+from the content it is placed in. */
+aside {
+	display: block;
+	z-index: 1;
+}
+
+/* The <audio> tag defines sound, such as music or other audio streams. */
+audio {
+	display: inline-block;
+	vertical-align: baseline;
+}
+
+/* The <b> tag specifies bold text. */
+b {
+	font-weight: $font-weight-bolder;
+}
+
+/* The <base> tag specifies the base URL/target for all relative 
+URLs in a document. */
+base {
+
+}
+
+/* The <bdi> tag isolate text from the surrounding text-direction 
+settings. */
+bdi {
+	@include unicode-bidi(isolate);
+}
+
+/* The <bdo> tag is used to override the current text direction. */
+bdo {
+	@include unicode-bidi(bidi-override);
+}
+
+/* The <blockquote> tag specifies a section that is quoted
+from another source. */
+blockquote {
+	display: block;
+	margin: 0 0 20px;
+	padding: 1em 40px;
+	font-size: $blockquote-font-size;
+}
+
+/* The <body> tag defines the document's body. */
+body {
+	background-color: $body-bg;
+	color: $body-color;
+	display: block;
+	font-family: $font-family-sans-serif;
+	height: auto;
+	left: 0;
+	line-height: $line-height-base;
+	margin: 0;
+	min-height: 100vh;
+	overflow-x: hidden;
+	padding: 0;
+	position: relative;
+	top: 0;
+	width: auto;
+	font-size: $font-size-base;
+	&:focus {
+		outline: none;
+	}
+}
+
+/* The <br> tag inserts a single line break. */
+br {
+
+}
+
+/* The <button> tag defines a clickable button. */
+button {
+	background-color: $color-bg;
+	border: $border-width $border-style rgba($border-color, .6);
+	cursor: $cursor;
+	display: inline-block;
+	font-family: inherit;
+	font-weight: $font-weight-base;
+	font: inherit;
+	line-height: $line-height-base;
+	margin: 0;
+	overflow: visible;
+	padding: 2px 7px;
+	text-align: center;
+	text-transform: none;
+	vertical-align: middle;
+	white-space: nowrap;
+	@include appearance(button);
+	// @include linear-gradient($white, gray("400"));
+	@include user-select(none);
+	&:hover:not([disabled]),
+	&:focus:not([disabled]) {
+		cursor: $cursor-hover;
+		outline: 0;
+		border-color: $border-color;
+		@include text-decoration($text-decoration);
+	}
+	// &:hover:active:not([disabled]),
+	// &:focus:active:not([disabled]) {		
+	// 	@include linear-gradient(gray("400"), $white);
+	// }
+	&[disabled] {
+		cursor: $cursor-not-allowed;
+		&:hover,
+		&:focus {
+			background-color: gray("400");
+		}
+	}
+	&[type="button"],
+	&[type="reset"],
+	&[type="submit"] {
+		-webkit-appearance: button;
+	}
+	&::-moz-focus-inner,
+	[type="button"]::-moz-focus-inner,
+	[type="reset"]::-moz-focus-inner,
+	[type="submit"]::-moz-focus-inner {
+		border-style: none;
+		padding: 0;
+	}
+	&:-moz-focusring,
+	[type="button"]:-moz-focusring,
+	[type="reset"]:-moz-focusring,
+	[type="submit"]:-moz-focusring {
+		outline: 1px dotted gray("400");
+	}
+}
+
+/* The <canvas> tag is used to draw graphics, on the fly, via scripting
+(usually JavaScript). */
+canvas {
+	display: inline-block;
+	vertical-align: baseline;
+}
+
+/* The <caption> tag defines a table caption. */
+caption {
+	color: $text-color;
+	display: table-caption;
+	padding: 8px 0;
+	text-align: center;
+}
+
+/* The <cite> tag defines the title of a work (e.g. a book, a song, a movie,
+a TV show, a painting, a sculpture, etc.). */
+cite {
+	font-style: italic;
+}
+
+/* The <code> tag is a phrase tag. It defines a piece of computer code. */
+code {
+	font-family: $font-family-monospace;
+}
+
+/* The <col> tag specifies column properties for each column
+within a <colgroup> element. */
+col {
+	display: table-column;
+}
+
+/* The <colgroup> tag specifies a group of one or more columns
+in a table for formatting. */
+colgroup {
+	display: table-column-group;
+}
+
+/* The <data> tag links the given content with a machine-readable translation. */
+data {
+
+}
+
+/* The <datalist> tag specifies a list of pre-defined options for an <input> element. */
+datalist {
+	display: none;
+}
+
+/* The <dd> tag is used to describe a term/name in a description list. */
+dd {
+	display: block;
+	line-height: $line-height-base;
+	margin-left: 30px;
+}
+
+/* The <del> tag defines text that has been deleted from a document. */
+del {
+	@include text-decoration(line-through);
+}
+
+/* The <details> tag specifies additional details that the user can view
+or hide on demand. */
+details {
+	display: block;
+}
+
+/* The <dfn> tag represents the defining instance of a term in HTML. */
+dfn {
+	font-style: italic;
+}
+
+/* The <dialog> tag defines a dialog box or window. */
+dialog {
+	border-color: initial;
+	border-image: initial;
+	border-style: solid;
+	border-width: initial;
+    background: $white;
+    color: $black;
+    height: -webkit-fit-content;
+    left: 0;
+    margin: auto;
+    padding: 1em;
+    position: absolute;
+    right: 0;
+    width: -moz-fit-content;
+    width: -webkit-fit-content;
+    &:not([open]) {
+    	display: none;
+    }
+    &::backdrop {    	
+	    background: rgba($black,.1);
+	    bottom: 0;
+	    left: 0;
+	    position: fixed;
+	    right: 0;
+	    top: 0;
+    }
+}
+
+/* The <div> tag defines a division or a section in an HTML document. */
+div {
+	display: block;
+}
+
+/* The <dl> tag defines a description list. */
+dl {
+	display: block;
+	margin: 0 1em;
+}
+
+/* The <dt> tag defines a term/name in a description list. */
+dt {
+	display: block;
+	font-weight: $font-weight-bold;
+}
+
+/* The <em> tag is a phrase tag. It renders as emphasized text. */
+em {
+	font-style: italic;
+}
+
+/* The <embed> tag defines a container for an external application
+or interactive content (a plug-in). */
+embed {
+	border: none;
+	bottom: 0;
+	height: 100%;
+	left: 0;
+	position: relative;
+	top: 0;
+	width: 100%;
+	&:focus {
+		outline: none;
+	}
+}
+
+/* The <fieldset> tag is used to group related elements in a form. */
+fieldset {
+	border: $border-width $border-style $border-color;
+	display: block;
+	margin: 0 2px;
+	padding: 0.35em 0.75em 0.625em;
+	&[disabled] {
+		background-color: gray("200");
+		cursor: $cursor-not-allowed;
+		opacity: .5;
+		pointer-events: none;
+	}
+}
+
+/* The <figcaption> tag defines a caption for a <figure> element. */
+figcaption {
+	display: block;
+}
+
+/* The <figure> tag specifies self-contained content, like illustrations,
+diagrams, photos, code listings, etc. */
+figure {
+	display: block;
+	margin: 1em 40px;
+}
+
+/* The <footer> tag defines a footer for a document or section. */
+footer {
+	bottom: 0;
+	clear: both;
+	color: $text-color;
+	display: block;
+	line-height: $line-height-base;
+	min-height: 1px;
+	position: relative;
+	width: 100%;
+}
+
+/* The HTML <form> element defines a form that is used to collect user input:. */
+form {
+	cursor: $cursor;
+	display: block;
+	margin-top: 0;
+}
+
+/* The <h1> to <h6> tags are used to define HTML headings.
+   <h1> defines the most important heading. <h6> defines the least important heading. */
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	cursor: text;
+	display: block;
+	font-family: inherit;
+	margin: $headings-margin;
+}
+
+/* The <head> element is a container for all the head elements. */
+head {
+	display: none;
+}
+
+/* The <header> element represents a container for introductory content
+or a set of navigational links. */
+header {
+	display: block;
+}
+
+/* The <hr> tag defines a thematic break in an HTML page
+(e.g. a shift of topic). */
+hr {
+	border-color: $hr-border-color;
+	border-style: solid;
+	border-width: $hr-border-width;
+	box-sizing: content-box;
+	color: $color;
+	cursor: $cursor;
+	display: block;
+	height: 0;
+	margin: $hr-margin-y;
+	overflow: visible;
+	&[dotted] {
+		border-style: none none dotted;
+	}
+}
+
+/* The <html> tag defines the root element of the document. */
+html {
+	display: block;
+	font-family: $font-family-sans-serif;
+	height: 100%;
+	line-height: $line-height-component;
+	overflow-x: hidden;
+	scroll-behavior: smooth;
+	@include text-size-adjust(100%);
+	&:focus {
+		outline: none;
+	}
+}
+
+/* The <i> tag defines a part of text in an alternate voice or mood. */
+i {
+	font-style: italic;
+}
+
+/* The <iframe> tag specifies an inline frame. */
+iframe {
+	border-color: initial;
+	border-image: initial;
+	border-style: inset;
+	border-width: 2px;	
+	&:focus {
+		outline: none;
+	}
+	&[seamless] {
+		display: block;
+	}
+}
+
+/* The <img> tag defines an image in an HTML page. */
+img {
+	border-style: none;
+	border: none;
+	display: inline-block;
+	page-break-inside: avoid;
+	vertical-align: middle;
+	&:not([width]) {
+		width: auto;
+		max-width: 100%;
+	}
+	&:not([height]) {
+		height: auto;
+	}
+	&[responsive] {
+		bottom: 0;
+		height: auto;
+		left: 0;
+		max-height: 100%;
+		max-width: 100%;
+		position: relative;
+		right: 0;
+		top: 0;
+		width: auto;
+	}
+}
+
+/* The <input> tag specifies an input field where the user can enter data. */
+input {
+	border-style: inset;
+	border-width: $border-width + .5;
+	box-sizing: border-box;
+	color: $text-color;
+	display: inline-block;
+	font-family: inherit;
+	font: inherit;
+	height: auto;
+	line-height: $line-height-component;
+	overflow: visible;
+	padding: 3px 8px;
+	position: relative;
+	text-align: left;
+	transition: outline 200ms ease-in-out;
+	&:focus {
+		outline: none;
+	}
+	&[disabled] {
+		cursor: $cursor;
+	}
+	&[type="button"],
+	&[type="reset"],
+	&[type="submit"] {
+		background-color: $color-bg;
+		border: $border-width $border-style rgba($border-color, .6);
+		cursor: $cursor;
+		display: inline-block;
+		font-family: inherit;
+		font-weight: $font-weight-base;
+		font: inherit;
+		line-height: $line-height-base;
+		margin: 0;
+		overflow: visible;
+		padding: 2px 7px;
+		text-align: center;
+		text-transform: none;
+		vertical-align: middle;
+		white-space: nowrap;
+		@include appearance(button);
+		@include linear-gradient($white, gray("400"));
+		@include user-select(none);
+		&:hover,
+		&:focus {
+			border-color: $border-color;
+			cursor: $cursor-hover;
+			@include text-decoration($text-decoration);
+		}
+		&:focus:active {
+			background-image: linear-gradient(gray("400"), $white);
+		}
+	}
+	&[type="checkbox"],
+	&[type="radio"] {
+		box-sizing: border-box;
+		line-height: normal;
+		margin: 4px 0 0;
+		padding: 0;
+		&[disabled] {
+			cursor: $cursor-not-allowed;
+		}
+	}
+	&[type="color"] {
+		background-color: transparent;
+		border: none;
+		box-sizing: content-box;
+		color: none;
+		height: 30px;
+		margin: 0;
+		padding: 0;
+	}
+	&[type="file"] {
+		background-color: transparent;
+		border: none;
+		color: $text-color;
+		display: block;
+	}
+	&[type="range"] {
+		display: block;
+	}
+	&[type="search"] {
+		border: $border-width + .7 $border-style $border-color;
+	}
+	&[type="url"] {
+		@include text-decoration(underline);
+	}
+	&[type="date"],
+	&[type="datetime-local"],
+	&[type="month"],
+	&[type="number"],
+	&[type="time"],
+	&[type="week"] {
+		line-height: 1em;
+	}
+	&[type="checkbox"]:focus,
+	&[type="file"]:focus,
+	&[type="radio"]:focus {
+		outline-offset: -2px;
+		outline: 5px auto -webkit-focus-ring-color;
+	}
+}
+
+/* The <ins> tag defines a text that has been inserted into a document. */
+ins {
+	@include text-decoration(underline);
+}
+
+/* The <kbd> tag is a phrase tag. It defines keyboard input. */
+kbd {
+	font-family: $font-family-monospace;
+}
+
+/* The <label> tag defines a label for an <input> element. */
+label {
+	cursor: $cursor;
+	display: inline-block;
+	max-width: 100%;
+}
+
+/* The <legend> tag defines a caption for the <fieldset> element. */ 
+legend {
+	border: none;
+	box-sizing: border-box;
+	color: $text-color;
+	display: table;
+	line-height: inherit;
+	max-width: 100%;
+	padding: 0;
+	white-space: normal;
+}
+
+/* The <li> type attribute specifies the style of the bullet point
+of a list item in a list. */
+li {
+	display: list-item;
+}
+
+/* The <link> tag defines a link between a document and an external resource. */
+link {
+	display: none;
+}
+
+/* The <main> tag specifies the main content of a document. */
+main {
+	display: block;
+}
+
+/* The <map> tag is used to define a client-side image-map.
+An image-map is an image with clickable areas. */
+map {
+	display: underline;
+}
+
+/* The <mark> tag defines marked text. */
+mark {
+	background-color: $mark-bg;
+	color: $text-color;
+	padding: $mark-padding;
+}
+
+/* The <meta> data (information) about data. */
+meta {
+	display: none;
+}
+
+/* The <meter> tag defines a scalar measurement within a known range, 
+or a fractional value. This is also known as a gauge. */
+meter {
+    box-sizing: border-box;
+    display: inline-block;
+    height: 1em;
+    vertical-align: -0.2em;
+    width: 5em;
+    @include appearance(meter);
+    &::-webkit-meter-inner-element {
+	    -webkit-appearance: inherit;
+	    -webkit-user-modify: read-only !important;
+	    box-sizing: inherit;
+	    height: 100%;
+	    width: 100%;
+	}
+    &::-webkit-meter-bar {
+	    -webkit-user-modify: read-only !important;
+	    background: linear-gradient(to bottom, #ddd, #eee 20%, #ccc 45%, #ccc 55%, #ddd);
+	    box-sizing: border-box;
+	    height: 100%;
+	    width: 100%;
+	}
+    &::-webkit-meter-optimum-value {
+	    -webkit-user-modify: read-only !important;
+	    background: linear-gradient(to bottom, #ad7, #cea 20%, #7a3 45%, #7a3 55%, #ad7);
+	    box-sizing: border-box;
+	    height: 100%;
+	}
+    &::-webkit-meter-suboptimum-value {
+	    -webkit-user-modify: read-only !important;
+	    background: linear-gradient(to bottom, #fe7, #ffc 20%, #db3 45%, #db3 55%, #fe7);
+	    box-sizing: border-box;
+	    height: 100%;
+	}
+    &::-webkit-meter-even-less-good-value {
+	    -webkit-user-modify: read-only !important;
+	    background: linear-gradient(to bottom, #f77, #fcc 20%, #d44 45%, #d44 55%, #f77);
+	    box-sizing: border-box;
+	    height: 100%;
+	}
+}
+
+/* The <menu> tag defines a list/menu of commands. */
+menu {
+	display: block;
+	list-style-type: disc;
+	margin: 1em 0;
+	padding-left: 40px;
+}
+
+/* The <nav> tag defines a set of navigation links. */
+nav {
+	border: none;
+	display: block;
+	list-style-type: none;
+	margin-top: 0;
+	min-height: 1px;
+	padding: 0;
+	position: relative;
+	top: 0;
+	width: 100%;
+	z-index: 100;
+}
+
+/* The <noscript> tag defines an alternate content for users that 
+have disabled scripts in their browser or have a browser that 
+doesn't support script. */
+noscript {
+
+}
+
+/* The <object> tag defines an embedded object within an HTML document. Use this element to embed 
+multimedia (like audio, video, Java applets, ActiveX, PDF, and Flash)
+in your web pages. */
+object {
+	&:focus {
+		outline: none;
+	}
+}
+
+/* The <ol> tag defines an ordered list.
+An ordered list can be numerical or alphabetical. */
+ol {
+	display: block;
+	list-style-type: decimal;
+	margin: 1em 0;
+	padding-left: 40px;
+}
+
+/* The <optgroup> is used to group related options in a drop-down list. */
+optgroup {
+	color: $text-color;
+	font-family: inherit;
+	font-weight: $font-weight-bold;
+	font: inherit;
+	line-height: $line-height-component;
+	margin: 0;
+}
+
+/* The <option> tag defines an option in a select list. */
+option {
+	color: $text-color;
+	font: inherit;
+	margin: 0;
+	&[disabled] {
+		color: rgba(127.5,127.5,127.5,.6);
+	}
+}
+
+/* The <output> tag represents the result of a calculation
+(like one performed by a script). */
+output {
+	color: $text-color;
+	display: inline;
+	padding-top: 7px;
+}
+
+/* The <p> tag defines a paragraph. */
+p {
+	color: $text-color;
+	cursor: $cursor-text;
+	display: block;
+	margin: $paragraph-margin;
+	orphans: 3;
+	padding: 0;
+	widows: 3;
+}
+
+
+/* The <param> tag is used to define parameters for plugins embedded
+with an <object> element. */
+param {
+	display: none;
+}
+
+/* The <picture> tag gives web developers more flexibility in 
+specifying image resources. */
+picture {
+
+}
+
+/* The <pre> tag defines preformatted text. */
+pre {
+	color: $text-color;
+	display: block;
+	font-family: $font-family-monospace;
+	line-height: $line-height-base;
+	margin: 0 0 10px;
+	padding: 9.5px;
+	white-space: pre;
+	word-wrap: break-word;
+	@include word-break(break-all);
+}
+
+/* The <progress> tag represents the progress of a task. */
+progress {
+	display: inline-block;
+	vertical-align: baseline;
+}
+
+/* The <q> tag defines a short quotation. */
+q {
+	display: inline;
+	&::before {
+		content: open-quote;
+	}
+	&::after {
+		content: close-quote;
+	}
+	&[athor]::before,
+	&[comment]::before {
+		content: "- ";
+	}
+}
+
+/* The <rp> tag can be used to provide parentheses around a ruby text, 
+to be shown by browsers that do not support ruby annotations. */
+rp {
+	display: none;
+}
+
+/* The <rt> tag defines an explanation or pronunciation of characters
+(for East Asian typography) in a ruby annotation. */
+rt {
+	line-height: normal;
+}
+
+/* The <s> tag specifies text that is no longer correct, accurate or
+relevant. */
+s {
+	color: $text-color;
+	@include text-decoration(line-through);
+}
+
+/* The <samp> tag is a phrase tag. It defines sample output from a computer
+program. */
+samp {
+	font-family: $font-family-monospace;
+}
+
+/* The <script> tag is used to define a client-side script (JavaScript). */
+script {
+	display: none;
+}
+
+/* The <section> tag defines sections in a document, such as chapters, headers,
+footers, or any other sections of the document. */
+section {
+	display: block;
+	position: relative;
+}
+
+/* The <select> element is used to create a drop-down list. */
+select {
+	color: $text-color;
+	font-family: inherit;
+	font: inherit;
+	line-height: $line-height-component;
+	margin: 0;
+	text-transform: none;
+}
+
+/* The <small> tag defines smaller text (and other side comments). */
+small {
+	font-size: $small-font-size;
+}
+
+/* The <source> tag is used to specify multiple media resources for 
+media elements, such as <video>, <audio>, and <picture>. */
+source {
+
+}
+
+/* The <span> tag is used to group inline-elements in a document. */
+span {
+
+}
+
+/* The <strong> tag is a phrase tag. It defines important text. */
+strong {
+	font-weight: $font-weight-bolder;
+}
+
+/* The <style> tag is used to define style information for an HTML document. */
+style {
+	display: none;
+}
+
+/* The <sub> tag defines subscript text. Subscript text appears half a
+character below the normal line, and is sometimes rendered in a smaller font.
+Subscript text can be used for chemical formulas, like H2O. */
+sub {
+	bottom: -0.25em;
+	color: $text-color;
+	line-height: 0;
+	position: relative;
+	vertical-align: baseline;
+}
+
+/* The <summary> tag defines a visible heading for the <details> element.
+The heading can be clicked to view/hide the details. */
+summary {
+	display: list-item;
+}
+
+/* The <sup> tag defines superscript text. Superscript text appears
+half a character above the normal line, and is sometimes rendered in a
+smaller font. Superscript text can be used for footnotes, like WWW[1]. */
+sup {
+	color: $text-color;
+	line-height: 0;
+	position: relative;
+	top: -0.5em;
+	vertical-align: baseline;
+}
+
+/* The <svg> tag defines a container for SVG graphics. */
+svg {
+
+}
+
+/* The <table> tag defines an HTML table. */
+table {
+	background-color: transparent;
+	border-collapse: separate;
+	border-color: $border-color;
+	border-spacing: $border-spacing;
+	display: table;
+}
+
+/* The <tbody> tag is used to group the body content in an HTML table. */
+tbody {
+	border-color: inherit;
+	display: table-row-group;
+	vertical-align: middle;
+}
+
+/* The <td> tag defines a standard cell in an HTML table. */
+td {
+	display: table-cell;
+	vertical-align: inherit;
+}
+
+/* The <template> tag holds its content hidden from the client. */
+template {
+	display: none;
+}
+
+/* The <textarea> tag defines a multi-line text input control. */
+textarea {
+	border-radius: $border-radius;
+	border-style: inset;
+	border-width: $border-width;
+	box-sizing: border-box;
+	color: $text-color;
+	display: inline-block;
+	font-family: inherit;
+	font: inherit;
+	height: auto;
+	line-height: $line-height-component;
+	margin: 3px 0;
+	overflow: auto;
+	padding: 3px 8px;
+	position: relative;
+	text-align: left;
+	transition: outline 200ms ease-in-out;
+	&:focus {
+		outline: none;
+	}
+}
+
+/* The <tfoot> tag is used to group footer content in an HTML table. */
+tfoot {
+	border-color: inherit;
+	display: table-footer-group;
+	vertical-align: middle;
+}
+
+/* The <th> tag defines a header cell in an HTML table. */
+th {
+	color: $text-color;
+	display: table-cell;
+	font-weight: $font-weight-bold;
+	padding: 0;
+	text-align: center;
+	vertical-align: inherit;
+}
+
+/* The <thead> tag is used to group header content in an HTML table. */
+thead {
+	border-color: inherit;
+	display: table-header-group;
+	vertical-align: middle;
+}
+
+/* The <time> tag defines a multi-line text input control. */
+time {
+
+}
+
+/* The <title> tag is required in all HTML documents and it defines
+the title of the document. */
+title {
+	display: none;
+}
+
+/* The <tr> tag defines a row in an HTML table. */
+tr {
+	border-color: inherit;
+	display: table-row;
+	page-break-inside: avoid;
+	vertical-align: inherit;
+}
+
+/* The <track> tag specifies text tracks for media elements (<audio> and <video>). */
+track {
+
+}
+
+/* The <u> tag represents some text that should be stylistically different from
+normal text, such as misspelled words or proper nouns in Chinese. */
+u {
+	color: $text-color;
+	@include text-decoration(underline);
+}
+
+/* The <ul> tag defines an unordered (bulleted) list. */
+ul {
+	display: block;
+	list-style-type: disc;
+}
+
+/* The <var> tag is a phrase tag. It defines a variable. */
+var {
+	color: $text-color;
+	font-style: italic;
+}
+
+/* The <video> tag specifies video, such as a movie clip or other video streams. */
+video {
+	border: none;
+	display: inline-block;
+	height: auto;
+	max-width: 100%;
+	vertical-align: baseline;
+	width: auto;
+	&[responsive] {
+		bottom: 0;
+		height: auto;
+		left: 0;
+		max-height: 100%;
+		max-width: 100%;
+		position: relative;
+		right: 0;
+		top: 0;
+		width: auto;
+	}
+}
+
+/* The <wbr> (Word Break Opportunity) tag specifies where in a text it would 
+be ok to add a line-break. */
+wbr {
+
+}
+
+/* normalize futures. */
+[hidden],
+.hidden {
+	display: none !important;
+}
+[exposed],
+.exposed {
+	display: block !important;
+}
+[invisible],
+.invisible {
+	visibility: hidden;
+}
+[visible],
+.visible {
+	visibility: visible;
+}
+[type="checkbox"],
+[type="radio"] {
+	box-sizing: border-box;
+	padding: 0;
+}
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+	height: auto;
+}
+[type="search"] {
+	-webkit-appearance: textfield;
+	outline-offset: -2px;
+}
+[type="search"]::-webkit-search-decoration {
+	-webkit-appearance: none;
+}
+::-webkit-file-upload-button {
+	-webkit-appearance: button;
+	font: inherit;
+}
+
+/* The * tag is for all tags. */
+* {
+	box-sizing: border-box;
+	&:focus {
+		outline: none !important;
+		box-shadow:	$focus;
+	}
+	&::-moz-focus-inner {
+		outline: none;
+	}
+	&::before,
+	&::after {
+		box-sizing: border-box;
+	}
+	& [float="left"],
+	& .pull-left {
+		float: left;
+	}
+	& [float="right"],
+	& .pull-right {
+		float: right;
+	}
+	& [float="none"] {
+		float: unset;
+	}
+	& [text="center"],
+	& .text-center {
+		text-align: center;
+	}
+	& [text="justify"],
+	& .text-justify {
+		text-align: justify;
+	}
+	& [text="left"],
+	& .text-left {
+		text-align: left;
+	}
+	& [text="right"],
+	& .text-right {
+		text-align: right;
+	}
+	& .right {
+		right: 0;
+	}
+	& .left {
+		left: 0;
+	}
+}

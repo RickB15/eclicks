@@ -1,0 +1,142 @@
+.full-screen {
+	height: 100vh;
+	width: 100vw;
+
+}
+/* horizontal middle */
+.h-m {
+	position: absolute !important;
+	top: 50%;
+	@include translateY(-50%);
+	&.xy {
+		@include translate(50%, -50%);
+	}
+}
+/* horizontal middle of screen */
+.h-ms {
+	position: absolute !important;
+	top: 50vh;
+	@include translateY(-50%);
+	&.xy {
+		@include translate(50%, -50%);
+	}
+}
+
+/* vertical middle */
+.v-m {
+	left: 50%;
+	position: absolute !important;
+	@include translateX(-50%);
+	&.xy {
+		@include translate(50%, -50%);
+	}
+}
+/* vertical middle of screen */
+.v-ms {
+	left: 50vw;
+	position: absolute !important;
+	@include translateX(-50%);
+	&.xy {
+		@include translate(50%, -50%);
+	}
+}
+
+/* middle of box */
+.m-box {
+	left: 50%;
+	position: absolute !important;
+	top: 50%;
+	@include translate(-50%, -50%);
+}
+/* middle of screen */
+.m-screen {
+	left: 50vw;
+	position: absolute !important;
+	top: 50vh;
+	@include translate(-50%, -50%);
+}
+
+.inline {
+	display: inline-block !important;
+}
+.block {
+	display: block !important;
+}
+
+/* responsive styling */
+.responsive {
+	bottom: 0;
+	height: auto;
+	left: 0;
+	max-height: 100%;
+	max-width: 100%;
+	position: relative !important;
+	right: 0;
+	top: 0;
+	width: auto;
+}
+
+.fixed {
+	position: fixed !important;
+}
+.relative {
+	position: relative !important;
+}
+.absolute {
+	position: absolute !important;
+}
+
+.show {
+	display: block !important;
+	@include media-max(768px) {
+		&-xs {
+			display: block !important;
+		}
+	}
+	@include media-minmax(768px, 991px) {
+		&-sm {
+			display: block !important;
+		}
+	}
+	@include media-minmax(992px, 1200px) {
+		&-md {
+			display: block !important;
+		}
+	}
+	@include media-min(1200px) {
+		&-lg {
+			display: block !important;
+		}
+	}
+}
+.hidden {
+	display: none !important;
+	@include media-max(768px) {
+		&-xs {
+			display: none !important;
+		}
+	}
+	@include media-minmax(768px, 991px) {
+		&-sm {
+			display: none !important;
+		}
+	}
+	@include media-minmax(992px, 1200px) {
+		&-md {
+			display: none !important;
+		}
+	}
+	@include media-min(1200px) {
+		&-lg {
+			display: none !important;
+		}
+	}
+}
+.visible {
+	opacity: 1 !important;
+	visibility: visible !important;
+}
+.invisible {
+	opacity: 0 !important;
+	visibility: hidden !important;
+}

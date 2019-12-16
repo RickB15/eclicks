@@ -1,0 +1,10 @@
+.embed-code {
+    width: 100%;
+    height: auto;
+    min-height: 40vh;
+    display: grid;
+    align-content: center;
+    border: 1px solid $surface;
+    border-radius: $border-radius;
+    padding: 2rem 6rem;
+}

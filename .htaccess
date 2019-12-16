@@ -1,0 +1,20 @@
+Options -Indexes
+IndexOptions FancyIndexing
+IndexIgnore *.txt *.ico *.png *.jpg *.mp4 *.jason
+
+<files .htaccess>
+    order allow,deny
+    deny from all
+</files>
+
+RewriteEngine On
+
+RewriteCond %{HTTPS} off
+#RewriteCond %{HTTP_HOST} ^localhost [NC]
+#RewriteRule ^(.*)$ http://localhost/$1 [R,L]
+
+RewriteCond $1 !^(index\.php|\.txt|images|js|css|favicon.png)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteRule ^(.*)$ ./index.php/$1 [NE,L]

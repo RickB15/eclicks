@@ -1,0 +1,72 @@
+// Retrieve color Sass maps
+@function color($key: "blue") {
+  @return map-get($colors, $key);
+}
+
+@function theme-color($key: "primary") {
+  @return map-get($theme-colors, $key);
+}
+
+@function gray($key: "100") {
+  @return map-get($grays, $key);
+}
+
+@function color-red($key: "100") {
+  @return map-get($reds, $key);
+}
+
+@function color-maroon($key: "100") {
+  @return map-get($maroons, $key);
+}
+
+@function color-orange($key: "100") {
+  @return map-get($oranges, $key);
+}
+
+@function color-yellow($key: "100") {
+  @return map-get($yellows, $key);
+}
+
+@function color-olive($key: "100") {
+  @return map-get($olives, $key);
+}
+
+@function color-lime($key: "100") {
+  @return map-get($limes, $key);
+}
+
+@function color-green($key: "100") {
+  @return map-get($greens, $key);
+}
+
+@function color-cyan($key: "100") {
+  @return map-get($cyans, $key);
+}
+
+@function color-aqua($key: "100") {
+  @return map-get($aquas, $key);
+}
+
+@function color-teal($key: "100") {
+  @return map-get($teals, $key);
+}
+
+@function color-blue($key: "100") {
+  @return map-get($blues, $key);
+}
+
+@function color-navy($key: "100") {
+  @return map-get($navys, $key);
+}
+
+@function color-pink($key: "100") {
+  @return map-get($pinks, $key);
+}
+
+@function color-fuchsia($key: "100") {
+  @return map-get($fuchsias, $key);
+}
+
+@function color-purple($key: "100") {
+  @return map-get($purples, $key);
+}

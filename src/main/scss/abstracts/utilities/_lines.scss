@@ -1,0 +1,16 @@
+.hr {
+    border: 0;
+    border-top: 1px solid rgba($black,.1);
+}
+
+.vr {
+    border: none;
+    border-width: 1px !important;
+    border-left: solid;
+    display: block;
+    min-height: 50vh;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+    left:50%;
+}

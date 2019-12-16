@@ -1,0 +1,27 @@
+.overview {
+    margin-bottom: 2.5rem;
+    &-title {
+        font-weight: bold;
+    }
+    &-icon {
+        color: $black;
+        margin-right: .2rem;
+        font-size: 2.4rem;
+        vertical-align: top;
+    }
+    &-list {
+        margin: 0;
+        margin-left: 2.2rem;
+        margin-top: -1.2rem;
+        list-style-type: none;
+        &__item {
+            color: $black;
+            &:not(:first-child) { 
+                margin-top: .3rem;
+            }
+        }
+    }
+    &-last {
+        margin-bottom: 0;
+    }
+}
