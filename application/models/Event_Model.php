@@ -16,7 +16,7 @@
 * @version      0.0.1 
 * @link         -
 * @since        File available since Release 0.0.0
-* @author       Rick Blanskma <rickblanksma@gmail.com>
+* @author       Rick Blanksma <rickblanksma@gmail.com>
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
 

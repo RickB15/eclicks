@@ -1,6 +1,6 @@
 <?php
 /**
-* Associated Calendar Model
+* Notifications Model
 * 
 * 
 * 
@@ -23,18 +23,27 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Handles 
  */
-class Associated_Calendar_Model extends MY_Model {
+class Settings_Model extends MY_Model {
+
     public function __construct()
 	{
-		parent::__construct();
+        parent::__construct();
+        
+        //database tables
+        $this->db_table['notifications'] = 'notifications';
 	}
 
     /**
 	 * Handles 
 	 * @return 
 	 */
-	public function name()
+	public function set_notifications(Array $name)
 	{
+        if( $this->_db_insert($this->db_table['notifications'], $name) ){
+            $insert_id = $this->db->insert_id();
+            return $insert_id;
+        }
 
+        return FALSE;
     }
 }
