@@ -29,6 +29,7 @@ $lang['duration'] = 'duration';
 $lang['edit'] = 'edit';
 $lang['edit_'] = 'edit';
 $lang['email'] = 'email';
+$lang['emails'] = 'emails';
 $lang['event'] = 'event';
 $lang['for_example'] = 'for example';
 $lang['go_to'] = 'go to';
@@ -63,6 +64,9 @@ $lang['time_zone'] = 'time zone';
 $lang['title'] = 'title';
 $lang['username'] = 'username';
 $lang['yes'] = 'yes';
+$lang['sign_in'] = 'sign in';
+$lang['sign_out'] = 'sign out';
+$lang['with'] = 'with';
 
 //time and date
 $lang['january'] = 'January';
@@ -149,6 +153,7 @@ $lang['new_event'] = 'new event';
 //notivications
 $lang['choose_template'] = 'choose a template to send a';
 $lang['default_item'] = 'default item';
+$lang['select_item'] = 'select an item';
 
 //share page
 $lang['choose_event'] = 'choose event to embed';
@@ -159,9 +164,14 @@ $lang['no_events'] = 'there are no events to display';
 //page titles
 $lang['activities'] = 'activities';
 $lang['appointment_planner'] = 'appointment planner';
+$lang['home'] = 'home';
+$lang['login'] = 'login';
 $lang['no_title'] = 'no page title';
+$lang['privacy_policy'] = 'privacy policy';
+$lang['register'] = 'register';
 $lang['settings'] = 'settings';
 $lang['share_publish'] = 'share & publish';
+$lang['terms_and_conditions'] = 'terms and conditions';
 //page segments
 $lang['appointment_error'] = 'appointment error';
 $lang['appointment_made'] = 'appointment made';

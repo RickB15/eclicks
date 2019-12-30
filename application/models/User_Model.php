@@ -167,6 +167,24 @@ class User_Model extends MY_Model {
     /**
      * 
      */
+    protected function get_bizzmail_details(String $db_table, String $username)
+    {
+        $where = Array('username' => $username);
+        $select = 'name, api_key';
+        $result = $this->_db_select($db_table, $select, null, $where, null, true);
+        if( isset($result[0]) ){
+            if( isset($result[0]->username) ){
+                unset($result[0]->username);
+            }
+            return $result[0];
+        }
+        unset($result);
+        return NULL;
+    }
+
+    /**
+     * 
+     */
     protected function check_user_password(String $db_table, String $username, String $password)
     {
         $where = Array('username' => $username, 'password' => $password);

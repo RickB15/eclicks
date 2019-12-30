@@ -122,7 +122,7 @@ function createList(Array $activity, $host, $type) {
                 <small class="<?php 
                     switch ($activity['status']) {
                         case 'confirm':
-                            echo 'text-warning';
+                            echo 'text-primary';
                             break;
                         case 'confirmed':
                             echo 'text-success';
@@ -168,7 +168,7 @@ function createList(Array $activity, $host, $type) {
                         <span id="appointment-status" class="<?php 
                             switch ($activity['status']) {
                                 case 'confirm':
-                                    echo 'text-warning';
+                                    echo 'text-primary';
                                     break;
                                 case 'confirmed':
                                     echo 'text-success';

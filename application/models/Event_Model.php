@@ -19,7 +19,6 @@
 * @author       Rick Blanskma <rickblanksma@gmail.com>
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
-include_once APPPATH.'models/user_model.php';
 
 /**
  * Handles 
@@ -231,7 +230,7 @@ class Event_Model extends MY_Model {
             return FALSE;
         }
 
-        return ucfirst($description);
+        return ucfirst(trim($description));
     }
     
     /**
@@ -287,6 +286,6 @@ class Event_Model extends MY_Model {
             return FALSE;
         }
 
-        return ucfirst(strtolower($title));
+        return ucfirst(strtolower(trim($title)));
     }
 }

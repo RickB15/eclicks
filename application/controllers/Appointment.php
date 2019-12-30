@@ -60,9 +60,12 @@ class Appointment extends MY_Controller {
 					$pageData['cs_username'] = $username;
 
 					if( !empty($pageData['events']) ){
-						$this->event_list($pageData);
+						if( !isset($pageData['events'][1]) ){
+							$this->index($username, $pageData['events'][0]->title);
+						} else {
+							$this->event_list($pageData);
+						}
 					} else {
-						
 						//TODO better error handling
 						$this->appointment_error('Username not correct or user has no events');
 						//TODO error, username is not correct or user has no events
@@ -77,7 +80,11 @@ class Appointment extends MY_Controller {
 						$pageInfo['cs_title'] = $pageData['event']->title;
 
 						//set custom js, css and/or font files
-						$js = Array('appointment_calendar.js' => 'end', 'lib/vanilla-calendar-master/vanillaCalendar.js' => 'end');
+						$js = Array(
+							'appointment_calendar.js' => 'end',
+							'lib/google-api/google_calendar.js' => 'end',
+							'lib/vanilla-calendar-master/vanillaCalendar.js' => 'end'
+						);
 						$css = array('lib/vanilla-calendar-master/vanillaCalendar.css');
 						//// $fonts = array();
 				

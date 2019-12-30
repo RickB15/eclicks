@@ -505,9 +505,11 @@ $colors-bg: map-merge(
 
 // Theme colors
 $primary: rgba(0,179,227,1);
-$primary-variant: rgba(0,179,227,.8);
+$primary-variant: rgba(51,194,233,1);
 $secondary: rgba(215,106,1,1);
-$secondary-variant: rgba(215,106,1,.8);
+$secondary-variant: rgba(223,136,52,1);
+$tertiary: rgba(76,175,80,1);
+$tertiary-variant: rgba(112,191,115,1);
 $success: $green-500;
 $info: $aqua-500;
 $warning: $yellow-500;
@@ -524,6 +526,8 @@ $theme-colors: map-merge(
     "primary-variant":    $primary-variant,
     "secondary":          $secondary,
     "secondary-variant":  $secondary-variant,
+    "tertiary":           $tertiary,
+    "tertiary-variant":   $tertiary-variant,
     "success":            $success,
     "info":               $info,
     "warning":            $warning,

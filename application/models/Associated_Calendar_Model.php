@@ -19,7 +19,6 @@
 * @author       Rick Blanskma <rickblanksma@gmail.com>
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
-include_once APPPATH.'models/user_model.php';
 
 /**
  * Handles 

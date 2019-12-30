@@ -65,6 +65,7 @@ class MY_Controller extends CI_Controller {
             $this->lang->load('error_message_lang', $this->data['language']);
             $this->lang->load('form_validation_lang', $this->data['language']);
         } else {
+            $this->data['language'] = 'english';
             $this->lang->load('db_error_messages_lang', 'english');
             $this->lang->load('default_lang', 'english');
             $this->lang->load('error_message_lang', 'english');
@@ -120,10 +121,10 @@ class MY_Controller extends CI_Controller {
         if( str_replace(' ', '_', strtolower($this->application['appName']))
             === str_replace(' ', '_', strtolower($this->config->item('application_name'))) ){
             //if application is Eclicks than don't add application name to {@pagepath}
-            //* Everything that issen't Eclicks should have his own application map inside "views"
+            //* Everything that isn't Eclicks should have his own application map inside "views"
             $pagePath .= "";
         } else {
-            //replcae spaces with underscore
+            //replace spaces with underscore
             $pagePath .= str_replace(' ', '_', strtolower($this->application['appName'])).'/';
         }
         //replace strange characters with underscore
@@ -498,6 +499,8 @@ class MY_Controller extends CI_Controller {
                 $this->data['language'] = $this->_get_session('lang');
             } else if( isset($this->data['user']->details->language) ){
                 $this->data['language'] = $this->_decode($this->data['user']->details->language);
+            } else {
+                 $this->data['language'] = 'english';
             }
             unset($this->data['user']->details->language);
         }

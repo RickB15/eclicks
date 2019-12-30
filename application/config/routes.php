@@ -74,3 +74,6 @@ $route['availability'] = 'settings/availability';
 $route['events'] = 'settings/events';
 $route['notifications'] = 'settings/notifications';
 $route['associated-calendars'] = 'settings/associated-calendars';
+
+$route['privacy_policy'] = 'policies/privacy_policy';
+$route['terms_and_conditions'] = 'conditions/terms_and_conditions';

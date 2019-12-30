@@ -27,6 +27,26 @@ $config['base_url'] = 'http://localhost:8383/';
 
 /*
 |--------------------------------------------------------------------------
+| Bizz API and APP Site URL
+|--------------------------------------------------------------------------
+|
+| URL to mybizzmail API and APP call.
+|
+| For the dev or live version of this app use this link:
+| https://api.mybizzmail.com/
+| https://app.mybizzmail.com/
+|
+| WARNING: You MUST set this value!
+|
+| If you need to allow multiple domains, remember that this file is still
+| a PHP script and you can easily do that on your own.
+|
+*/
+$config['bizz_url'] = 'https://api.mybizzmail.com/';
+$config['bizz_url_ui'] = 'https://app.mybizzmail.com/';
+
+/*
+|--------------------------------------------------------------------------
 | Index File
 |--------------------------------------------------------------------------
 |
@@ -377,10 +397,10 @@ $config['encryption_key'] = hex2bin('5aaa94fba81d0a7dbc515ab1998b1c7a');
 | except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
 |
 */
-$config['sess_driver'] = 'files';
+$config['sess_driver'] = 'database';
 $config['sess_cookie_name'] = 'ci_session';
 $config['sess_expiration'] = 7200;
-$config['sess_save_path'] = NULL;
+$config['sess_save_path'] = 'ci_sessions';
 $config['sess_match_ip'] = FALSE;
 $config['sess_time_to_update'] = 300;
 $config['sess_regenerate_destroy'] = FALSE;

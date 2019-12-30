@@ -90,6 +90,50 @@ if ( ! function_exists('base_url'))
 
 // ------------------------------------------------------------------------
 
+if ( ! function_exists('bizz_url'))
+{
+	/**
+	 * Bizz URL
+	 *
+	 * Create a local URL to the bizzmail API.
+	 * Segments can be passed in as a string or an array, same as site_url
+	 * or a URL to a file can be passed in, e.g. to an image file.
+	 *
+	 * @param	string	$uri
+	 * @param	string	$protocol
+	 * @return	string
+	 */
+	function bizz_url()
+    {
+        $CI =& get_instance();
+        return $CI->config->config['bizz_url'];
+    }
+}
+
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('bizz_url_ui'))
+{
+	/**
+	 * Bizz URL
+	 *
+	 * Create a local URL to the bizzmail API.
+	 * Segments can be passed in as a string or an array, same as site_url
+	 * or a URL to a file can be passed in, e.g. to an image file.
+	 *
+	 * @param	string	$uri
+	 * @param	string	$protocol
+	 * @return	string
+	 */
+	function bizz_url_ui()
+    {
+        $CI =& get_instance();
+        return $CI->config->config['bizz_url_ui'];
+    }
+}
+
+// ------------------------------------------------------------------------
+
 if ( ! function_exists('current_url'))
 {
 	/**

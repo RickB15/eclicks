@@ -562,7 +562,7 @@ sup {
   background-color: #fdfefe;
 }
 .fc-head {
-  background-color: #a5a5a5;
+  background-color: #70bf73;
   color: #fdfefe;
   font-size: 0.8rem;
 }
@@ -571,7 +571,7 @@ sup {
   background-color: #d1d2d2;
 }
 .fc-day-group {
-  background-color: #d76a01 !important;
+  background-color: #4caf50 !important;
 }
 .fc-timeGrid-view .fc-day-grid .fc-row {
   min-height: 1.5rem;
@@ -1952,10 +1952,12 @@ header {
   padding-bottom: 0.3rem;
 }
 .navbar-main {
-  background-color: #444444;
+  background-color: #4caf50;
+  max-height: 6rem;
+  overflow: hidden;
 }
 .navbar-second {
-  background-color: #666666;
+  background-color: #70bf73;
 }
 .navbar-second .nav-item:first-child {
   padding-top: 0.2rem;
@@ -1968,6 +1970,8 @@ header {
 }
 .navbar-brand .title {
   margin-bottom: 0;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .navbar-brand .title-sub {
   font-style: italic;
@@ -1980,13 +1984,14 @@ header {
 }
 .navbar-lang {
   margin: 0;
+  margin-left: auto;
 }
 .navbar .nav-item {
   padding: 0;
   font-size: 0.9rem;
 }
 .navbar .nav-item:hover {
-  background-color: #787979;
+  background-color: #33c2e9;
 }
 .navbar .nav-link {
   padding: 0.4rem;
@@ -1999,7 +2004,10 @@ header {
   cursor: pointer;
 }
 .navbar .nav-link:focus {
-  background-color: #787979;
+  background-color: #33c2e9;
+  background-image: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 .navbar .nav-link:focus {
   box-shadow: none !important;
@@ -2008,10 +2016,10 @@ header {
   background-color: #00b3e3;
 }
 .navbar .active:hover, .navbar .active:focus {
-  background-color: #4ad9ff;
+  background-color: #33c2e9;
 }
 .navbar .active .nav-link:focus {
-  background-color: #4ad9ff;
+  background-color: #33c2e9;
 }
 .navbar .active .nav-link:focus {
   box-shadow: none !important;
@@ -2028,7 +2036,7 @@ header {
   background-color: grey("600");
 }
 .navbar .dropdowndivider {
-  border-color: rgba(0, 179, 227, 0.8);
+  border-color: #33c2e9;
   margin: 0;
 }
 
@@ -2205,6 +2213,9 @@ header {
 .btn-social-windows {
   background-color: #006fc1;
 }
+.btn-social-google {
+  background-color: #4082ee;
+}
 .btn-outline-dark {
   border: 1px solid #202020;
 }
@@ -2239,10 +2250,10 @@ header {
 
 .upcoming-bar,
 .previous-bar {
-  background-color: #d1d2d2;
+  background-color: #70bf73;
   border: 1px solid transparent;
   border-bottom: 2px solid #787979;
-  color: #202020;
+  color: #fdfefe;
   cursor: pointer;
   font-weight: bold;
   margin: 0.3rem 0;
@@ -2267,6 +2278,14 @@ header {
 .previous-list {
   border-bottom: 1px solid #787979;
 }
+.upcoming-list .list-group-item,
+.previous-list .list-group-item {
+  background-color: #d1d2d2;
+}
+.upcoming-list .list-group-item .calendar-icon,
+.previous-list .list-group-item .calendar-icon {
+  color: #00B3E3;
+}
 .upcoming-list > li,
 .previous-list > li {
   list-style-type: none;
@@ -2282,7 +2301,7 @@ header {
 
 /* Details style */
 .details__content {
-  background-color: #d1d2d2 !important;
+  background-color: #fdfefe !important;
   padding: 0.3rem 5rem;
 }
 .details__footer {
@@ -2303,15 +2322,11 @@ header {
   font-weight: normal;
 }
 .details .footer-item {
-  color: #Bfc9cA;
+  color: #8f8f8f;
   text-align: center;
 }
 .details .footer-item:not(:last-child) {
   border-right: 1px solid #bbbbbb;
-}
-
-.list-group-item:not(.active) .calendar-icon {
-  color: #00B3E3;
 }
 
 .calendar-icon-text {

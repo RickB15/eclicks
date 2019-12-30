@@ -12,9 +12,6 @@
         https://code.jquery.com/jquery-3.4.1.min.js,
         https://fontawesome.com/how-to-use/on-the-web/setup/hosting-font-awesome-yourself
     "/>
-@if( isset($segment) && strtolower($segment) === 'associated_calendars' )
-    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
-@endif
 
     <title>
 @if(isset($pageName))
@@ -32,6 +29,7 @@
 
     <link type="image/ico" rel="icon" href="<?= IMGPATH ?>favicons/favicon-16x16.ico" sizes="16x16" />
     <link type="image/ico" rel="icon" href="<?= IMGPATH ?>favicons/favicon-32x32.ico" sizes="32x32" />
+    <link type="image/png" rel="icon" href="<?= IMGPATH ?>favicons/favicon.png" />
 
     <noscript>Sorry, your browser does not support JavaScript!</noscript>
 
@@ -101,7 +99,9 @@
            email: '<?php echo lang('email'); ?>',
            phone: '<?php echo lang('phone'); ?>',
            click_me: '<?php echo lang('click_me'); ?>',
-           appointment: '<?php echo lang('appointment'); ?>'
+           appointment: '<?php echo lang('appointment'); ?>',
+           sign_in: '<?php echo lang('sign_in'); ?>',
+           sign_out: '<?php echo lang('sign_out'); ?>'
         };
     </script>
 
@@ -126,11 +126,16 @@
     <script type="application/javascript" src="<?= JSPATH ?>lib/jqwidgets-ver8.3.2/jqwidgets/jqxdraw.js"></script>
     <script type="application/javascript" src="<?= JSPATH ?>lib/jqwidgets-ver8.3.2/jqwidgets/jqxtimepicker.js"></script>
 
+    <!-- Moment -->
+    <script type="application/javascript" src="<?= JSPATH ?>lib/moment-2.24.0/moment.js"></script>
+    <script type="application/javascript" src="<?= JSPATH ?>lib/moment-2.24.0/moment-locales.js"></script>
+    <script type="application/javascript" src="<?= JSPATH ?>lib/moment-2.24.0/moment-timezone-with-data.js"></script>
+
     <!-- Eclicks JS -->
     <script  type="application/javascript" src="<?= JSPATH ?>core.js"></script>
 
     <!-- ** THEME ASSETS ** -->
-@if( isset($appName) && strtolower($appName) === 'eclicks' && isset($path) && strtolower($path) !== 'auth' )
+@if( isset($appName) && strtolower($appName) === 'eclicks' && isset($path) && strtolower($path) !== 'auth' && strtolower($path) !== 'policies' && strtolower($path) !== 'conditions')
     <!-- SB Admin 2 -->
     <link type="text/css" href="<?= THEMEPATH ?>sb-admin-2/css/sb-admin-2.min.css"  rel="stylesheet"/>
 	<script type="application/javascript" src="<?= THEMEPATH ?>sb-admin-2/vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -141,10 +146,6 @@
 @endif
 
     <!-- ** PAGE SPECIFIC ASSETS ** -->
-@if( isset($segment) && strtolower($segment) === 'associated_calendars' )
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-@endif
-
 @if( isset($css) )
 <?php //TODO error handeler file not found ?>
 @foreach($css as $file)
@@ -179,7 +180,7 @@
     <!-- ** CUSTOM ASSETS ** -->
 
     <!-- Custom CSS -->
-@if( isset($appName) && strtolower($appName) === 'client schedular' || isset($path) && strtolower($path) === 'auth' )
+@if( isset($appName) && strtolower($appName) === 'client schedular' || isset($path) && (strtolower($path) === 'auth' || strtolower($path) === 'policies' || strtolower($path) === 'conditions'))
     <link type="text/css" href="<?= CSSPATH ?>main.css" rel="stylesheet" />
 @endif
 

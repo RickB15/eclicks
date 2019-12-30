@@ -15,14 +15,14 @@
                                 <div class="list-group-item text-center text-primary card-header">
                                     <?= $event->title; ?>
                                     <div class="info-list-item">
-                                        <a href="<?= base_url('appointment/'.url_title($cs_username).'/'.url_title($event->title,'dash',true)); ?>" class="btn btn-primary right"><?= ucfirst(lang('go_to') . ' ' . lang('event')); ?></a>
+                                        <a href="<?= base_url('appointment/'.url_title($cs_username).'/'.url_title($event->title,'dash',true)); ?>" class="btn btn-primary btn-ghost right"><?= ucfirst(lang('go_to') . ' ' . lang('event')); ?></a>
                                     </div>
                                 </div>
                             <?php else: ?>
                             <button id="heading-<?= $key; ?>" class="list-group-item btn btn-link card-header" data-toggle="collapse" data-target="#collapse-<?= $key; ?>" aria-expanded="<?php if(!empty($event->description)){ echo 'true'; }else{ echo 'false'; } ?>"" aria-controls="collapse-<?= $key; ?>">
-                                <?= $event->title; ?>
-                                <div class="info-list-item mr-5">
-                                    <p class="text-muted"><?= lang('collapse'); ?></p>
+                                <?= $event->title; ?><small class="text-muted"> (<?= lang('click_me'); ?>)</small>
+                                <div class="info-list-item">
+                                    <a href="<?= base_url('appointment/'.url_title($cs_username).'/'.url_title($event->title,'dash',true)); ?>" class="btn btn-primary btn-ghost right"><?= ucfirst(lang('go_to') . ' ' . lang('event')); ?></a>
                                 </div>
                             </button>
                             <?php endif; ?>
@@ -30,9 +30,6 @@
                             <div id="collapse-<?= $key; ?>" class="collapse" aria-labelledby="heading-<?= $key; ?>" data-parent="#accordion">
                                 <div class="card-body px-5">
                                     <?= $event->description; ?>
-                                </div>
-                                <div class="card-footer text-right">
-                                    <a href="<?= base_url('appointment/'.url_title($cs_username).'/'.url_title($event->title,'dash',true)); ?>" class="btn btn-primary right"><?= ucfirst(lang('go_to') . ' ' . lang('event')); ?></a>
                                 </div>
                             </div>
                             <?php endif; ?>

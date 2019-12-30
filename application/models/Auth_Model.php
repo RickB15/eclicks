@@ -19,7 +19,7 @@
 * @author       Rick Blanskma <rickblanksma@gmail.com>
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
-include_once APPPATH.'models/user_model.php';
+include_once APPPATH.'models/User_Model.php';
 
 /**
  * Handles the auth database » check user login and register
@@ -152,6 +152,14 @@ class Auth_Model extends User_Model {
 	{
 		//TODO error handling if null
         return $this->get_settings_id($this->db_table['auth_client_schedular'], $username);
+	}
+
+	/**
+	 * 
+	 */
+	public function auth_bizzmail($username)
+	{
+		return $this->get_bizzmail_details($this->db_table['auth'], $username);
 	}
 
 	/**

@@ -19,7 +19,6 @@
 * @author       Rick Blanskma <rickblanksma@gmail.com>
 */
 defined('BASEPATH') OR exit('No direct script access allowed');
-include_once APPPATH.'models/user_model.php';
 
 /**
  * Handles 
@@ -122,7 +121,7 @@ class Settings_Model extends MY_Model {
      */
     private function update_redirect(String $setting)
     {
-        $new_redirect = Array('redirect_url' => (string) $setting);
+        $new_redirect = Array('redirect_url' => (string) trim($setting));
         $where = Array('id' => $this->settings_id);
         if( $this->_db_update($this->db_table['settings'], $new_redirect, $where) === TRUE ){
             return TRUE;

@@ -28,6 +28,5 @@
 @hasSection('script')
 	@yield('script')
 @endif
-
 </body>
 </html>

@@ -219,7 +219,7 @@ const defaultEvents = function () {
                             let newEvent = {
                                 id: ID(),
                                 groupId: groupId,
-                                classNames: 'fc-day-group',
+                                classNames: ['fc-day-group'],
                                 start: newStart,
                                 end: newEnd,
                                 allDay: event.allDay

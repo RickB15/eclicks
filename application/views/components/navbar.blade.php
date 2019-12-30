@@ -1,5 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
-        <nav class="navbar navbar-dark navbar-main">
+        <nav class="navbar navbar-dark navbar-main">        
+            <a href="<?= base_url(); ?>" class='d-lg-block d-none' style="margin-right: -50px;">
+                <img src="<?= IMGPATH ?>logos/navbar/eclicks-logo.png" width="50" height="50" alt="">
+            </a>
             <div class="container">
                 <div class="navbar-brand">
                     <h2 class="title">
@@ -12,7 +15,7 @@
                         @yield('title', ucwords(lang('no_title')))
 @endif
                     </h2>
-                    <small class="title-sub">
+                    <small class="title-sub d-md-block d-none">
 @if($pageName === 'appointment_planner' && isset($segment) && $segment === 'index' && isset($cs_username) && !empty($cs_username))
                         <?= ucfirst(lang('make_appointment')); ?> <span id="username"><?= ucfirst($cs_username); ?></span>
 @else
@@ -39,9 +42,12 @@
                 </ul>
             </div>
         </nav>
-@if(isset($path) && isset($access) && isset($appName) && $path !== 'auth' && $access !== 'public' && $appName === 'Client Schedular')
+@if(isset($path) && isset($access) && isset($appName) && (strtolower($path) !== 'auth' && strtolower($path) !== 'policies' && strtolower($path) !== 'conditions') && $access !== 'public' && $appName === 'Client Schedular')
         <nav class="navbar navbar-expand-lg navbar-dark navbar-second">
             <div class="container">
+                <a href="<?= base_url(); ?>" class='d-lg-none'>
+                    <img src="<?= IMGPATH ?>logos/navbar/eclicks-logo.png" width="40" height="40" alt="">
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>

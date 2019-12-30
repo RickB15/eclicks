@@ -234,9 +234,20 @@ class Settings extends MY_Controller {
 	 */
 	public function notifications()
 	{	
-		////import helpers and models
+		//import helpers and models
+		$this->load->model('Auth_Model');
+		$this->load->helper('cURL_helper');
 
-		////get data from database
+		//get data from database
+		$api_key = $this->Auth_Model->auth_bizzmail($this->data['user']->username)->api_key;
+
+		// Getting Emails
+		$response = getNotificationEmails(bizz_url(), $api_key);
+		$pageData['notification_email'] = json_decode($response, true);
+
+		// Getting Sms
+		$response = getNotificationSms(bizz_url(), $api_key);
+		$pageData['notification_sms'] = json_decode($response, true);
 
 		//set page info
 		$pageInfo['pageName'] = $this->pageName;
@@ -245,7 +256,7 @@ class Settings extends MY_Controller {
 		////sort
 		
 		//render
-		$this->_render($pageInfo);
+		$this->_render($pageInfo, $pageData);
 	}
 
 	/**
@@ -267,6 +278,7 @@ class Settings extends MY_Controller {
 		//set custom js, css and/or font files
 		$js = Array(
 			'associated_calendars.js' => 'end',
+			'lib/google-api/google_calendar.js' => 'end',
 			'lib/hello-v2.0.0-4/hello.js' => 'start'
 		);
 		//// $css = array();

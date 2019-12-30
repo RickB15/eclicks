@@ -5,6 +5,7 @@
 @section('content')
         <div class="container">
             <div class="row justify-content-center">
+            <pre id="content" style="white-space: pre-wrap;"></pre>
                 <div class="col-12 col-lg-10">
                     <h4 id="header-step-1" class="text-center"><?= ucfirst(lang('choose_date_and_time')); ?></h4>
                     <h4 id="header-step-2" class="text-center hidden"><?= ucfirst(lang('give_your_details')); ?></h4>
@@ -128,4 +129,11 @@
                 </div>
             </div>
         </div>
+@endsection
+
+@section('script')
+<script async defer src="https://apis.google.com/js/api.js"
+    onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+</script>
 @endsection

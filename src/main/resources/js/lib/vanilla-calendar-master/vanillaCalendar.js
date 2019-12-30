@@ -390,6 +390,7 @@ var vanillaCalendar = {
           if (maxCount > max) {
             this.noTimeMessage();
           }
+          //!!!!!!!!!!!!!!!!!!!!TODO use moment and change all times!!!!!!!!!!!!!!!!!!!!
           const startTimeHours = parseInt(appointment.start_time.split(':')[0]);
           const startTimeMinutes = parseInt(appointment.start_time.split(':')[1]);
           const startTimeSeconds = parseInt(appointment.start_time.split(':')[2]); //not used
@@ -425,104 +426,129 @@ var vanillaCalendar = {
       }
     }
 
-    if (maxCount <= max) {
-      timeSlots.forEach(time => {
-        let timeButton = document.createElement("BUTTON");
-        let innerStart = time.start.split(':')[0] + ':' + time.start.split(':')[1];
-        let innerEnd = time.end.split(':')[0] + ':' + time.end.split(':')[1];
-        const checkTime = parseFloat(parseInt(time.start.split(':')[0]) + parseFloat(time.start.split(':')[1] / 60));
+//TODO add calendar events
+    // listUpcomingEvents().then(function (dates) {
+      // const checkDate = moment(clicked.toISOString()).utc().format('YYYY-MM-DD');
+      let timeZone = leftPad(_this.settings.time_zone, 2) + ':00';
+      if (parseInt(_this.settings.time_zone) < 0) {
+        timeZone = '-' + timeZone;
+      } else {
+        timeZone = '+' + timeZone;
+      }
+      if (maxCount <= max) {
+        timeSlots.forEach(time => {
+          // for (const [key, value] of Object.entries(dates)) {
+          //   const startDate = moment(value.start).format('YYYY-MM-DD');
+          //   const endDate = moment(value.start).format('YYYY-MM-DD');
+          //   if (moment(checkDate).isBetween(startDate, endDate) 
+          //   || moment(checkDate).isSame(startDate)
+          //   || moment(checkDate).isSame(endDate)) {
+          //     console.log(value)
+          //     const startTime = moment(value.start).format('HH:mm:ss');
+          //     const endTime = moment(value.end).format('HH:mm:ss');
+          //     console.log(startTime)
+          //     console.log(endTime)
+          //     console.log(time)
+          //   }
+          // }
+          let timeButton = document.createElement("BUTTON");
+          let innerStart = time.start.split(':')[0] + ':' + time.start.split(':')[1];
+          let innerEnd = time.end.split(':')[0] + ':' + time.end.split(':')[1];
+          const checkTime = parseFloat(parseInt(time.start.split(':')[0]) + parseFloat(time.start.split(':')[1] / 60));
 
-        setAttributes(timeButton, {
-          class: 'btn btn-outline-dark'
+          setAttributes(timeButton, {
+            class: 'btn btn-outline-dark'
+          });
+
+          timeButton.addEventListener('click', function () {
+            if (isEmpty(document.getElementById('carousel-next'))) {
+              _this.createNextButton()
+            }
+            let focusedButtons = document.querySelectorAll('.btn-focused');
+            if (!isEmpty(focusedButtons)) {
+              [].forEach.call(focusedButtons, function (button) {
+                button.classList.remove("btn-focused");
+              });
+            }
+            this.classList.add('btn-focused');
+            let picked = document.querySelectorAll(
+              '[data-calendar-label="picked-time"]'
+            )[0];
+            picked.innerHTML = ' ' + globalLang.at + ' ' + innerStart + ' - ' + innerEnd;
+            //for ajax call
+            _this.startTime = time.start + ':00';
+            _this.endTime = time.end + ':00';
+          });
+
+          timeButton.innerHTML = innerStart + ' - ' + innerEnd;
+
+          if (checkTime > today.getHours() + 4 && new Date(clickedDate).getDate() === today.getDate()) {
+            create = true;
+          } else if (new Date(clickedDate).getDate() !== today.getDate()) {
+            create = true;
+          }
+
+          if (create === true) {
+            if (checkTime < 12) {
+              document.getElementById('body-morning').appendChild(timeButton);
+              bodyMorning = true;
+            } else if (checkTime >= 12 && checkTime < 17) {
+              document.getElementById('body-afternoon').appendChild(timeButton);
+              bodyAfternoon = true;
+            } else {
+              document.getElementById('body-evening').appendChild(timeButton);
+              bodyEvening = true;
+            }
+          }
         });
 
-        timeButton.addEventListener('click', function () {
-          if (isEmpty(document.getElementById('carousel-next'))) {
-            _this.createNextButton()
-          }
-          let focusedButtons = document.querySelectorAll('.btn-focused');
-          if (!isEmpty(focusedButtons)) {
-            [].forEach.call(focusedButtons, function (button) {
-              button.classList.remove("btn-focused");
-            });
-          }
-          this.classList.add('btn-focused');
-          let picked = document.querySelectorAll(
-            '[data-calendar-label="picked-time"]'
-          )[0];
-          picked.innerHTML = ' ' + globalLang.at + ' ' + innerStart + ' - ' + innerEnd;
-          //for ajax call
-          _this.startTime = time.start + ':00';
-          _this.endTime = time.end + ':00';
-        });
-
-        timeButton.innerHTML = innerStart + ' - ' + innerEnd;
-
-        if (checkTime > today.getHours() + 4 && new Date(clickedDate).getDate() === today.getDate()) {
-          create = true;
-        } else if (new Date(clickedDate).getDate() !== today.getDate()) {
-          create = true;
-        }
-
-        if (create === true) {
-          if (checkTime < 12) {
-            document.getElementById('body-morning').appendChild(timeButton);
-            bodyMorning = true;
-          } else if (checkTime >= 12 && checkTime < 17) {
-            document.getElementById('body-afternoon').appendChild(timeButton);
-            bodyAfternoon = true;
-          } else {
-            document.getElementById('body-evening').appendChild(timeButton);
-            bodyEvening = true;
-          }
-        }
-      });
-
-      if (bodyMorning === false) {
-        if (!isEmpty(document.getElementById('collapse-morning'))) {
-          if (document.getElementById('collapse-morning').classList.contains('show')) {
-            //make sure an other collapse is shown if this collapse has no times
-            if (bodyAfternoon !== false) {
-              document.getElementById('collapse-afternoon').classList.add('show');
-            } else if (bodyEvening !== false) {
-              document.getElementById('collapse-evening').classList.add('show');
+        if (bodyMorning === false) {
+          if (!isEmpty(document.getElementById('collapse-morning'))) {
+            if (document.getElementById('collapse-morning').classList.contains('show')) {
+              //make sure an other collapse is shown if this collapse has no times
+              if (bodyAfternoon !== false) {
+                document.getElementById('collapse-afternoon').classList.add('show');
+              } else if (bodyEvening !== false) {
+                document.getElementById('collapse-evening').classList.add('show');
+              }
             }
+            document.getElementById('morning').remove();
           }
-          document.getElementById('morning').remove();
         }
-      }
-      if (bodyAfternoon === false) {
-        if (!isEmpty(document.getElementById('collapse-afternoon'))) {
-          if (document.getElementById('collapse-afternoon').classList.contains('show')) {
-            //make sure an other collapse is shown if this collapse has no times
-            if (bodyMorning !== false) {
-              document.getElementById('collapse-morning').classList.add('show');
-            } else if (bodyEvening !== false) {
-              document.getElementById('collapse-evening').classList.add('show');
+        if (bodyAfternoon === false) {
+          if (!isEmpty(document.getElementById('collapse-afternoon'))) {
+            if (document.getElementById('collapse-afternoon').classList.contains('show')) {
+              //make sure an other collapse is shown if this collapse has no times
+              if (bodyMorning !== false) {
+                document.getElementById('collapse-morning').classList.add('show');
+              } else if (bodyEvening !== false) {
+                document.getElementById('collapse-evening').classList.add('show');
+              }
             }
+            document.getElementById('afternoon').remove();
           }
-          document.getElementById('afternoon').remove();
         }
-      }
-      if (bodyEvening === false) {
-        if (!isEmpty(document.getElementById('collapse-evening'))) {
-          if (document.getElementById('collapse-evening').classList.contains('show')) {
-            //make sure an other collapse is shown if this collapse has no times
-            if (bodyMorning !== false) {
-              document.getElementById('collapse-morning').classList.add('show');
-            } else if (bodyAfternoon !== false) {
-              document.getElementById('collapse-afternoon').classList.add('show');
+        if (bodyEvening === false) {
+          if (!isEmpty(document.getElementById('collapse-evening'))) {
+            if (document.getElementById('collapse-evening').classList.contains('show')) {
+              //make sure an other collapse is shown if this collapse has no times
+              if (bodyMorning !== false) {
+                document.getElementById('collapse-morning').classList.add('show');
+              } else if (bodyAfternoon !== false) {
+                document.getElementById('collapse-afternoon').classList.add('show');
+              }
             }
+            document.getElementById('evening').remove();
           }
-          document.getElementById('evening').remove();
+        }
+        if (bodyMorning === false && bodyAfternoon === false && bodyEvening === false) {
+          _this.noTimeMessage();
         }
       }
-      if (bodyMorning === false && bodyAfternoon === false && bodyEvening === false) {
-        this.noTimeMessage();
-      }
-    }
-    document.getElementById('vcal-times-box').classList.remove('hidden');
-    document.getElementById('vcal-times').classList.remove('hidden');
+      document.getElementById('vcal-times-box').classList.remove('hidden');
+      document.getElementById('vcal-times').classList.remove('hidden');
+    // })
+    
   },
 
   createNextButton: function () {
@@ -638,7 +664,6 @@ var vanillaCalendar = {
     let timeSlots = [];
 
     const startTimes = this.settings.appointment_start_times.replace('[', '').replace(']', '').split(',');
-    const timeZone = this.settings.time_zone;
 
     if (!isEmpty(this.times)) {
       for (let index = 0; index < this.times.length; index++) {

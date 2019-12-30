@@ -29,6 +29,7 @@ $lang['duration'] = 'duur';
 $lang['edit'] = 'bewerken';
 $lang['edit_'] = 'bewerken van';
 $lang['email'] = 'email';
+$lang['emails'] = 'emails';
 $lang['event'] = 'evenement';
 $lang['for_example'] = 'bijvoorbeeld';
 $lang['go_to'] = 'ga naar';
@@ -63,6 +64,9 @@ $lang['time_zone'] = 'tijdzone';
 $lang['title'] = 'titel';
 $lang['username'] = 'gebruikersnaam';
 $lang['yes'] = 'ja';
+$lang['sign_in'] = 'aanmelden';
+$lang['sign_out'] = 'afmelden';
+$lang['with'] = 'bij';
 
 //time and date
 $lang['january'] = 'januari';
@@ -148,7 +152,8 @@ $lang['first_event'] = 'van eerste event';
 $lang['new_event'] = 'van een nieuw event';
 //notivications
 $lang['choose_template'] = 'kies een sjabloom voor een ';
-$lang['default_item'] = 'standaard item';
+$lang['default_item'] = 'standaard optie';
+$lang['select_item'] = 'kies een optie';
 
 //share page
 $lang['choose_event'] = 'kies een evenement';
@@ -159,9 +164,14 @@ $lang['no_events'] = 'er zijn geen evenementen om te laten zien';
 //page titles
 $lang['activities'] = 'activiteiten';
 $lang['appointment_planner'] = 'afspraak planner';
+$lang['home'] = 'thuis';
+$lang['login'] = 'in loggen';
 $lang['no_title'] = 'geen pagina titel';
+$lang['privacy_policy'] = 'privacybeleid';
+$lang['register'] = 'registreren';
 $lang['settings'] = 'instellingen';
 $lang['share_publish'] = 'delen & publiceren';
+$lang['terms_and_conditions'] = 'algemene voorwaarden';
 //page segments
 $lang['appointment_error'] = 'afspraak error';
 $lang['appointment_made'] = 'afspraak gemaakt';
