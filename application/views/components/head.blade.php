@@ -35,6 +35,9 @@
 
     <!-- ** SET GLOBAL JS BASE URL ** -->
     <script>
+        //TODO make const global.variable throughout all files in config.js
+        const api_key = '<?php echo "61ca5c14e434c6670b93d97d69a59c0e6b835420"; //TODO make dynamic ?>';
+        const groupId = '<?php echo "3048"; //TODO make dynamic ?>';
         const base_url = '<?php echo base_url(); ?>';
         const locale = '<?php echo $language; ?>';
         <?php 
@@ -107,7 +110,9 @@
 
     <!-- ** PACKAGES ASSETS ** -->
     <!-- jQuery -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <script type="application/javascript" src="<?= JSPATH ?>lib/jquery-3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     <!-- Popper -->
     <script type="application/javascript" src="<?= JSPATH ?>lib/popper-1.16.0/popper.min.js"></script>
@@ -133,6 +138,7 @@
 
     <!-- Eclicks JS -->
     <script  type="application/javascript" src="<?= JSPATH ?>core.js"></script>
+    <script  type="application/javascript" src="<?= JSPATH ?>config.js"></script>
 
     <!-- ** THEME ASSETS ** -->
 @if( isset($appName) && strtolower($appName) === 'eclicks' && isset($path) && strtolower($path) !== 'auth' && strtolower($path) !== 'policies' && strtolower($path) !== 'conditions')

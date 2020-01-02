@@ -65,20 +65,25 @@ class Activities extends MY_Controller {
 		if( $this->Availability_Model->get_availability($this->data['cs_user']->cs_username) === NULL ){
 			$pageData['availability_redirect'] = 'settings/availability';
 		}
+
 		if( !empty($activities) ){
 			foreach ($activities as $key => $value) {
 				$date = strtotime($value['date']);
-				$today = time();
-				if( $date <= $today ) {
-					$activities[$key]['date'] = date('d/M/Y', strtotime($value['date']));
-					$pageData['upcoming_activities'][$key] = $activities[$key];
-					$pageData['upcoming_activities'][$key]['from_now'] = date('d', $date - $today) - 1; //minus today
-				} else {
+				$today = strtotime('now');
+				$activities[$key]['date'] = date('d/M/Y', strtotime($value['date']));
+				if( $date < $today || $value['status'] === 'canceled' ) {					
 					$pageData['previous_activities'][$key] = $activities[$key];
-					$pageData['upcoming_activities'][$key]['from_now'] = date('d', $today - $date) - 1; //minus today
+					if( $date > $today ){
+						$pageData['previous_activities'][$key]['until_now'] = date('d', $date - $today) + 1; //plus today
+					} else {
+						$pageData['previous_activities'][$key]['from_now'] = date('d', $today - $date) - 1; //minus today
+					}
+					$pageData['previous_activities'][$key]['day'] = date('d', $date);
+				} elseif( $value['status'] !== 'deleted' ){
+					$pageData['upcoming_activities'][$key] = $activities[$key];
+					$pageData['upcoming_activities'][$key]['until_now'] = date('d', $date - $today) + 1; //plus today
+					$pageData['upcoming_activities'][$key]['day'] = date('d', $date);
 				}
-				$pageData['upcoming_activities'][$key]['day'] = date('d', $date);
-				$pageData['upcoming_activities'][$key]['id'] = $key;
 			}
 		}
 		$pageData['host']['name'] = $this->_decode($this->data['cs_user']->cs_username);
@@ -102,5 +107,23 @@ class Activities extends MY_Controller {
 		
 		//render
 		$this->_render($pageInfo, $pageData);
+	}
+
+	public function update_appointment()
+	{
+		$appointment_id = $this->input->post('update_appointment');
+		$status = $this->input->post('submit');
+		if( !empty($appointment_id) && !empty($status) && is_numeric($appointment_id) ){
+			$this->load->model('Activities_Model');
+
+			if( $this->Activities_Model->update_status($appointment_id, $status) === TRUE ){
+				redirect(base_url('activities'));
+			} else {
+				//TODO better error handling
+				echo 'Appointment not canceled. Something went wrong';
+			}
+		} else {
+			show_404();
+		}
 	}
 }

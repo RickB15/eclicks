@@ -45,11 +45,11 @@ class Activities_Model extends MY_Model {
 			$join = array(
 				array(
 					$this->db_table['event'],
-					$this->db_table['event'].".id = ".$this->db_table['appointment'].".event_id"
+					$this->db_table['event'].".event_id = ".$this->db_table['appointment'].".event_id"
 				),
 				array(
 					$this->db_table['attendee'],
-					$this->db_table['attendee'].".id = ".$this->db_table['appointment'].".attendee_id"
+					$this->db_table['attendee'].".attendee_id = ".$this->db_table['appointment'].".attendee_id"
 				)
 			);
 			$data = $this->_db_select($this->db_table['appointment'], null, null, $where, $join, true);
@@ -59,7 +59,6 @@ class Activities_Model extends MY_Model {
 					unset($data[$key]->user_cs_username);
 					unset($data[$key]->attendee_id);
 					unset($data[$key]->event_id);
-					unset($data[$key]->id);
 					
 					foreach ($appointment as $item => $value) {
 						switch ($item) {
@@ -85,5 +84,17 @@ class Activities_Model extends MY_Model {
 	public function get_activity(String $cs_username, $appointment_id)
 	{
 
+	}
+
+	public function update_status(String $appointment_id, String $status)
+	{
+		if( $status === 'confirm' || $status === 'confirmed' || $status === 'canceled' || $status === 'deleted' ){
+			$where = Array('appointment_id' => $appointment_id);
+			$data = Array('status' => $status);
+			if( $this->_db_update($this->db_table['appointment'], $data, $where) === TRUE ){
+				return TRUE;
+			}
+		}
+		return FALSE;
 	}
 }

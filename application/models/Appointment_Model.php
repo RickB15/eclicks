@@ -138,7 +138,7 @@ class Appointment_Model extends MY_Model {
         $settings_id = $this->get_settings_id($cs_username);
         if( !empty($settings_id) ){
             $select = 'appointments_a_day, appointment_start_times, appointment_interim, redirect_url, time_zone';
-            $where = Array('id' => $settings_id);
+            $where = Array('settings_id' => $settings_id);
             $settings = $this->_db_select($this->db_table['settings'], $select, null, $where)->row();
 
             if( !empty($settings) ){
@@ -163,7 +163,7 @@ class Appointment_Model extends MY_Model {
      * 
      */
     public function get_appointments(String $cs_username, String $event_title) {
-        $event_id = $this->get_event_id($cs_username, $event_title);
+        $event_id = $this->get_event_id($cs_username, $event_title); //TODO select other than title because now it must be unique..
 
         if( !empty($event_id) ){
             $select = 'date, start_time, end_time';
@@ -187,7 +187,7 @@ class Appointment_Model extends MY_Model {
                 $attendee = $this->set_attendee($attendee);
                 if( is_numeric($attendee) ){
                     $data = Array(
-                        'date' => $appointment->date,
+                        'date' => (string)$appointment->date,
                         'start_time' => $appointment->start_time,
                         'end_time' => $appointment->end_time,
                         'status' => 'confirm',
@@ -238,11 +238,11 @@ class Appointment_Model extends MY_Model {
 
     private function get_attendee_id(Array $attendee)
     {
-        $select = 'id';
+        $select = 'attendee_id';
         $where = Array('email' => $attendee['email']);
         $result = $this->_db_select($this->db_table['attendee'], null, null, $where, null, true);
-        if( isset($result[0]->id) && is_object($result[0]) === TRUE ){
-            return $result[0]->id;
+        if( isset($result[0]->attendee_id) && is_object($result[0]) === TRUE ){
+            return $result[0]->attendee_id;
         }
         return NULL;
     }
@@ -252,11 +252,11 @@ class Appointment_Model extends MY_Model {
      */
     private function get_event_id(String $cs_username, String $event_title)
     {
-        $select = 'id';
+        $select = 'event_id';
         $where = Array('user_cs_username' => strtolower($cs_username), 'title' => ucfirst($event_title));
         $result = $this->_db_select($this->db_table['event'], $select, null, $where, null, true);
-        if( !empty($result) && isset($result[0]->id) ){
-            return $result[0]->id;
+        if( !empty($result) && isset($result[0]->event_id) ){
+            return $result[0]->event_id;
         }
         return NULL;
     }
@@ -295,7 +295,7 @@ class Appointment_Model extends MY_Model {
         $where = Array('user_cs_username' => $cs_username);
         $join = array(
             $this->db_table['availability_user'], 
-            $this->db_table['availability_user'].".availability_slot_id = ".$this->db_table['availability'].".id",
+            $this->db_table['availability_user'].".availability_slot_id = ".$this->db_table['availability'].".availability_id",
             'inner'
         );
         $query = $this->_db_select($this->db_table['availability'], $select, null, $where, $join, true);

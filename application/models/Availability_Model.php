@@ -38,7 +38,7 @@ class Availability_Model extends MY_Model {
      */
     public function check_availability(String $availability_id)
     {
-        $where = Array('id' => $availability_id);
+        $where = Array('availability_id' => $availability_id);
         if( !empty($this->_db_select($this->db_table['availability'], null, null, $where, null, true)) ){
             return TRUE;
         }
@@ -57,7 +57,7 @@ class Availability_Model extends MY_Model {
         //make sure everything has the right format for in the database
         foreach ($availability_array as $availability) {
             //check if availability id is not in database
-            if( $this->check_availability($availability['id']) === FALSE ){
+            if( $this->check_availability($availability['availability_id']) === FALSE ){
                 $availability = $this->format_availability($availability);
 
                 if( $this->_db_insert($this->db_table['availability'], $availability, null, true) === FALSE ){
@@ -68,7 +68,7 @@ class Availability_Model extends MY_Model {
 
                     $inserted_all = false;
                 } else {
-                    $data = Array('user_cs_username' => $cs_username, 'availability_slot_id' => $availability['id']);
+                    $data = Array('user_cs_username' => $cs_username, 'availability_slot_id' => $availability['availability_id']);
                     if( $this->_db_insert($this->db_table['availability_user'], $data, null, true) === FALSE ){
                         //TODO better error handling
                         $error .= "availability is set but couldn't be connected to the user \n";
@@ -96,15 +96,15 @@ class Availability_Model extends MY_Model {
      */
     public function get_availability(String $cs_username, Array $availability_id=NULL, Bool $specific=FALSE)
     {
-        $select = 'id, group_id, class_names, start, end, all_day, specific';
+        $select = 'availability_id, group_id, class_names, start, end, all_day, specific';
         $where = Array('user_cs_username' => $cs_username);
         $join = array(
             $this->db_table['availability_user'], 
-            $this->db_table['availability_user'].".availability_slot_id = ".$this->db_table['availability'].".id",
+            $this->db_table['availability_user'].".availability_slot_id = ".$this->db_table['availability'].".availability_id",
             'inner'
         );
         if( $availability_id !== NULL ){
-            $where['id'] = $availability_id;
+            $where['availability_id'] = $availability_id;
         }
         $query = $this->_db_select($this->db_table['availability'], $select, null, $where, $join, true);
         
@@ -140,10 +140,10 @@ class Availability_Model extends MY_Model {
         //make sure everything has the right format for in the database
         foreach ($availability_array as $availability) {
             //check if availability id is in database
-            if( $this->check_availability($availability['id']) === TRUE ){
+            if( $this->check_availability($availability['availability_id']) === TRUE ){
                 $availability = $this->format_availability($availability);
                 
-                $where = Array('id' => $availability['id']);
+                $where = Array('availability_id' => $availability['availability_id']);
                 if( $this->_db_update($this->db_table['availability'], $availability, $where, true) === FALSE ){
                     $start_date = new DateTime($availability['start']);
                     $end_date = new DateTime($availability['end']);
@@ -178,10 +178,10 @@ class Availability_Model extends MY_Model {
         //make sure everything has the right format for in the database
         foreach ($availability_array as $availability) {
             //check if availability id is in database
-            if( $this->check_availability($availability['id']) === TRUE ){
-                $where = Array('user_cs_username' => $cs_username, 'availability_slot_id' => $availability['id']);
+            if( $this->check_availability($availability['availability_id']) === TRUE ){
+                $where = Array('user_cs_username' => $cs_username, 'availability_slot_id' => $availability['availability_id']);
                 if( $this->_db_delete($this->db_table['availability_user'], $where) === TRUE ){
-                    $where = Array('id' => $availability['id']);
+                    $where = Array('availability_id' => $availability['availability_id']);
                     if( $this->_db_delete($this->db_table['availability'], $where) === FALSE ){
                         $start_date = new DateTime($availability['start']);
                         $end_date = new DateTime($availability['end']);

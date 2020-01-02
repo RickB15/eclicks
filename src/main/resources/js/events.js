@@ -528,7 +528,7 @@ function makeElement(specs, id) {
 
 function fillInFields(callback, form = null, eventId = null) {
     const data = JSON.stringify({ 
-        id: eventId
+        event_id: eventId
     });
 
     $.ajax({
@@ -707,7 +707,7 @@ function formSubmit(form) {
     if (!isEmpty(form.dataset.event) && parseInt(form.dataset.event) !== 0) {
         data = JSON.stringify({
             ...data,
-            id: form.dataset.event
+            event_id: form.dataset.event
         });
     } else {
         data = JSON.stringify({
@@ -743,7 +743,7 @@ function formSubmit(form) {
 
 function onDelete(deleteBtn) {
     const data = JSON.stringify({
-        id: deleteBtn.form.dataset.event
+        event_id: deleteBtn.form.dataset.event
     });
 
     const callback = (function (response) {

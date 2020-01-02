@@ -122,7 +122,7 @@ class Event_Model extends MY_Model {
      */
     public function get_event(String $cs_username, String $eventId, Array $fields=NULL)
     {
-        $where = Array('user_cs_username' => $cs_username, 'id' => $eventId);
+        $where = Array('user_cs_username' => $cs_username, 'event_id' => $eventId);
         $eventObject = $this->_db_select($this->db_table['event'], $fields, null, $where, null, true);
         
         if( !empty($eventObject) && isset($eventObject[0]) ){
@@ -145,8 +145,8 @@ class Event_Model extends MY_Model {
     {
         //object is JSON way, array is normal way
         if( is_object($event) ){
-            $where = Array('user_cs_username' => $cs_username, 'id' => $event->id);
-            unset($event->id);
+            $where = Array('user_cs_username' => $cs_username, 'event_id' => $event->event_id);
+            unset($event->event_id);
 
             $error = '';
             //format values so it will be correctly stored in the database
@@ -198,7 +198,7 @@ class Event_Model extends MY_Model {
 
         } elseif( is_array($event) ){
             //TODO make this functional (normal way)
-            $where = Array('user_cs_username' => $cs_username, 'id' => $event['id']);
+            $where = Array('user_cs_username' => $cs_username, 'event_id' => $event['event_id']);
             if( $this->_db_update($this->db_table['event'], $event, $where, true) === TRUE ){
                 return TRUE;
             }
@@ -213,7 +213,7 @@ class Event_Model extends MY_Model {
     public function delete_event(String $cs_username, String $event_id)
     {
         if( isset($cs_username) && isset($event_id) && !empty($cs_username) && !empty($event_id) ){
-            $where = Array('user_cs_username' => $cs_username, 'id' => $event_id);
+            $where = Array('user_cs_username' => $cs_username, 'event_id' => $event_id);
             if( $this->_db_delete($this->db_table['event'], $where) === TRUE ){
                 return TRUE;
             }

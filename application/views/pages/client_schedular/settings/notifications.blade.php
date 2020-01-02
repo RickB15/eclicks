@@ -5,23 +5,42 @@
 @section('settings-content')
                 <form method="post" action="#" class="form" onsubmit="return false;">
                     <?php
-                        $times = array(lang('direct'), '24 '. lang('hours') . ' ' . lang('in advance'), '10 '. lang('minutes') . ' ' . lang('in advance'));
+                        $times = array('direct', '24', '10');
                         $ways = array('email', 'sms');
                         foreach ($times as $time):
                     ?>
-                    <h5 class="h5"><?= ucfirst($time); ?></h5>                    
+                    <h5 class="h5">
+                    <?php 
+                        if( $time === 'direct' ){
+                            echo ucfirst(lang($time)); 
+                        } else {
+                            echo ucfirst($time.' '.lang('hours').' '.lang('in_advance'));
+                        }
+                    ?>
+                    </h5>                    
                     <?php foreach ($ways as $way): ?>
-                    <div id="<?= $time; ?>" class="form-group mb-4">
+                    <div id="<?= $time.'-'.$way; ?>" class="form-group mb-4">
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <label for="<?= $time.'-'.$way; ?>-select" class="input-group-text"><?= ucfirst(lang($way).' '.lang('template')); ?>:</label>
                             </div>
-                            <select id="<?= $time.'-'.$way; ?>-select" name="<?= $time.'-'.$way; ?>-select" class="custom-select" aria-describedby="<?= $time.'-'.$way; ?>-select">
+                            <select id="<?= $time.'-'.$way; ?>-select" name="<?= $time.'-'.$way; ?>-select" class="custom-select" aria-describedby="<?= $time.'-'.$way; ?>-select" onchange="autoSubmit(this)">
                                 <!-- Generating dynamic value -->
                                 <option selected="true" disabled="true"><?= ucfirst(lang('select_item'));?>...</option>
-                                <?php foreach(${'notification_'.$way} as $value): ?>
-                                    <option value="<?= $value['id']?>"><?= $value['name']?></option>
-                                <?php endforeach; ?>
+                                <?php 
+                                if(isset(${'notification_'.$way})):
+                                    foreach(${'notification_'.$way} as $value): 
+                                        if( !empty($value['id']) ): ?>
+                                            <option value="<?= $value['id']?>" <?php
+                                            if( isset($notifications_settings->{$way.'_'.$time})
+                                            && (int)$notifications_settings->{$way.'_'.$time} === (int)$value['id'] ){
+                                                echo 'selected="true"';
+                                            }
+                                            ?>><?= $value['name']?></option>
+                                    <?php endif;
+                                    endforeach; 
+                                endif;
+                                ?>
                             </select>
                             <div class="input-group-append">
                                 <span id="<?= $time.'-'.$way; ?>-new" class="input-group-text">

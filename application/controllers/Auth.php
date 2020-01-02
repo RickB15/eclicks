@@ -218,7 +218,7 @@ class Auth extends MY_Controller {
 			$password = $this->input->post('password');
 			$language = 'english'; //TODO make dynamic
 
-			//check if user doen't exist
+			//check if user doesn't exist
 			if( $this->Auth_Model->check_register($username) === TRUE ){
 				//set auth variables (corresponding to database fields)
 				$auth = Array(
@@ -246,31 +246,47 @@ class Auth extends MY_Controller {
 					'company_mobile'=> $this->input->post('company_phone'),
 					'gender' 		=> strtolower($this->input->post('gender-man')),
 					'language' 		=> strtolower($language),
-					'username'		=> $auth['username']
+					'auth_username'	=> $auth['username']
 				);
-				//hash user details variables with username as exeption
-				$auth_details = $this->_encode($auth_details, 'username');
+				//hash user details variables with username as exception
+				$auth_details = $this->_encode($auth_details, 'auth_username');
+
+				//set meta data to connect to mybizzmail
+				$bizz_meta = Array(
+					'name' 			=> 'paul', //TODO change this by mybizzmail system
+					'api_key'		=> '61ca5c14e434c6670b93d97d69a59c0e6b835420', //TODO change this by mybizzmail system
+					'group_id'		=> '3048', //TODO change this by mybizzmail system
+					'user_id'		=> '44', //TODO change this by mybizzmail system
+					'auth_username'	=> $auth['username']
+				);
+				//hash metadata variables with username as exception
+				$bizz_meta = $this->_encode($bizz_meta, array('auth_username', 'group_id', 'user_id'));
 
 				//set new user
-				if( $this->Auth_Model->register_auth($auth, $auth_details) === TRUE ){
+				if( $this->Auth_Model->register_auth($auth, $auth_details, $bizz_meta) === TRUE ){
 					//TODO check if auth has payed for client schedular
 					//import models
 					$this->load->model('Settings_Model');
+					$this->load->model('Notifications_Model');
 
 					//create default database items
 					$default_settings = $this->_default_settings();
+					$default_notifications = $this->_default_notifications();
 
 					//set default database items
 					$settings_insert_id = $this->Settings_Model->set_settings($default_settings);
-					if( $settings_insert_id >= 0 ){
+					$notifications_insert_id = $this->Notifications_Model->set_notifications($default_notifications);
+					if( $settings_insert_id >= 0 && $notifications_insert_id >= 0 ){
 						$client_schedular_user = Array(
 							'cs_username'		=> strtolower($this->_decode($auth_details['firstname'])), //TODO let users choose username for client schedular
 							'email'				=> $this->_decode($auth_details['email']), //TODO let users choose email for client schedular
 							'company'			=> null, //TODO make dynamic
 							'settings_id'		=> $settings_insert_id,
+							'notifications_id'	=> $notifications_insert_id,
 							'auth_username'		=> $auth['username']
 						);
-						$client_schedular_user = $this->_encode($client_schedular_user, array('settings_id', 'auth_username'));
+						//encode with exception for settings_id, notifications_id and auth_username
+						$client_schedular_user = $this->_encode($client_schedular_user, array('settings_id', 'notifications_id', 'auth_username'));
 						//TODO encode client_schedular_user
 						if( $this->Auth_Model->register_client_schedular_auth($client_schedular_user) === TRUE ){
 							//redirect to login
@@ -373,6 +389,21 @@ class Auth extends MY_Controller {
 			'appointments_a_day' 		=> 4,
 			'redirect_url'				=> base_url('appointment/appointment_made'),
 			'time_zone'					=> 2
+		);
+	}
+
+	/**
+	 * 
+	 */
+	private function _default_notifications()
+	{
+		return Array(
+			'email_direct' 	=> 5711, //Client Schedular - appointment confirmed NL
+			'email_10' 		=> 5713, //Client Schedular - 24 hours your appointm. eng Default
+			'email_24'		=> 5716, //Client Schedular - 10 min your appointm. eng Default
+			'sms_direct'	=> 0,
+			'sms_10'		=> 0,
+			'sms_24'		=> 0
 		);
 	}
 }

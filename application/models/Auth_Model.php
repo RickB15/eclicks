@@ -33,6 +33,7 @@ class Auth_Model extends User_Model {
         $this->db_table['auth'] = 'auth';
         $this->db_table['auth_details'] = 'auth_details';
         $this->db_table['auth_client_schedular'] = 'user';
+        $this->db_table['bizz_meta'] = 'bizzmail_meta';
 	}
 
     /**
@@ -73,9 +74,9 @@ class Auth_Model extends User_Model {
      * @param auth_details {array} contains the given password from {@auth/register_user}
 	 * @return boolean
 	 */
-	public function register_auth(Array $auth, Array $auth_details)
+	public function register_auth(Array $auth, Array $auth_details, Array $bizz_meta)
 	{
-		if( !empty($auth) && !empty($auth_details) ){
+		if( !empty($auth) && !empty($auth_details) && !empty($bizz_meta) ){
 			$data = Array(
 				'user' =>
 					Array(
@@ -86,6 +87,11 @@ class Auth_Model extends User_Model {
 					Array(
 						'table'	=> $this->db_table['auth_details'],
 						'data'	=> $auth_details
+					),
+				'metadata' =>
+					Array(
+						'table'	=> $this->db_table['bizz_meta'],
+						'data'	=> $bizz_meta
 					)
 			);
 			if( $this->set_new_user($data) === TRUE ){
@@ -159,7 +165,7 @@ class Auth_Model extends User_Model {
 	 */
 	public function auth_bizzmail($username)
 	{
-		return $this->get_bizzmail_details($this->db_table['auth'], $username);
+		return $this->get_bizzmail_details($this->db_table['bizz_meta'], $username);
 	}
 
 	/**
@@ -167,7 +173,7 @@ class Auth_Model extends User_Model {
 	 */
 	public function get_cs_user($username)
 	{
-		$select = 'cs_username, email, settings_id, company';
+		$select = 'cs_username, email, settings_id, notifications_id, company';
 		return $this->get_application_user($this->db_table['auth_client_schedular'], $username, $select);
 	}
 

@@ -7,6 +7,16 @@ $(function(){
         $('#previous-list').toggleClass('hidden');
         $('#icon-previous').toggleClass('fa-plus fa-minus');
     });
+    $('#update_previous_form').submit(function (event) {
+        if (!confirm('Are you sure you want to delete this appointment permanently?') ) {
+            event.preventDefault();
+        }
+    });
+    $('#update_form').submit(function (event) {
+        if (!confirm("Are you sure you want to cancel this appointment? This can't be undone!")) {
+            event.preventDefault();
+        }
+    });
 });
 
 // For the filter search
@@ -25,7 +35,7 @@ function search(input) {
     }
 }
 // Remove content from filter when esc or cross is pressed
-function searchChange(input) {
+function searchChange() {
     var li = document.getElementsByClassName("searchable");
     for (i = 0; i < li.length; i++) {
         li[i].style.display = "";

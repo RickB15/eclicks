@@ -1,12 +1,16 @@
 <?php
 
     // Getting Retaltion ID from Bizzmail
-    function getRelationID($bizz_url, $host_email, $guest_email){
+    function getRelationID($bizz_url, $host_email, $guest_email, $apiKey){
         $fetch_url = $bizz_url."v1/scheduler/relation"."?hostEmail=".$host_email."&guestEmail=".$guest_email;
+        $authorization = 'Authorization: '.$apiKey;
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $fetch_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, 'Content-Type:application/json');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            $authorization,
+            'Content-Type: application/json')
+        );
         // curl_setopt($ch, CURLOPT_POSTFIELDS,$params);
         // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);

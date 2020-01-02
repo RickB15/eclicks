@@ -41,7 +41,7 @@
                                     <?php endif; ?>
                                 </div>
                                 <div class="card-footer text-muted text-right">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#<?= 'edit'; ?>" data-backdrop="static" data-event-id="<?= $event->id ?>">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#<?= 'edit'; ?>" data-backdrop="static" data-event-id="<?= $event->event_id ?>">
                                         <?= ucfirst(lang('edit')); ?>
                                     </button>
                                 </div>

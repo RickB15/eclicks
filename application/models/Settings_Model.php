@@ -53,7 +53,7 @@ class Settings_Model extends MY_Model {
      */
     public function get_settings(String $settings_id, Array $settings=NULL)
     {
-        $where = Array('id' => $settings_id);
+        $where = Array('settings_id' => $settings_id);
         return $this->_db_select($this->db_table['settings'], $settings, null, $where)->row();
     }
 
@@ -74,7 +74,7 @@ class Settings_Model extends MY_Model {
                 return $output['Error'];
             }
         } elseif( isArray($settings) ){
-            $where = Array('id' => $settings_id);
+            $where = Array('settings_id' => $settings_id);
             //TODO make this functional (normal way)
             if( $this->_db_update($this->db_table['settings'], $settings, $where) ){
                 return TRUE;
@@ -109,7 +109,7 @@ class Settings_Model extends MY_Model {
         );
 
         $new_interim = Array('appointment_interim' => $hours.':'.$minutes.':'.'00');
-        $where = Array('id' => $this->settings_id);
+        $where = Array('settings_id' => $this->settings_id);
         if( $this->_db_update($this->db_table['settings'], $new_interim, $where) === TRUE ){
             return TRUE;
         }
@@ -119,10 +119,27 @@ class Settings_Model extends MY_Model {
     /**
      * 
      */
+    private function update_amount(String $setting)
+    {
+        $setting = (int) trim($setting);
+        if( $setting >= 1 && $setting <= 8 ){
+            $new_amount = Array('appointments_a_day' => $setting);
+            $where = Array('settings_id' => $this->settings_id);
+            if( $this->_db_update($this->db_table['settings'], $new_amount, $where) === TRUE ){
+                return TRUE;
+            }
+        }
+        return FALSE;
+    }
+
+    /**
+     * 
+     */
     private function update_redirect(String $setting)
     {
+        //TODO don't show error when redirect is same as in db
         $new_redirect = Array('redirect_url' => (string) trim($setting));
-        $where = Array('id' => $this->settings_id);
+        $where = Array('settings_id' => $this->settings_id);
         if( $this->_db_update($this->db_table['settings'], $new_redirect, $where) === TRUE ){
             return TRUE;
         }
@@ -147,7 +164,7 @@ class Settings_Model extends MY_Model {
             $new_start_times = Array('appointment_start_times' => json_encode($old_start_times));
         }
 
-        $where = Array('id' => $this->settings_id);
+        $where = Array('settings_id' => $this->settings_id);
         if( $this->_db_update($this->db_table['settings'], $new_start_times, $where) === TRUE ){
             return TRUE;
         }
@@ -160,7 +177,7 @@ class Settings_Model extends MY_Model {
     private function update_time_zone(String $setting)
     {
         $new_time_zone = Array('time_zone' => (int) $setting);
-        $where = Array('id' => $this->settings_id);
+        $where = Array('settings_id' => $this->settings_id);
         if( $this->_db_update($this->db_table['settings'], $new_time_zone, $where) === TRUE ){
             return TRUE;
         }

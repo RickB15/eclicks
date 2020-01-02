@@ -58,38 +58,6 @@ const defaultSettings = function() {
                 hour12: false
             }
         ],
-        customButtons: {
-            resetCalendar: {
-                text: globalLang.reset,
-                click: function () {
-                    //TODO !! warning message !! Do you wanna clear?
-                    let events = calendar.getEvents();
-                    let deleteEvents = [];
-                    events.forEach(event => {
-                        event.remove();
-                        deleteEvents.push(event);
-                    });
-                    if (!isEmpty(deleteEvents)) {
-                        updateCalendar('schedular', deleteEvents, 'delete');
-                    }
-                }
-            },
-            resetSpecificCalendar: {
-                text: globalLang.reset,
-                click: function () {
-                    //TODO !! warning message !! Do you wanna clear?
-                    let events = calendarSpecific.getEvents();
-                    let deleteEvents = [];
-                    events.forEach(event => {
-                        event.remove();
-                        deleteEvents.push(event);
-                    });
-                    if (!isEmpty(deleteEvents)) {
-                        updateCalendar('schedular-specific', deleteEvents, 'delete');
-                    }
-                }
-            }
-        },
         eventTimeFormat: {
             hour: '2-digit',
             minute: '2-digit',
@@ -104,7 +72,7 @@ const defaultEvents = function () {
     return {
         select: function (info) {
             const event = this.addEvent({
-                id: ID(),
+                availability_id: ID(),
                 start: info.start,
                 end: info.end,
                 allDay: info.allDay
@@ -217,7 +185,7 @@ const defaultEvents = function () {
 
                         if (exist === false) {
                             let newEvent = {
-                                id: ID(),
+                                availability_id: ID(),
                                 groupId: groupId,
                                 classNames: ['fc-day-group'],
                                 start: newStart,
@@ -264,10 +232,43 @@ function renderCalendar() {
         header: {
             left: '',
             center: '',
-            right: 'resetCalendar'
+            right: 'reset'
         },
         columnHeaderFormat: {
             weekday: 'short'
+        },
+        customButtons: {
+            reset: {
+                text: globalLang.reset,
+                click: function () {
+                    $.confirm({
+                        title: 'Reset recurring availability',
+                        content: 'Are you sure you want to reset all <b>recurring</b> availability?',
+                        buttons: {
+                            confirm: {
+                                btnClass: 'btn-danger',
+                                action: function () {
+                                    let events = calendar.getEvents();
+                                    let deleteEvents = [];
+                                    events.forEach(event => {
+                                        event.remove();
+                                        deleteEvents.push(event);
+                                    });
+                                    if (!isEmpty(deleteEvents)) {
+                                        updateCalendar('schedular', deleteEvents, 'delete');
+                                    }
+                                }
+                            },
+                            cancel: {
+                                btnClass: 'btn-warning',
+                                action: function () {
+
+                                }
+                            }
+                        }
+                    })
+                }
+            }
         },
         events: function (info, successCallback, failureCallback) {
             $.ajax({
@@ -313,7 +314,7 @@ function renderSpecificCalendar() {
             header: {
                 left: 'prev',
                 center: 'title',
-                right: 'resetSpecificCalendar today next'
+                right: 'reset today next'
             },
             footer: {
                 left: 'prev',
@@ -328,6 +329,39 @@ function renderSpecificCalendar() {
             columnHeaderFormat: {
                 weekday: 'short',
                 day: 'numeric'
+            },
+            customButtons: {
+                reset: {
+                    text: globalLang.reset,
+                    click: function () {
+                        $.confirm({
+                            title: 'Reset date-specific availability',
+                            content: 'Are you sure you want to reset all <b>date-specific</b> availability?',
+                            buttons: {
+                                confirm: {
+                                    btnClass: 'btn-danger',
+                                    action: function () {
+                                        let events = calendarSpecific.getEvents();
+                                        let deleteEvents = [];
+                                        events.forEach(event => {
+                                            event.remove();
+                                            deleteEvents.push(event);
+                                        });
+                                        if (!isEmpty(deleteEvents)) {
+                                            updateCalendar('calendar-specific', deleteEvents, 'delete');
+                                        }
+                                    }
+                                },
+                                cancel: {
+                                    btnClass: 'btn-warning',
+                                    action: function () {
+
+                                    }
+                                }
+                            }
+                        })
+                    }
+                }
             },
             validRange: function (nowDate) {
                 return {
@@ -500,7 +534,7 @@ function updateCalendar(calendarId, events, action) {
         for (let index = 0; index < events.length; index++) {
             const event = events[index];
             formatEvents.push({
-                id: event.id,
+                availability_id: event.id,
                 groupId: event.groupId,
                 classNames: event.classNames,
                 start: event.start,
@@ -511,7 +545,7 @@ function updateCalendar(calendarId, events, action) {
         }
     } else {
         formatEvents.push({
-            id: events.id,
+            availability_id: events.id,
             groupId: events.groupId,
             classNames: events.classNames,
             start: events.start,

@@ -236,23 +236,36 @@ class Settings extends MY_Controller {
 	{	
 		//import helpers and models
 		$this->load->model('Auth_Model');
-		$this->load->helper('cURL_helper');
+		$this->load->helper('curl_helper');
+		$this->load->model('Notifications_Model');
 
 		//get data from database
 		$api_key = $this->Auth_Model->auth_bizzmail($this->data['user']->username)->api_key;
+		$pageData['notifications_settings'] = $this->Notifications_Model->get_notifications($this->data['cs_user']->notifications_id);
 
 		// Getting Emails
-		$response = getNotificationEmails(bizz_url(), $api_key);
+		$response = getNotificationEmails(bizz_url(), $this->_decode($api_key));
 		$pageData['notification_email'] = json_decode($response, true);
 
 		// Getting Sms
-		$response = getNotificationSms(bizz_url(), $api_key);
+		$response = getNotificationSms(bizz_url(), $this->_decode($api_key));
 		$pageData['notification_sms'] = json_decode($response, true);
 
 		//set page info
 		$pageInfo['pageName'] = $this->pageName;
 		$pageInfo['segment'] = strtolower(__FUNCTION__);
 
+		//set custom js, css and/or font files
+		$js = Array(
+			'notifications.js' => 'end'
+		);
+		//// $css = array();
+		//// $fonts = array();
+
+		//import custom js, css and/or font files
+		$this->files['js'] = $js;
+		//// $this->files['css'] = $css;
+		//// $this->files['fonts'] = $fonts;
 		////sort
 		
 		//render
@@ -300,6 +313,7 @@ class Settings extends MY_Controller {
 	 */
 	public function json_set_general()
 	{
+		//TODO don't show error when setting is same as in db
 		if( $this->is_ajax() ){
 			$this->load->model('Settings_Model');
 			$input = json_decode($this->input->post('setting'));
@@ -307,9 +321,9 @@ class Settings extends MY_Controller {
 			if( !empty($input) ){
 				$output = $this->Settings_Model->update_settings($this->_decode($this->data['cs_user']->settings_id), $input);
 				if( $output === TRUE ){
-					echo(json_encode(array('id' => $input->id, 'executed' => true)));
+					echo(json_encode(array('id' => $input->settings_id, 'executed' => true)));
 				} else {
-					echo(json_encode(array('id' => $input->id, 'executed' => false, 'error' => $output)));
+					echo(json_encode(array('id' => $input->settings_id, 'executed' => false, 'error' => $output)));
 				}
 			} else {
 				echo(json_encode(NULL));
@@ -438,7 +452,7 @@ class Settings extends MY_Controller {
 			$event = json_decode($this->input->post('event'));
 
 			if( !empty($event) ){
-				$output = $this->Event_Model->get_event($this->data['cs_user']->cs_username, $event->id);
+				$output = $this->Event_Model->get_event($this->data['cs_user']->cs_username, $event->event_id);
 				if( !empty($output) ){
 					echo(json_encode($output));
 				} else {
@@ -464,7 +478,7 @@ class Settings extends MY_Controller {
 			$event = json_decode($this->input->post('event'));
 
 			if( !empty($event) ){
-				if( isset($event->id) ){
+				if( isset($event->event_id) ){
 					echo(json_encode($this->_update_event($event)));
 				} else {
 					$output = $this->Event_Model->set_event($this->data['cs_user']->cs_username, $event);
@@ -492,8 +506,8 @@ class Settings extends MY_Controller {
 			$this->load->model('Event_Model');
 			$event = json_decode($this->input->post('event'));
 
-			if( !empty($event) && isset($event->id) ){
-				$output = $this->Event_Model->delete_event($this->data['cs_user']->cs_username, $event->id);
+			if( !empty($event) && isset($event->event_id) ){
+				$output = $this->Event_Model->delete_event($this->data['cs_user']->cs_username, $event->event_id);
 				if( $output === TRUE ){
 					echo(json_encode(array('executed' => true)));
 				} else {
@@ -511,10 +525,34 @@ class Settings extends MY_Controller {
 	/**
 	 * 
 	 */
+	public function json_update_notification()
+	{
+		if( $this->is_ajax() ){
+			$this->load->model('Notifications_Model');
+			$input = json_decode($this->input->post('setting'));
+
+			if( !empty($input) ){
+				$output = $this->Notifications_Model->update_notification($this->_decode($this->data['cs_user']->notifications_id), $input);
+				if( $output === TRUE ){
+					echo(json_encode(array('id' => $input->notifications_id, 'executed' => true)));
+				} else {
+					echo(json_encode(array('id' => $input->notifications_id, 'executed' => false, 'error' => $output)));
+				}
+			} else {
+				echo(json_encode(NULL));
+			}
+		} else {
+			show_404();
+		}
+	}
+
+	/**
+	 * 
+	 */
 	private function _update_event(Object $event)
 	{
 		$this->load->model('Event_Model');
-		$result = $this->Event_Model->get_event($this->data['cs_user']->cs_username, $event->id);
+		$result = $this->Event_Model->get_event($this->data['cs_user']->cs_username, $event->event_id);
 		if( !empty($result) ){
 			$output = $this->Event_Model->update_event($this->data['cs_user']->cs_username, $event);
 			if( $output === TRUE ){

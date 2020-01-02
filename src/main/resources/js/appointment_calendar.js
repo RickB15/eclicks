@@ -407,6 +407,47 @@ function formSubmit(form) {
     const callback = (function (response) {
         if (!isEmpty(response)) {
             if (response.executed === true) {
+                var api = 'Basic ' + api_key;
+                //Posting value to relation table bizzmail
+                fetch(b_url, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        email: attendeeData.email,
+                        firstname: attendeeData.name,
+                        phonenumber_mobile: attendeeData.phone
+                    }),
+                    headers: {
+                        'Authorization': api,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(function (res) {
+                    return res.json();
+                })
+                .then(function (data) {
+                    guestID = data.id;
+
+                    // Adding the relation in group
+                    fetch(`${global.b_url}group/add/${groupId}`, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            relation: guestID
+                        }),
+                        headers: {
+                            'Authorization': api,
+                            'Content-Type': 'application/json'
+                        }
+                    }).then(function (res) {
+                        return res.json();
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+                //redirect attendee to user redirect url (from general settings)
                 window.location.replace(vanillaCalendar.settings.redirect_url);
             } else {
                 alert(response.error)

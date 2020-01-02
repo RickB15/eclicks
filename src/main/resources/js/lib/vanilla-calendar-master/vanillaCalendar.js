@@ -103,8 +103,8 @@ var vanillaCalendar = {
           document.getElementById('carousel-next').remove()
         }
         _this.clickedInit(this.dataset.calendarDate)
-        //for ajax call
-        _this.datePicked = year + '-' + month + '-' + day;
+        //for ajax call (month + 1 because starts at 0)
+        _this.datePicked = year + '-' + (month+1) + '-' + day;
       })
     }
   },
@@ -376,7 +376,8 @@ var vanillaCalendar = {
     let bodyAfternoon = false;
     let bodyEvening = false;
 
-    let checkDate = clicked.getFullYear() + '-' + clicked.getMonth() + '-' + clicked.getDate();
+    //moth +1 because it starts at 0
+    let checkDate = clicked.getFullYear() + '-' + (clicked.getMonth()+1) + '-' + clicked.getDate();
     
     //remove from time slots if appointments are made
     if (!isEmpty(this.appointments)) {
@@ -411,7 +412,13 @@ var vanillaCalendar = {
             const startTimeSlotHours = parseInt(time.start.split(':')[0]);
             const startTimeSlotMinutes = parseInt(time.start.split(':')[1]);
             const startTimeSlotSeconds = parseInt(time.start.split(':')[2]); //not used
-            const timeSlotStart = startTimeSlotHours + (startTimeSlotMinutes / 60);
+            let timeSlotStart = startTimeSlotHours - interimHours;
+            
+            if (timeSlotStart + interimMinutes >= 60) {
+              timeSlotStart += 1 + ((startTimeSlotMinutes + interimMinutes - 60) / 60)
+            } else {
+              timeSlotStart += (startTimeSlotMinutes / 60) + (interimMinutes / 60)
+            }
 
             const endTimeSlotHours = parseInt(time.end.split(':')[0]);
             const endTimeSlotMinutes = parseInt(time.end.split(':')[1]);

@@ -95,7 +95,7 @@
 <?php
 function createList(Array $activity, $host, $type) {
     ob_start(); ?>
-    <li class="list-group-item flex-column align-items-start searchable collapsed" type="button" data-toggle="collapse" data-target="#details-<?= $activity['id'] ?>" aria-expanded="false" aria-controls="details-<?= $activity['id'] ?>">
+    <li class="list-group-item flex-column align-items-start searchable collapsed" type="button" data-toggle="collapse" data-target="#details-<?= $activity['appointment_id'] ?>" aria-expanded="false" aria-controls="details-<?= $activity['appointment_id'] ?>">
         <div class="row">
             <div class="col-3 col-lg-1 text-center">
                 <span class="fa-stack fa-1x text-center">
@@ -128,20 +128,28 @@ function createList(Array $activity, $host, $type) {
                             echo 'text-success';
                             break;
                         case 'canceled':
-                            echo 'text-muted';
+                            echo 'text-danger';
                             break;
                         default:
-                            echo 'text-danger';
+                            echo 'text-muted';
                             break;
                     }
                 ?>"
                 ><?= ucfirst(lang($activity['status'], false)); ?></small>
             </div>
         </div>
-        <span style="position: absolute; right: 5px; top: 0;"><?= ucfirst('in ' . $activity['from_now'] . ' '.lang('days')) ?></span>
+        <span style="position: absolute; right: 5px; top: 0;">
+            <?php
+                if( isset($activity['from_now']) ){
+                    echo ucfirst($activity['from_now'] . ' ' . lang('days') . ' ' . lang('ago'));
+                } else {
+                    echo ucfirst(lang('in') . ' ' . $activity['until_now'] . ' ' . lang('days'));
+                }
+            ?>
+        </span>
     </li>
 
-    <div id="details-<?= $activity['id'] ?>" class="details collapse" aria-labelledby="heading-<?= $activity['id'] ?>" data-parent="#accordion-<?= $type ?>">
+    <div id="details-<?= $activity['appointment_id'] ?>" class="details collapse" aria-labelledby="heading-<?= $activity['appointment_id'] ?>" data-parent="#accordion-<?= $type ?>">
         <div class="details__content">
             <div class="row">
                 <i class='w-100 text-center'><?= ucfirst(lang('appointment').' '.lang('details')) ?></i>    
@@ -174,10 +182,10 @@ function createList(Array $activity, $host, $type) {
                                     echo 'text-success';
                                     break;
                                 case 'canceled':
-                                    echo 'text-muted';
+                                    echo 'text-danger';
                                     break;
                                 default:
-                                    echo 'text-danger';
+                                    echo 'text-muted';
                                     break;
                             }
                         ?>"><?= ucfirst(lang($activity['status'], false)); ?></span>
@@ -214,9 +222,36 @@ function createList(Array $activity, $host, $type) {
                         <span id="phone"><?= $activity['phone']; ?></span></p>
                 </div>                                            
                 <div class="col-12 text-right">
-                    <button class="btn btn-danger mt-3" role="button">
-                        <?= ucfirst(lang('cancel').' '.lang('appointment')) ?>
-                    </button>
+                    <?php
+                        $id = ($type === 'previous') ? 'update_previous_form' : 'update_form';
+                        $attributes = array('class' => 'form', 'id' => 'update_form');
+                        echo form_open('activities/update_appointment', $attributes);
+
+                        $data = array(
+                            'name' 		=> 'update_appointment',
+                            'id' 		=> 'update_appointment',
+                            'class'		=> 'input hidden',
+                            'type'		=> 'input',
+                            'value'		=> $activity['appointment_id'],
+                            'readonly'	=> 'true'
+                        );
+                        echo form_input($data);
+
+                        $data = array(
+                            'id' 	=> 'submit',
+                            'name' 	=> 'submit',
+                            'class'	=> 'btn btn-danger mt-3',
+                            'type'	=> 'submit',
+                            'role'  => 'button',
+                            'value' => ($type === 'previous') ? 'deleted' : 'canceled'
+                        );
+                        if( $type === 'previous' ){
+                            $content = ucfirst(lang('delete').' '.lang('appointment'));
+                        } else {
+                            $content = ucfirst(lang('cancel').' '.lang('appointment'));
+                        }
+                        echo form_button($data, $content);
+                    ?>
                 </div>
             </div>
         </div>
@@ -229,7 +264,7 @@ function createList(Array $activity, $host, $type) {
                 </div>
                 <div class="col footer-item">
                     <small><?= ucfirst(lang('tracking_id')); ?>:&nbsp;
-                        <span id="tracking-id"><?= $activity['id']; ?></span>
+                        <span id="tracking-id"><?= $activity['appointment_id']; ?></span>
                     </small>
                 </div>
             </div>

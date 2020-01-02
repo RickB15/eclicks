@@ -55,7 +55,13 @@ class User_Model extends MY_Model {
                     break;
                 case 'details':
                     if( $this->set_user_details($array['table'], $array['data']) === FALSE ){
-                        $this->delete_user($array['table'], $array['data']['username']);
+                        $this->delete_user($array['table'], $array['data']['auth_username']);
+                        return FALSE;
+                    }
+                    break;
+                case 'metadata':
+                    if( $this->set_user_metadata($array['table'], $array['data']) === FALSE ){
+                        $this->delete_user($array['table'], $array['data']['auth_username']);
                         return FALSE;
                     }
                     break;
@@ -169,7 +175,7 @@ class User_Model extends MY_Model {
      */
     protected function get_bizzmail_details(String $db_table, String $username)
     {
-        $where = Array('username' => $username);
+        $where = Array('auth_username' => $username);
         $select = 'name, api_key';
         $result = $this->_db_select($db_table, $select, null, $where, null, true);
         if( isset($result[0]) ){
@@ -258,6 +264,23 @@ class User_Model extends MY_Model {
     }
 /*
 | -------------------------------------------------------------------
+|  Set user metadata
+| -------------------------------------------------------------------
+*/
+    /**
+	 * Set new user metadata
+     * @param user_metadata {array} contains the given metadata
+	 * @return boolean
+	 */
+	protected function set_user_metadata(String $db_table, Array $user_metadata)
+	{
+        if( $this->_db_insert($db_table, $user_metadata) ){
+            return TRUE;
+        }
+        return FALSE;
+    }
+/*
+| -------------------------------------------------------------------
 |  Get user details
 | -------------------------------------------------------------------
 */
@@ -266,7 +289,7 @@ class User_Model extends MY_Model {
      */
     protected function get_user_details(String $db_table, String $username)
     {
-        $where = array('username' => $username);
+        $where = array('auth_username' => $username);
         $result = $this->_db_select($db_table, null, null, $where, null, true);
         if( isset($result[0]) && is_object($result[0]) === TRUE ){
             return $result[0];
@@ -283,7 +306,7 @@ class User_Model extends MY_Model {
      */
     protected function update_user_details(String $db_table, String $username, Array $user_details)
     {
-        $where = Array('username' => $username);
+        $where = Array('auth_username' => $username);
         if( $this->_db_update($db_table, $user_details, $where, true) === TRUE ){
             return TRUE;
         }        

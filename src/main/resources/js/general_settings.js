@@ -63,7 +63,7 @@ function autoSubmit(input) {
         value = parseInt(value);
     }
     const data = JSON.stringify({
-        id: input.id,
+        settings_id: input.id,
         value: value,
         fieldId: document.getElementById(input.id).closest('.form-group').id
     });
