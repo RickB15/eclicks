@@ -20,7 +20,7 @@
     }
 
     // Sending Emails to the relations
-    function sendEmail($bizz_url,$targetID,$eventTime,$guestName,$mailApiKey,$mailId){
+    function sendEmail($bizz_url,$targetID,$eventData,$mailApiKey,$mailId){
         $fetch_url = $bizz_url."v1/send/email/".$mailId;
         $authorization = 'Authorization: '.$mailApiKey;
         // echo $authorization."<br>";
@@ -28,10 +28,7 @@
         $data = array(
             'target' => $targetID,
             'type' => 'relation',
-            'events' => array(
-                'eventTime' => $eventTime,
-                'guestName' => $guestName
-            )
+            'events' => $eventData
         );
         $payload = json_encode($data);
         $ch = curl_init();
@@ -51,11 +48,11 @@
         $result = curl_exec($ch);
         curl_close($ch);
 
-        echo $result."<br>";
+        // echo json_encode($result);
     }
 
     // Sending SMS to the relations
-    function sendSMS($bizz_url,$targetID,$eventTime,$smsApiKey,$smsId){
+    function sendSMS($bizz_url,$targetID,$eventData,$smsApiKey,$smsId){
         $fetch_url = $bizz_url."v1/send/sms/".$smsId;
         $authorization = 'Authorization: '.$smsApiKey;
         // echo $authorization."<br>";
@@ -83,7 +80,7 @@
         $result = curl_exec($ch);
         curl_close($ch);
 
-        echo $result."<br>";
+        // echo json_encode($result);
     }
 
     // Getting Overview Details
@@ -194,21 +191,9 @@
     }
 
     // Copying mail if doesn't exist
-    function copyMails($bizz_url,$apiKey){
-        require_once('configMailMeta.php');
-
+    function copyMails($bizz_url, $apiKey, $mails){
         $fetch_url = $bizz_url."v1/scheduler/copyMails";
         $authorization = 'Authorization: '.$apiKey;
-
-        $mails = array(
-            $appointmentConfirmNL,
-            $appointmentConfirmENG,
-            $mail24hr,
-            $mail1hr,
-            $mail10min,
-            $appointmentCancel,
-            $notificationBooking,
-        );
         
         $data = array(
             "mails" => $mails
@@ -229,6 +214,4 @@
         $response = curl_exec($ch);
 
         return $response;
-
     }
-?>

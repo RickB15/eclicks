@@ -93,9 +93,22 @@ defined('EXIT__AUTO_MAX')      OR define('EXIT__AUTO_MAX', 125); // highest auto
 | the images, css, js, fonts, etc.
 |
 */
-defined('IMGPATH')  OR define("IMGPATH", '/src/main/resources/img/');
-defined('JSPATH')   OR define("JSPATH", '/src/main/resources/js/');
-defined('CSSPATH')  OR define("CSSPATH", '/src/main/resources/styles/css/');
-defined('FONTPATH') OR define("FONTPATH", '/src/main/resources/styles/fonts/');
-defined('VENDORPATH') OR define("VENDORPATH", '/src/main/resources/vendor/');
-defined('THEMEPATH') OR define("THEMEPATH", '/src/themes/');
+defined('IMGPATH')      OR define("IMGPATH", '/src/main/resources/img/');
+defined('JSPATH')       OR define("JSPATH", '/src/main/resources/js/');
+defined('CSSPATH')      OR define("CSSPATH", '/src/main/resources/styles/css/');
+defined('FONTPATH')     OR define("FONTPATH", '/src/main/resources/styles/fonts/');
+defined('VENDORPATH')   OR define("VENDORPATH", '/src/main/resources/vendor/');
+defined('THEMEPATH')    OR define("THEMEPATH", '/src/themes/');
+/*
+|--------------------------------------------------------------------------
+| Google API Client
+|--------------------------------------------------------------------------
+|
+| Used for the Google API. It defines the needed data to make a connection
+| to the API
+|
+*/
+defined('CLIENT_API_KEY')       OR define('CLIENT_API_KEY', 'AIzaSyC_Sj4DMosLKK8bZP5EJlzF67Hzt34_3zY');
+defined('CLIENT_ID')            OR define("CLIENT_ID", '467734047893-55b6llqdgmu74h5v39hia5j7jtdfsn5b.apps.googleusercontent.com');
+defined('CLIENT_SECRET')        OR define("CLIENT_SECRET", 'hP8LPgdInxEynq96ibdLPxZO');
+defined('CLIENT_REDIRECT_URL')  OR define("CLIENT_REDIRECT_URL", 'OAuth/api_redirect');

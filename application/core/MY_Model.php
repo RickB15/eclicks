@@ -228,7 +228,13 @@ class MY_Model extends CI_Model {
 							array_push($decoded_where, array_intersect_key((array) $result, array_flip(array_keys($where))));
 						}
 					}
-					$this->db->where($decoded_where[0]);
+					if(!empty($decoded_where)){
+						$this->db->where($decoded_where[0]);
+					} else {
+						//TODO better error
+						echo 'no correct where';
+						die();
+					}
 					unset($decoded_where);
 				}
 				else {
@@ -240,7 +246,7 @@ class MY_Model extends CI_Model {
 				die();
 			}
 		}
-		
+
 		$this->db->update($table, $data);
 		if( $this->db->affected_rows() > 0 ){
 			return TRUE;

@@ -155,18 +155,11 @@ class Appointment_Model extends MY_Model {
     /**
      * 
      */
-    public function get_linked_calendars(String $cs_username) {
-        
-    }
-
-    /**
-     * 
-     */
     public function get_appointments(String $cs_username, String $event_title) {
         $event_id = $this->get_event_id($cs_username, $event_title); //TODO select other than title because now it must be unique..
 
         if( !empty($event_id) ){
-            $select = 'date, start_time, end_time';
+            $select = 'date, start_time, end_time, status';
             $where = Array('event_id' => $event_id);
             $result = $this->_db_select($this->db_table['appointment'], $select, null, $where)->result();
             if( !empty($result) ){
@@ -179,23 +172,67 @@ class Appointment_Model extends MY_Model {
     /**
      * 
      */
-    public function make_appointment(String $cs_username, String $event_title, Object $attendee, Object $appointment) {
+    public function make_appointment(String $cs_username, String $event_title, Object $attendee, Object $appointment, Object $host) {
         $event_id = $this->get_event_id($cs_username, $event_title);
 
         if( !empty($event_id) ){
             if( !empty($attendee) && !empty($appointment) ){
-                $attendee = $this->set_attendee($attendee);
-                if( is_numeric($attendee) ){
+                $attendee_id = $this->set_attendee($attendee);
+                if( is_numeric($attendee_id) ){
                     $data = Array(
                         'date' => (string)$appointment->date,
                         'start_time' => $appointment->start_time,
                         'end_time' => $appointment->end_time,
                         'status' => 'confirm',
                         'event_id' => $event_id,
-                        'attendee_id' => $attendee
+                        'attendee_id' => $attendee_id
                     );
                     $output = $this->_db_insert($this->db_table['appointment'], $data);
-                    if( $output === TRUE ){
+                    if( $output === TRUE ){                        
+		                $this->load->helper('curl_helper');
+                        $appointment_time = $this->get_appointment_time($event_id, $attendee_id);
+                        if( $host->email_available == 1 ){
+                            $response = getRelationID(
+                                bizz_url(),
+                                $this->_decode($host->email),
+                                $this->_decode($attendee->email),
+                                $this->_decode($host->api_key)
+                            );
+
+                            if( !empty($response) ){
+                                $data = json_decode($response, true);
+                                $eventData = array(
+                                    'eventId' => $event_id,
+                                    'name' => $this->_decode($host->name),
+                                    'eventTime' => $appointment_time,
+                                    'guestName' => $this->_decode($attendee->name)
+                                );
+    
+                                //to guest
+                                if( isset($data["guest_id"]) && !empty($data["guest_id"]) ){
+                                    //TODO check if mail has been send
+                                    $send_attendee_mail = sendEmail(
+                                        bizz_url(),
+                                        $data["guest_id"],
+                                        $eventData,
+                                        $this->_decode($host->api_key),
+                                        $host->email_direct
+                                    );
+                                }
+
+                                //to host
+                                if( isset($data["host_id"]) && !empty($data["host_id"]) ){
+                                    //TODO check if mail has been send
+                                    $send_host_mail = sendEmail(
+                                        bizz_url(),
+                                        $data["host_id"],
+                                        $eventData,
+                                        $this->_decode($host->api_key),
+                                        $host->email_host
+                                    );
+                                }
+                            }
+                        }
                         return TRUE;
                     } else {
                         return (Object) Array('Error' => "Appointment not made. Something went wrong");
@@ -225,6 +262,7 @@ class Appointment_Model extends MY_Model {
     private function set_attendee(Object $attendee) {
         $attendee = $this->format_attendee($attendee);
         $attendee_id = $this->get_attendee_id((array) $attendee);
+        //TODO add relation to mybizzmail only now and not always as the case now
         if( $attendee_id === NULL ){
             if( $this->_db_insert($this->db_table['attendee'], (array) $attendee) === TRUE ){
                 return $this->db->insert_id();
@@ -259,6 +297,21 @@ class Appointment_Model extends MY_Model {
             return $result[0]->event_id;
         }
         return NULL;
+    }
+
+    /**
+     * 
+     */
+    private function get_appointment_time(String $event_id, String $attendee_id)
+    {
+        $select = 'date, start_time, end_time';
+        $where = Array('event_id' => $event_id, 'attendee_id' => $attendee_id);
+        $query = $this->_db_select($this->db_table['appointment'], $select, null, $where);
+        //get last item
+        foreach ($query->result() as $result) {
+            $time = $result;
+        }
+        return strtotime($time->date.$time->start_time);
     }
 
     /**

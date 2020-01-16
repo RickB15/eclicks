@@ -34,6 +34,7 @@ class Auth_Model extends User_Model {
         $this->db_table['auth_details'] = 'auth_details';
         $this->db_table['auth_client_schedular'] = 'user';
         $this->db_table['bizz_meta'] = 'bizzmail_meta';
+        $this->db_table['notifications'] = 'notifications';
 	}
 
     /**
@@ -46,8 +47,8 @@ class Auth_Model extends User_Model {
 	{
 		//TODO login by email
 		//if user exist in database
-		if( $this->check_user($this->db_table['auth'], $username) === TRUE ){
-			if( $this->check_password($username, $password) === TRUE ){
+		if( $this->check_user($this->db_table['auth'], strtolower($username)) === TRUE ){
+			if( $this->check_password(strtolower($username), $password) === TRUE ){
 				return TRUE;
 			}
 		}
@@ -62,11 +63,33 @@ class Auth_Model extends User_Model {
 	public function check_register(String $username)
 	{
         //if user exist in database
-		if( $this->check_user($this->db_table['auth'], $username) === FALSE ){
+		if( $this->check_user($this->db_table['auth'], strtolower($username)) === TRUE ){
 			return TRUE;
 		}
 		return FALSE;
 	}
+
+	/**
+	 * Handles if given username doesn't exist yet
+     * @param username {string} contains the given username from {@auth/register_user}
+	 * @return boolean
+	 */
+	public function check_cs_register(String $username)
+	{
+        //if user exist in database
+		if( $this->check_user($this->db_table['auth_client_schedular'], strtolower($username)) === TRUE ){
+			return TRUE;
+		}
+		return FALSE;
+	}
+
+	// /**
+	//  * Handles 
+	//  */
+	// public function get_cs_register(String $username)
+	// {
+	// 	return $this->get_user($this->db_table['auth'], $username);
+	// }
 
 	/**
 	 * Handles the user with details are set to the database
@@ -148,7 +171,7 @@ class Auth_Model extends User_Model {
 	 */
 	public function auth_details($username)
 	{
-		return $this->get_user_details($this->db_table['auth_details'], $username);
+		return $this->get_user_details($this->db_table['auth_details'], strtolower($username));
 	}
 
 	/**
@@ -157,7 +180,7 @@ class Auth_Model extends User_Model {
 	public function auth_settings_id($username)
 	{
 		//TODO error handling if null
-        return $this->get_settings_id($this->db_table['auth_client_schedular'], $username);
+        return $this->get_settings_id($this->db_table['auth_client_schedular'], strtolower($username));
 	}
 
 	/**
@@ -165,7 +188,7 @@ class Auth_Model extends User_Model {
 	 */
 	public function auth_bizzmail($username)
 	{
-		return $this->get_bizzmail_details($this->db_table['bizz_meta'], $username);
+		return $this->get_bizzmail_details($this->db_table['bizz_meta'], strtolower($username));
 	}
 
 	/**
@@ -177,6 +200,34 @@ class Auth_Model extends User_Model {
 		return $this->get_application_user($this->db_table['auth_client_schedular'], $username, $select);
 	}
 
+	/**
+	 * 
+	 */
+	public function get_bizz_meta($username)
+	{
+		$select = 'api_key, group_id, user_id';
+		return $this->get_application_meta($this->db_table['bizz_meta'], $username, $select);
+	}
+
+	/**
+	 * 
+	 */
+	public function get_cs_send_details($username)
+	{
+		$select = 'email, name, api_key, email_direct, email_host, sms_direct, sms_host, email_available, sms_available';		
+        $join = array(
+            array(
+                $this->db_table['bizz_meta'],						
+                $this->db_table['bizz_meta'].'.auth_username = '.$this->db_table['auth_client_schedular'].'.auth_username'
+			),
+			array(
+				$this->db_table['notifications'],
+				$this->db_table['notifications'].'.notifications_id = '.$this->db_table['auth_client_schedular'].'.notifications_id'
+			)
+        );
+		return $this->get_application_send_details($this->db_table['auth_client_schedular'], strtolower($username), $select, $join);
+	}
+
     /**
 	 * Check if give password is the same as database password
      * @param username {string} contains the given username from {@this->check_login}
@@ -186,7 +237,7 @@ class Auth_Model extends User_Model {
 	private function check_password(String $username, String $password)
 	{
 		if( !empty($username) && !empty($password) ){
-            if( $this->check_user_password($this->db_table['auth'], $username, $password) ){
+            if( $this->check_user_password($this->db_table['auth'], strtolower($username), $password) ){
 				return TRUE;
 			}
 		}

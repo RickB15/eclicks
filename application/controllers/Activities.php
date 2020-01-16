@@ -38,7 +38,8 @@ class Activities extends MY_Controller {
 		$this->pageAccess = 'private';
 
 		if( $this->_check_auth() === FALSE ){
-			redirect(base_url('login'));
+			// redirect(base_url('login'));
+			redirect($this->config->item('bizz_url_ui'));
 		}
 	}
 
@@ -50,39 +51,32 @@ class Activities extends MY_Controller {
 	public function index()	
 	{
 		//import helpers and models
-		$this->load->model('Event_Model');
-		$this->load->model("Availability_Model");
 		$this->load->model('Activities_Model');
 
 		//get data from database
 		$activities = $this->Activities_Model->get_activities($this->data['cs_user']->cs_username);
 
-		//set page data
-		//TODO make introduction page
-		if( $this->Event_Model->get_events($this->data['cs_user']->cs_username) === NULL ){
-			$pageData['events_redirect'] = 'settings/events';
-		}
-		if( $this->Availability_Model->get_availability($this->data['cs_user']->cs_username) === NULL ){
-			$pageData['availability_redirect'] = 'settings/availability';
-		}
-
 		if( !empty($activities) ){
 			foreach ($activities as $key => $value) {
-				$date = strtotime($value['date']);
-				$today = strtotime('now');
+				$date = date('d', strtotime($value['date']));
+				$today = date('d', strtotime('now'));
 				$activities[$key]['date'] = date('d/M/Y', strtotime($value['date']));
 				if( $date < $today || $value['status'] === 'canceled' ) {					
 					$pageData['previous_activities'][$key] = $activities[$key];
 					if( $date > $today ){
-						$pageData['previous_activities'][$key]['until_now'] = date('d', $date - $today) + 1; //plus today
+						$pageData['previous_activities'][$key]['until_now'] = $date - $today;
 					} else {
-						$pageData['previous_activities'][$key]['from_now'] = date('d', $today - $date) - 1; //minus today
+						$pageData['previous_activities'][$key]['from_now'] = $today - $date - 1; //minus today
 					}
-					$pageData['previous_activities'][$key]['day'] = date('d', $date);
+					$pageData['previous_activities'][$key]['day'] = $date;
 				} elseif( $value['status'] !== 'deleted' ){
+					if($date === $today){
+						$pageData['upcoming_activities'][$key]['now'] = 'now';
+					} else {
+						$pageData['upcoming_activities'][$key]['until_now'] = $date - $today;
+					}
 					$pageData['upcoming_activities'][$key] = $activities[$key];
-					$pageData['upcoming_activities'][$key]['until_now'] = date('d', $date - $today) + 1; //plus today
-					$pageData['upcoming_activities'][$key]['day'] = date('d', $date);
+					$pageData['upcoming_activities'][$key]['day'] = $date;
 				}
 			}
 		}
@@ -115,6 +109,7 @@ class Activities extends MY_Controller {
 		$status = $this->input->post('submit');
 		if( !empty($appointment_id) && !empty($status) && is_numeric($appointment_id) ){
 			$this->load->model('Activities_Model');
+			var_dump($appointment_id);
 
 			if( $this->Activities_Model->update_status($appointment_id, $status) === TRUE ){
 				redirect(base_url('activities'));

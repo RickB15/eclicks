@@ -25,7 +25,7 @@
                 </div>
                 <?php endif; ?>
             </div>
-        <?php endif; ?>            
+        <?php endif; ?>
             <div class="row">
                 <div class="col justify-content-right">
                     <h2 class="page-title"><?= ucwords(lang($pageName)); ?></h2>
@@ -38,14 +38,14 @@
                                         <i class="fas fa-search fa-1x"></i>
                                     </span>
                                 </button>
-                                <!-- <button id="filter-icon" class="input-group-text btn" onclick="filterOn(this)" title="<?= ucfirst(lang('filter_on_time')); ?>">
-                                    <span class="fiter-icon">
+                                <button id="filter-icon" class="input-group-text btn" onclick="filterOn()" title="<?= ucfirst(lang('filter_on_time')); ?>">
+                                    <span class="filter-icon">
                                         <i class="fas fa-filter"></i>
                                     </span>
                                     <span class="time-icon">
                                         <i class="fas fa-clock"></i>
                                     </span>
-                                </button> -->
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -128,6 +128,7 @@ function createList(Array $activity, $host, $type) {
                             echo 'text-success';
                             break;
                         case 'canceled':
+                        case 'canceled_by_attendee':
                             echo 'text-danger';
                             break;
                         default:
@@ -142,7 +143,9 @@ function createList(Array $activity, $host, $type) {
             <?php
                 if( isset($activity['from_now']) ){
                     echo ucfirst($activity['from_now'] . ' ' . lang('days') . ' ' . lang('ago'));
-                } else {
+                } elseif( isset($activity['now']) ) {
+                    echo ucfirst(lang('today'));
+                } elseif(isset($activity['until_now'])) {
                     echo ucfirst(lang('in') . ' ' . $activity['until_now'] . ' ' . lang('days'));
                 }
             ?>
@@ -182,6 +185,7 @@ function createList(Array $activity, $host, $type) {
                                     echo 'text-success';
                                     break;
                                 case 'canceled':
+                                case 'canceled_by_attendee':
                                     echo 'text-danger';
                                     break;
                                 default:
@@ -224,12 +228,12 @@ function createList(Array $activity, $host, $type) {
                 <div class="col-12 text-right">
                     <?php
                         $id = ($type === 'previous') ? 'update_previous_form' : 'update_form';
-                        $attributes = array('class' => 'form', 'id' => 'update_form');
+                        $attributes = array('class' => 'form', 'id' => 'update_form'.$activity['appointment_id']);
                         echo form_open('activities/update_appointment', $attributes);
 
                         $data = array(
                             'name' 		=> 'update_appointment',
-                            'id' 		=> 'update_appointment',
+                            'id' 		=> 'update_appointment'.$activity['appointment_id'],
                             'class'		=> 'input hidden',
                             'type'		=> 'input',
                             'value'		=> $activity['appointment_id'],
@@ -238,7 +242,7 @@ function createList(Array $activity, $host, $type) {
                         echo form_input($data);
 
                         $data = array(
-                            'id' 	=> 'submit',
+                            'id' 	=> 'submit'.$activity['appointment_id'],
                             'name' 	=> 'submit',
                             'class'	=> 'btn btn-danger mt-3',
                             'type'	=> 'submit',
@@ -259,7 +263,7 @@ function createList(Array $activity, $host, $type) {
             <div class="row">
                 <div class="col footer-item">
                     <small><?= ucfirst(lang('created'));?>:&nbsp;
-                        <span id="date-made"><?= $activity['created']; ?></span>
+                        <span id="date-made"><?= $activity['appointment_created']; ?></span>
                     </small>
                 </div>
                 <div class="col footer-item">

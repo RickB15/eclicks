@@ -37,7 +37,8 @@ class Settings extends MY_Controller {
 		$this->pageAccess = 'private';
 
 		if( $this->_check_auth() === FALSE ){
-			redirect(base_url('login'));
+			// redirect(base_url('login'));
+			redirect($this->config->item('bizz_url_ui'));
 		}
 	}
 
@@ -240,7 +241,7 @@ class Settings extends MY_Controller {
 		$this->load->model('Notifications_Model');
 
 		//get data from database
-		$api_key = $this->Auth_Model->auth_bizzmail($this->data['user']->username)->api_key;
+		$api_key = $this->data['user']->bizz_meta->api_key;
 		$pageData['notifications_settings'] = $this->Notifications_Model->get_notifications($this->data['cs_user']->notifications_id);
 
 		// Getting Emails
@@ -280,9 +281,12 @@ class Settings extends MY_Controller {
 	 */
 	public function associated_calendars()
 	{	
-		////import helpers and models
+		$this->load->model('Associated_Calendar_Model');
 
-		////get data from database
+		$pageData['signIn'] = true;
+		if( $this->_check_session('access_token') === TRUE && !empty($this->Associated_Calendar_Model->get_token($this->data['cs_user']->cs_username)) ){
+			$pageData['signIn'] = false;
+		}
 
 		//set page info
 		$pageInfo['pageName'] = $this->pageName;
@@ -291,7 +295,7 @@ class Settings extends MY_Controller {
 		//set custom js, css and/or font files
 		$js = Array(
 			'associated_calendars.js' => 'end',
-			'lib/google-api/google_calendar.js' => 'end',
+			// 'lib/google-api/google_calendar.js' => 'end',
 			'lib/hello-v2.0.0-4/hello.js' => 'start'
 		);
 		//// $css = array();
@@ -305,7 +309,7 @@ class Settings extends MY_Controller {
 		////sort
 		
 		//render
-		$this->_render($pageInfo);
+		$this->_render($pageInfo, $pageData);
 	}
 
 	/**
@@ -347,6 +351,8 @@ class Settings extends MY_Controller {
 			} else {
 				echo(json_encode(Array()));
 			}
+		} else {
+			show_404();
 		}
 	}
 
@@ -531,7 +537,7 @@ class Settings extends MY_Controller {
 			$this->load->model('Notifications_Model');
 			$input = json_decode($this->input->post('setting'));
 
-			if( !empty($input) ){
+			if( !empty($input) && isset($input->fieldId) && isset($input->value) ){
 				$output = $this->Notifications_Model->update_notification($this->_decode($this->data['cs_user']->notifications_id), $input);
 				if( $output === TRUE ){
 					echo(json_encode(array('id' => $input->notifications_id, 'executed' => true)));
@@ -545,6 +551,40 @@ class Settings extends MY_Controller {
 			show_404();
 		}
 	}
+
+	/**
+	 * 
+	 */
+	// public function json_google_token()
+	// {
+	// 	if( $this->is_ajax() ){
+	// 		$this->load->model('Associated_Calendar_Model');
+	// 		$token = json_decode($this->input->post('user'));
+	// 		$request = json_decode($this->input->post('request'));
+
+	// 		if( !empty($token) && !empty($request) ){
+	// 			if( $request->type === 'update' ){
+	// 				$output = $this->Associated_Calendar_Model->update_token($this->data['cs_user']->cs_username, $token);
+	// 			} elseif( $request->type === 'set' ){
+	// 				$output = $this->Associated_Calendar_Model->set_token($this->data['cs_user']->cs_username, $token);
+	// 			} elseif( $request->type === 'delete' ){
+	// 				$output = $this->Associated_Calendar_Model->delete_token($this->data['cs_user']->cs_username);
+	// 			} else {
+	// 				$output = 'no correct request';
+	// 			}
+				
+	// 			if( $output === TRUE ){
+	// 				echo(json_encode(array('executed' => true)));
+	// 			} else {
+	// 				echo(json_encode(array('executed' => false, 'error' => $output)));
+	// 			}
+	// 		} else {
+	// 			echo(json_encode(NULL));
+	// 		}
+	// 	} else {
+	// 		show_404();
+	// 	}
+	// }
 
 	/**
 	 * 

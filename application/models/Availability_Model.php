@@ -110,6 +110,8 @@ class Availability_Model extends MY_Model {
         
         if( !empty($query) ){
             foreach ($query as $row => $availability) {
+                $query[$row]->id = $query[$row]->availability_id;
+                unset($query[$row]->availability_id);
                 $query[$row] = (Object) $this->format_availability((Array) $availability);
                 //remove date specific availability from query
                 if( $query[$row]->specific !== $specific ){
@@ -142,9 +144,8 @@ class Availability_Model extends MY_Model {
             //check if availability id is in database
             if( $this->check_availability($availability['availability_id']) === TRUE ){
                 $availability = $this->format_availability($availability);
-                
                 $where = Array('availability_id' => $availability['availability_id']);
-                if( $this->_db_update($this->db_table['availability'], $availability, $where, true) === FALSE ){
+                if( $this->_db_update($this->db_table['availability'], $availability, $where) === FALSE ){
                     $start_date = new DateTime($availability['start']);
                     $end_date = new DateTime($availability['end']);
                     $error .= "couldn't update the availability with start time: ".$start_date->format('H:i').
@@ -237,7 +238,7 @@ class Availability_Model extends MY_Model {
                     $availability['groupId'] = $value;
                     unset($availability['group_id']);
                     break;
-                
+                    
                 case 'class_names':     
                     $availability['classNames'] = json_decode($value);
                     unset($availability['class_names']);
@@ -251,7 +252,8 @@ class Availability_Model extends MY_Model {
                     }
                     unset($availability[$key]);
                     break;
-                
+
+
                 case 'specific':
                     //to database format
                     if( $value === FALSE ){

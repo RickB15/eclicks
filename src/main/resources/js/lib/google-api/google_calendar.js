@@ -5,7 +5,7 @@ var CLIENT_ID = '467734047893-55b6llqdgmu74h5v39hia5j7jtdfsn5b.apps.googleuserco
 var API_KEY = 'AIzaSyC_Sj4DMosLKK8bZP5EJlzF67Hzt34_3zY';
 // Authorization scopes required by the API; multiple scopes can be
 // included, separated by spaces.
-var SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+var SCOPES = "https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/calendar.readonly";
 
 function handleClientLoad() {
     // Load the API's client and auth2 modules.
@@ -43,6 +43,7 @@ function initClient() {
         });
         $('#signout_button').click(function () {
             revokeAccess();
+            updateToDatabase(user, 'delete');
         });
     });
 }
@@ -65,9 +66,14 @@ function setSigninStatus(isSignedIn) {
     var user = GoogleAuth.currentUser.get();
     var isAuthorized = user.hasGrantedScopes(SCOPES);
     if (isAuthorized) {
+        if (isSignedIn) {
+            updateToDatabase(user, 'set');
+        } else {
+            updateToDatabase(user, 'update');
+        }
         $('#authorize_button').css('display', 'none');
         $('#signout_button').css('display', 'inline-block');
-        $('#auth-status').html('You are currently signed in and have granted ' +
+        $('#auth-status').html(user.w3.ig + '. You are currently signed in and have granted ' +
             'access to this app.').addClass('text-success').removeClass('text-danger');
     } else {
         $('#authorize_button').css('display', 'inline-block');
@@ -78,44 +84,50 @@ function setSigninStatus(isSignedIn) {
 }
 
 function updateSigninStatus(isSignedIn) {
-    setSigninStatus();
+    setSigninStatus(isSignedIn);
 }
 
-/**
- * Print the summary and start datetime/date of the next ten events in
- * the authorized user's calendar. If no events are found an
- * appropriate message is printed.
- */
-function listUpcomingEvents() {
-    return new Promise(function (resolve, reject) {
-        // some async operation here
-        setTimeout(function () {
-            gapi.client.calendar.events.list({
-                'calendarId': 'primary',
-                'timeMin': (new Date()).toISOString(),
-                'showDeleted': false,
-                'singleEvents': true,
-                'orderBy': 'startTime'
-            }).then(function (response) {
-                var events = response.result.items;
-                var times = {};
-        
-                if (events.length > 0) {
-                    for (i = 0; i < events.length; i++) {
-                        var event = events[i];
-                        var start = event.start.dateTime;
-                        if (!start) {
-                            start = event.start.date;
-                        }
-                        var end = event.end.dateTime;
-                        if (!end) {
-                            end = event.end.date;
-                        }
-                        times[i] = {start: start, end: end};
-                    }
+function updateToDatabase(user, request) {
+    const callback = (function (response) {
+        if (!isEmpty(response)) {
+            if (response.executed === true) {
+                if (request === 'set') {
+                    $.alert({
+                        title: 'logged in',
+                        content: 'you are logged in to ' + user.Zi.idpId
+                    })
+                } else if (request === 'delete') {
+                    $.alert({
+                        title: 'logged out',
+                        content: 'you are logged out'
+                    })
                 }
-                resolve(times);
-            });
-        }, 500);
+            } else {
+                alert(response.error)
+            }
+        }
+    });
+
+    const userData = JSON.stringify({
+        ...user.Zi
+    });
+    const requestData = JSON.stringify({
+        type: request
+    })
+
+    $.ajax({
+        type: 'POST',
+        data: { user: userData, request: requestData },
+        url: base_url + 'settings/json_google_token',
+        dataType: 'json',
+        error: function (xhr, errorType, exception) {
+            if (xhr.status && xhr.status == 400) {
+                alert(xhr.responseText);
+            } else {
+                //TODO better error handling
+                alert(globalLang.something_went_wrong);
+            }
+        },
+        success: callback
     });
 }

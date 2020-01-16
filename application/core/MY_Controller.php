@@ -64,6 +64,12 @@ class MY_Controller extends CI_Controller {
             $this->lang->load('default_lang', $this->data['language']);
             $this->lang->load('error_message_lang', $this->data['language']);
             $this->lang->load('form_validation_lang', $this->data['language']);
+        } elseif( $this->_check_session('lang') === TRUE ){
+            $this->data['language'] = $this->_get_session('lang');
+            $this->lang->load('db_error_messages_lang', $this->data['language']);
+            $this->lang->load('default_lang', $this->data['language']);
+            $this->lang->load('error_message_lang', $this->data['language']);
+            $this->lang->load('form_validation_lang', $this->data['language']);
         } else {
             $this->data['language'] = 'english';
             $this->lang->load('db_error_messages_lang', 'english');
@@ -98,7 +104,8 @@ class MY_Controller extends CI_Controller {
                     if( $this->_check_auth() !== TRUE ){
                     //check if user is loged in
                         //if not » redirect
-                        redirect('login');
+                        // redirect('login');
+                        redirect($this->config->item('bizz_url_ui'));
                     }
                 }
             } elseif( isset($this->pageAccess) ){
@@ -108,7 +115,8 @@ class MY_Controller extends CI_Controller {
                     if( $this->_check_auth() !== TRUE ){
                     //check if user is loged in
                         //if not » redirect
-                        redirect('login');
+                        // redirect('login');
+                        redirect($this->config->item('bizz_url_ui'));
                     }
                 }
             }
@@ -139,10 +147,36 @@ class MY_Controller extends CI_Controller {
             show_404();
         }
 
+        //get bizzmeta if not set
+        if( !isset($pageInfo['api_key']) ){
+            $pageInfo['api_key'] = (!empty($this->data['user']->bizz_meta->api_key))
+                ? $this->_decode($this->data['user']->bizz_meta->api_key)
+                : '0';
+        }
+        if( !isset($pageInfo['group_id']) ){
+            $pageInfo['group_id'] = (!empty($this->data['user']->bizz_meta->group_id))
+                ? $this->data['user']->bizz_meta->group_id
+                : '0';
+        }
+
+        //TODO make introduction page
+        //show warning message if event of availability not set        
+        if(isset($this->data['cs_user'])){
+            $this->load->model('Event_Model');
+            $this->load->model("Availability_Model");
+            if( $this->Event_Model->get_events($this->data['cs_user']->cs_username) === NULL ){
+                $pageData['events_redirect'] = 'settings/events';
+            }
+            if( $this->Availability_Model->get_availability($this->data['cs_user']->cs_username) === NULL ){
+                $pageData['availability_redirect'] = 'settings/availability';
+            }
+        }
+
         //remove user data from view
         unset($this->data['user']);
         if( $this->_check_auth() === TRUE ){
             $this->data['cs_username'] = $this->_decode($this->data['cs_user']->cs_username);
+            $this->data['cs_email'] = $this->_decode($this->data['cs_user']->email);
             unset($this->data['cs_user']);
         }
 

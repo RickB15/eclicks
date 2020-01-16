@@ -49,14 +49,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'Home';
+// $route['default_controller'] = 'Home'; //For if eclicks becomes the default system
+$route['default_controller'] = 'Activities';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = TRUE;
+
+$route['auth/(:any)'] = 'auth/index/$1';
 
 $route['login/(.+)'] = 'auth/login/$1';
 $route['login'] = 'auth/login';
 $route['register'] = 'auth/register';
 $route['logout'] = 'auth/logout';
+$route['logout_user'] = 'auth/logout_user';
 $route['reset_password'] = 'auth/reset_password';
 $route['change-language/(:any)'] = 'auth/change-language/$1';
 
@@ -77,3 +81,5 @@ $route['associated-calendars'] = 'settings/associated-calendars';
 
 $route['privacy_policy'] = 'policies/privacy_policy';
 $route['terms_and_conditions'] = 'conditions/terms_and_conditions';
+
+$route['oauth/get_client/(:any)/(:any)'] = 'oauth/get_client/$1/$2';

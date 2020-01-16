@@ -158,8 +158,46 @@ class User_Model extends MY_Model {
      */
     protected function get_application_user(String $db_table, String $username, String $select)
     {
-        $where = Array('auth_username' => $username);
+        $where = Array('cs_username' => $username);
         $result = $this->_db_select($db_table, $select, null, $where, null, true);
+        if( isset($result[0]) ){
+            if( isset($result[0]->auth_username) ){
+                unset($result[0]->auth_username);
+            }
+            return $result[0];
+        }
+        unset($result);
+        return NULL;
+    }
+
+    /**
+     * 
+     */
+    protected function get_application_meta(String $db_table, String $username, String $select)
+    {
+        $where = Array('cs_username' => $username);
+        $join = array(
+            'user',
+            'user.auth_username = '.$db_table.'.auth_username'
+        );
+		$result = $this->_db_select($db_table, $select, null, $where, $join, true);
+		if( isset($result[0]) ){
+            if( isset($result[0]->auth_username) ){
+                unset($result[0]->auth_username);
+            }
+            return $result[0];
+        }
+        unset($result);
+        return NULL;
+    }
+
+    /**
+     * 
+     */
+    protected function get_application_send_details(String $db_table, String $username, String $select, Array $join)
+    {
+        $where = Array('cs_username' => $username);
+        $result = $this->_db_select($db_table, $select, null, $where, $join, true);
         if( isset($result[0]) ){
             if( isset($result[0]->auth_username) ){
                 unset($result[0]->auth_username);

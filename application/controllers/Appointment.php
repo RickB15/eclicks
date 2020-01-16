@@ -49,6 +49,8 @@ class Appointment extends MY_Controller {
 		if( !empty($username) ){
 			//import helpers and models
 			$this->load->model('Appointment_Model');
+			$this->load->model('Auth_Model');
+
 			if( $this->Appointment_Model->check_user($username) ){
 				//set page info
 				$pageInfo['pageName'] = $this->pageName;
@@ -75,17 +77,32 @@ class Appointment extends MY_Controller {
 					$pageData['event'] = $this->Appointment_Model->get_event($username, preg_replace('~[-_]~', ' ', ucfirst(strtolower($event_title))));
 
 					if( !empty($pageData['event']) ){
+						$bizz_meta = $this->Auth_Model->get_bizz_meta($username);
+
+						if( $this->_check_session('access_token') === FALSE ){
+							redirect(base_url('OAuth/get_client/'.url_title($username).'/'.url_title($event_title,'dash',true)));
+						} else {
+							if( !empty($this->_get_session('access_token')) ){
+								$pageData['calendar'] = $this->_get_session('access_token');
+							}
+						}
+
+						$pageInfo['api_key'] = $this->_decode($bizz_meta->api_key);
+						$pageInfo['group_id'] = $bizz_meta->group_id;
 						$pageInfo['cs_username'] = $username;
 						$pageInfo['cs_duration'] = $pageData['event']->duration;
 						$pageInfo['cs_title'] = $pageData['event']->title;
+						$pageInfo['cs_email'] = $this->_decode($this->Auth_Model->get_cs_user($username)->email);
 
 						//set custom js, css and/or font files
 						$js = Array(
 							'appointment_calendar.js' => 'end',
-							'lib/google-api/google_calendar.js' => 'end',
 							'lib/vanilla-calendar-master/vanillaCalendar.js' => 'end'
 						);
-						$css = array('lib/vanilla-calendar-master/vanillaCalendar.css');
+						$css = array(
+							'lib/vanilla-calendar-master/vanillaCalendar.css',
+							'lib/css-loader/css-loader.min.css'
+						);
 						//// $fonts = array();
 				
 						//import custom js, css and/or font files
@@ -288,7 +305,11 @@ class Appointment extends MY_Controller {
 			if( !empty($username) && !empty($event_title) ){
 				$username = preg_replace('~[-_]~', ' ', ucfirst(strtolower($username)));
 				$event_title = preg_replace('~[-_]~', ' ', ucfirst(strtolower($event_title)));
+
 				$this->load->model('Appointment_Model');
+				$this->load->model('Auth_Model');
+
+				$host = $this->Auth_Model->get_cs_send_details($username);
 				$attendee = json_decode($this->input->post('attendee'));
 				$appointment = json_decode($this->input->post('appointment'));
 
@@ -297,7 +318,7 @@ class Appointment extends MY_Controller {
 				$this->session->set_flashdata('appointment', $appointment);
 	
 				if( !empty($attendee) && !empty($appointment) ){
-					$output = $this->Appointment_Model->make_appointment($username, $event_title, $attendee, $appointment);
+					$output = $this->Appointment_Model->make_appointment($username, $event_title, $attendee, $appointment, $host);
 					if( isset($output->Error) ){
 						echo(json_encode(array('executed' => false, 'error' => $output->Error)));	
 					} elseif( $output === TRUE ){

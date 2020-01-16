@@ -88,13 +88,14 @@ class Activities_Model extends MY_Model {
 
 	public function update_status(String $appointment_id, String $status)
 	{
-		if( $status === 'confirm' || $status === 'confirmed' || $status === 'canceled' || $status === 'deleted' ){
-			$where = Array('appointment_id' => $appointment_id);
-			$data = Array('status' => $status);
-			if( $this->_db_update($this->db_table['appointment'], $data, $where) === TRUE ){
-				return TRUE;
-			}
-		}
+		var_dump($appointment_id);
+		// if( $status === 'confirm' || $status === 'confirmed' || $status === 'canceled' || $status === 'deleted' ){
+		// 	$where = Array('appointment_id' => $appointment_id);
+		// 	$data = Array('status' => $status);
+		// 	if( $this->_db_update($this->db_table['appointment'], $data, $where) === TRUE ){
+		// 		return TRUE;
+		// 	}
+		// }
 		return FALSE;
 	}
 }

@@ -38,7 +38,8 @@ class Share extends MY_Controller {
 		$this->pageAccess = 'private';
 
 		if( $this->_check_auth() === FALSE ){
-			redirect(base_url('login'));
+			// redirect(base_url('login'));
+			redirect($this->config->item('bizz_url_ui'));
 		}
 	}
 

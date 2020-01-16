@@ -32,18 +32,28 @@
     <link type="image/png" rel="icon" href="<?= IMGPATH ?>favicons/favicon.png" />
 
     <noscript>Sorry, your browser does not support JavaScript!</noscript>
+    
+    <!-- Eclicks JS -->
+    <script  type="application/javascript" src="<?= JSPATH ?>core.js"></script>
+    <script  type="application/javascript" src="<?= JSPATH ?>config.js"></script>
 
     <!-- ** SET GLOBAL JS BASE URL ** -->
     <script>
         //TODO make const global.variable throughout all files in config.js
-        const api_key = '<?php echo "61ca5c14e434c6670b93d97d69a59c0e6b835420"; //TODO make dynamic ?>';
-        const groupId = '<?php echo "3048"; //TODO make dynamic ?>';
+        const api_key = '<?php echo $api_key; ?>';
+        const groupId = '<?php echo $group_id; ?>';
         const base_url = '<?php echo base_url(); ?>';
         const locale = '<?php echo $language; ?>';
+        <?php if( isset($calendar) && !empty($calendar) ): ?>
+            global.calendar.accessToken = '<?php echo $calendar['access_token']; ?>';
+            global.calendar.token_type = '<?php echo $calendar['token_type']; ?>';
+            global.calendar.expire = '<?php echo $calendar['created'] - $calendar['expires_in']; ?>';
+        <?php endif; ?>
         <?php 
         if( isset($pageName) && isset($segment) && ($pageName === 'appointment_planner' || $pageName === 'share & publish') && $segment === 'index'):
-            if( isset($cs_username) ): ?>
+            if( isset($cs_username) && isset($cs_email) ): ?>
                 const cs_username = '<?php echo url_title($cs_username); ?>';
+                const cs_email = '<?php echo $cs_email; ?>';
         <?php
             endif;
             if( isset($cs_duration) && isset($cs_title) ): ?>
@@ -54,57 +64,69 @@
         endif;
         ?>
         const globalLang = {
-           january: '<?php echo lang('january'); ?>',
-           febuary: '<?php echo lang('febuary'); ?>',
-           march: '<?php echo lang('march'); ?>',
-           april: '<?php echo lang('april'); ?>',
-           may: '<?php echo lang('may'); ?>',
-           june: '<?php echo lang('june'); ?>',
-           july: '<?php echo lang('july'); ?>',
-           august: '<?php echo lang('august'); ?>',
-           september: '<?php echo lang('september'); ?>',
-           october: '<?php echo lang('october'); ?>',
-           november: '<?php echo lang('november'); ?>',
-           december: '<?php echo lang('december'); ?>',
-           something_went_wrong: '<?php echo lang('error_something_went_wrong'); ?>',
-           edit: '<?php echo lang('edit_'); ?>',
-           availability: '<?php echo lang('availability'); ?>',
-           delete: '<?php echo lang('delete'); ?>',
-           cancel: '<?php echo lang('cancel'); ?>',
-           duplicate: '<?php echo lang('duplicate'); ?>',
-           reset: '<?php echo lang('reset'); ?>',
-           all: '<?php echo lang('all'); ?>',
-           make: '<?php echo lang('make'); ?>',
-           an: '<?php echo lang('an'); ?>',
-           event: '<?php echo lang('event'); ?>',
-           save_changes: '<?php echo lang('save_changes'); ?>',
-           required: '<?php echo lang('required'); ?>',
-           hours: '<?php echo lang('hours'); ?>',
-           minutes: '<?php echo lang('minutes'); ?>',
-           seconds: '<?php echo lang('seconds'); ?>',
-           hour: '<?php echo lang('hour'); ?>',
-           minute: '<?php echo lang('minute'); ?>',
-           second: '<?php echo lang('second'); ?>',
-           title: '<?php echo lang('title'); ?>',
-           duration: '<?php echo lang('duration'); ?>',
-           description: '<?php echo lang('description'); ?>',
-           enter_an_hour: '<?php echo lang('enter_an_hour'); ?>',
-           enter_a_minute: '<?php echo lang('enter_a_minute'); ?>',
-           ok: '<?php echo lang('ok'); ?>',
-           morning: '<?php echo lang('morning'); ?>',
            afternoon: '<?php echo lang('afternoon'); ?>',
-           evening: '<?php echo lang('evening'); ?>',
-           at: '<?php echo lang('at'); ?>',
-           next: '<?php echo lang('next'); ?>',
-           previous: '<?php echo lang('previous_'); ?>',
-           no_times_available: '<?php echo lang('no_times_available'); ?>',
-           name: '<?php echo lang('name'); ?>',
-           email: '<?php echo lang('email'); ?>',
-           phone: '<?php echo lang('phone'); ?>',
-           click_me: '<?php echo lang('click_me'); ?>',
+           all: '<?php echo lang('all'); ?>',
+           an: '<?php echo lang('an'); ?>',
            appointment: '<?php echo lang('appointment'); ?>',
+           april: '<?php echo lang('april'); ?>',
+           are_you_sure: '<?php echo lang('are_you_sure'); ?>',
+           at: '<?php echo lang('at'); ?>',
+           august: '<?php echo lang('august'); ?>',
+           availability: '<?php echo lang('availability'); ?>',
+           cancel: '<?php echo lang('cancel'); ?>',
+           click_me: '<?php echo lang('click_me'); ?>',
+           confirm: '<?php echo lang('confirm_'); ?>',
+           date_specific: '<?php echo lang('date_specific'); ?>',
+           december: '<?php echo lang('december'); ?>',
+           delete: '<?php echo lang('delete'); ?>',
+           description: '<?php echo lang('description'); ?>',
+           duplicate: '<?php echo lang('duplicate'); ?>',
+           duplicate_following_day: '<?php echo lang('duplicate_following_day'); ?>',
+           duration: '<?php echo lang('duration'); ?>',
+           edit: '<?php echo lang('edit_'); ?>',
+           email: '<?php echo lang('email'); ?>',
+           enter_a_minute: '<?php echo lang('enter_a_minute'); ?>',
+           enter_an_hour: '<?php echo lang('enter_an_hour'); ?>',
+           evening: '<?php echo lang('evening'); ?>',
+           event: '<?php echo lang('event'); ?>',
+           febuary: '<?php echo lang('febuary'); ?>',
+           field_correct: '<?php echo lang('field_correct'); ?>',
+           field_error: '<?php echo lang('field_error'); ?>',
+           hour: '<?php echo lang('hour'); ?>',
+           hours: '<?php echo lang('hours'); ?>',
+           january: '<?php echo lang('january'); ?>',
+           july: '<?php echo lang('july'); ?>',
+           june: '<?php echo lang('june'); ?>',
+           make: '<?php echo lang('make'); ?>',
+           march: '<?php echo lang('march'); ?>',
+           may: '<?php echo lang('may'); ?>',
+           minute: '<?php echo lang('minute'); ?>',
+           minutes: '<?php echo lang('minutes'); ?>',
+           morning: '<?php echo lang('morning'); ?>',
+           name: '<?php echo lang('name'); ?>',
+           next: '<?php echo lang('next'); ?>',
+           no_times_available: '<?php echo lang('no_times_available'); ?>',
+           november: '<?php echo lang('november'); ?>',
+           october: '<?php echo lang('october'); ?>',
+           ok: '<?php echo lang('ok'); ?>',
+           phone: '<?php echo lang('phone'); ?>',
+           previous: '<?php echo lang('previous_'); ?>',
+           recurring: '<?php echo lang('recurring'); ?>',
+           required: '<?php echo lang('required'); ?>',
+           reset: '<?php echo lang('reset'); ?>',
+           reset_all: '<?php echo lang('reset_all'); ?>',
+           save_changes: '<?php echo lang('save_changes'); ?>',
+           second: '<?php echo lang('second'); ?>',
+           seconds: '<?php echo lang('seconds'); ?>',
+           september: '<?php echo lang('september'); ?>',
+           set: '<?php echo lang('set'); ?>',
            sign_in: '<?php echo lang('sign_in'); ?>',
-           sign_out: '<?php echo lang('sign_out'); ?>'
+           sign_out: '<?php echo lang('sign_out'); ?>',
+           something_went_wrong: '<?php echo lang('error_something_went_wrong'); ?>',
+           succeeded: '<?php echo lang('succeeded'); ?>',
+           the: '<?php echo lang('the'); ?>',
+           title: '<?php echo lang('title'); ?>',
+           update: '<?php echo lang('update'); ?>'
         };
     </script>
 
@@ -135,10 +157,6 @@
     <script type="application/javascript" src="<?= JSPATH ?>lib/moment-2.24.0/moment.js"></script>
     <script type="application/javascript" src="<?= JSPATH ?>lib/moment-2.24.0/moment-locales.js"></script>
     <script type="application/javascript" src="<?= JSPATH ?>lib/moment-2.24.0/moment-timezone-with-data.js"></script>
-
-    <!-- Eclicks JS -->
-    <script  type="application/javascript" src="<?= JSPATH ?>core.js"></script>
-    <script  type="application/javascript" src="<?= JSPATH ?>config.js"></script>
 
     <!-- ** THEME ASSETS ** -->
 @if( isset($appName) && strtolower($appName) === 'eclicks' && isset($path) && strtolower($path) !== 'auth' && strtolower($path) !== 'policies' && strtolower($path) !== 'conditions')

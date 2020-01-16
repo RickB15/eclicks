@@ -41,3 +41,34 @@ function searchChange() {
         li[i].style.display = "";
     }
 }
+
+
+// Filter on date or on appointment made date
+function filterOn() {
+    var sort_by_name = function (a, b) {
+        return a.innerHTML.toLowerCase().localeCompare(b.innerHTML.toLowerCase());
+    }
+
+    var listUpcoming = $("#accordion-upcoming > .list-group-item").get();
+    var listUpcomingDetails = $("#accordion-upcoming > .details").get();
+    listUpcoming.sort(sort_by_name);
+    for (var i = 0; i < listUpcoming.length; i++) {
+        listUpcoming[i].parentNode.appendChild(listUpcoming[i]);
+        //add correct details to element
+        for (var y = 0; y < listUpcomingDetails.length; y++)
+        if ($(listUpcoming[i]).attr('aria-controls') === $(listUpcomingDetails[y]).attr('id') ){
+            listUpcoming[i].parentNode.appendChild(listUpcomingDetails[y]);
+        }
+    }
+    var listPrevious = $("#accordion-previous > .list-group-item").get();
+    var listPreviousDetails = $("#accordion-previous > .details").get();
+    listPrevious.sort(sort_by_name);
+    for (var i = 0; i < listPrevious.length; i++) {
+        listPrevious[i].parentNode.appendChild(listPrevious[i]);
+        //add correct details to element
+        for (var y = 0; y < listPreviousDetails.length; y++)
+        if ($(listPrevious[i]).attr('aria-controls') === $(listPreviousDetails[y]).attr('id')) {
+            listPrevious[i].parentNode.appendChild(listPreviousDetails[y]);
+        }
+    }
+}

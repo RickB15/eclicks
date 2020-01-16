@@ -37,15 +37,15 @@ class Cron extends CI_Controller {
     public function updateMail()
     {            
         // is_cli_request() is provided by default input library of codeigniter
-        // if($this->input->is_cli_request())
-        // {
+        if($this->input->is_cli_request())
+        {
             //send email
             $this->Cron_Model->send_email();
-        // }
-        // else
-        // {
-        //     show_404();
-        // }
+        }
+        else
+        {
+            show_404();
+        }
     }
 
     /**

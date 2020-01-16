@@ -3,6 +3,8 @@
 @section('title', ucwords(lang('calendar')))
 
 @section('content')
+        <!-- Loader -->
+        <div id="loader" class="loader loader-default"></div>
         <div class="container">
             <div class="row justify-content-center">
             <pre id="content" style="white-space: pre-wrap;"></pre>
@@ -32,12 +34,12 @@
                                             <div class="row">
                                                 <div class="col">
                                                     <h5>
+                                                        <span id="summary"><?= ucfirst(lang('appointment') . ': ') . $event->title; ?></span>
                                                         <?php
-                                                            echo ucfirst(lang('appointment') . ': ') . $event->title;
                                                             if( !empty($event->description) ):
                                                         ?>
-                                                            <span class="d-inline-block" tabindex="0" data-toggle="popover"
-                                                                title="<?= ucfirst('description:'); ?>"
+                                                            <span id="description" class="d-inline-block" tabindex="0" data-toggle="popover"
+                                                                title="<?= ucfirst(lang('description'). ':'); ?>"
                                                                 data-content="<?= $event->description; ?>"
                                                                 data-trigger="focus"
                                                                 data-placement="bottom"
@@ -129,11 +131,4 @@
                 </div>
             </div>
         </div>
-@endsection
-
-@section('script')
-<script async defer src="https://apis.google.com/js/api.js"
-    onload="this.onload=function(){};handleClientLoad()"
-    onreadystatechange="if (this.readyState === 'complete') this.onload()">
-</script>
 @endsection

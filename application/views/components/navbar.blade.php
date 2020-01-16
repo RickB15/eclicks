@@ -66,21 +66,26 @@
 @else
                         <li class="nav-item">
 @endif
-                            <a class="nav-link" href="<?= base_url('activities'); ?>"><?php echo ucwords(lang('activities')); ?></a>
+                            <a class="nav-link" href="<?= base_url('activities'); ?>"><?= ucwords(lang('activities')); ?></a>
                         </li>
 @if(isset($pageName) && $pageName === 'settings' )
                         <li class="nav-item active">
 @else
                         <li class="nav-item">
 @endif
-                            <a class="nav-link" href="<?= base_url('settings'); ?>"><?php echo ucwords(lang('settings')); ?></a>
+                            <a class="nav-link" href="<?= base_url('settings'); ?>"><?= ucwords(lang('settings')); ?></a>
                         </li>
 @if(isset($pageName) && $pageName === 'share & publish' )
                         <li class="nav-item active">
 @else
                         <li class="nav-item">
 @endif
-                            <a class="nav-link" href="<?= base_url('share'); ?>"><?php echo ucwords(lang('share_publish')); ?></a>
+                            <a class="nav-link" href="<?= base_url('share'); ?>"><?= ucwords(lang('share_publish')); ?></a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?= base_url('logout_user'); ?>"><?= ucwords(lang('logout')); ?></a>
                         </li>
                     </ul>
                 </div>

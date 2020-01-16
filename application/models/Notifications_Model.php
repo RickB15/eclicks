@@ -66,7 +66,7 @@ class Notifications_Model extends MY_Model {
         $this->notifications_id = $notifications_id;
         //object is JSON way, array is normal way
         if( is_object($notifications) ){
-            $function_name = 'update_'.preg_replace('/\d/', '', str_replace('-', '_', $notifications->fieldId));
+            $function_name = 'update_'.str_replace('-', '_', $notifications->fieldId);
             $output = $this->$function_name($notifications->value);
             if( $output === TRUE ){
                 return TRUE;
@@ -123,6 +123,18 @@ class Notifications_Model extends MY_Model {
     /**
      * 
      */
+    private function update_cancel_email(String $notification)
+    {
+        $data = Array('email_cancel' => $notification);
+        $where = Array('notifications_id' => $this->notifications_id);
+        if( $this->_db_update($this->db_table['notifications'], $data, $where) === TRUE ){
+            return TRUE;
+        }
+    }
+
+    /**
+     * 
+     */
     private function update_direct_sms(String $notification)
     {
         $data = Array('sms_direct' => $notification);
@@ -150,6 +162,42 @@ class Notifications_Model extends MY_Model {
     private function update_10_sms(String $notification)
     {
         $data = Array('sms_10' => $notification);
+        $where = Array('notifications_id' => $this->notifications_id);
+        if( $this->_db_update($this->db_table['notifications'], $data, $where) === TRUE ){
+            return TRUE;
+        }
+    }
+
+    /**
+     * 
+     */
+    private function update_cancel_sms(String $notification)
+    {
+        $data = Array('sms_cancel' => $notification);
+        $where = Array('notifications_id' => $this->notifications_id);
+        if( $this->_db_update($this->db_table['notifications'], $data, $where) === TRUE ){
+            return TRUE;
+        }
+    }
+
+    /**
+     * 
+     */
+    private function update_email_available(String $notification)
+    {
+        $data = Array('email_available' => $notification);
+        $where = Array('notifications_id' => $this->notifications_id);
+        if( $this->_db_update($this->db_table['notifications'], $data, $where) === TRUE ){
+            return TRUE;
+        }
+    }
+
+    /**
+     * 
+     */
+    private function update_sms_available(String $notification)
+    {
+        $data = Array('sms_available' => $notification);
         $where = Array('notifications_id' => $this->notifications_id);
         if( $this->_db_update($this->db_table['notifications'], $data, $where) === TRUE ){
             return TRUE;

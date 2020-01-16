@@ -22,6 +22,7 @@ var vanillaCalendar = {
   },
 
   clickedInit: function (date) {
+    document.getElementById('loader').classList.add('is-active');
     const _this = this;
     this.createTimes()
     this.setAppointments(function(response){
@@ -363,199 +364,32 @@ var vanillaCalendar = {
   },
 
   createTimeButtons: function(clickedDate) {
-    const _this = this;
-    const today = new Date();
-    const clicked = new Date(clickedDate);
-    const max = parseInt(this.settings.appointments_a_day);
-    let maxCount = 0;
-
+    let _this = this;
     let timeSlots = this.setTimeSlots();
-    let create = false;
-    //check if body is filled. Otherwise remove body
-    let bodyMorning = false;
-    let bodyAfternoon = false;
-    let bodyEvening = false;
-
-    //moth +1 because it starts at 0
-    let checkDate = clicked.getFullYear() + '-' + (clicked.getMonth()+1) + '-' + clicked.getDate();
     
     //remove from time slots if appointments are made
     if (!isEmpty(this.appointments)) {
-      const interimHours = parseInt(this.settings.appointment_interim.split(':')[0]);
-      const interimMinutes = parseInt(this.settings.appointment_interim.split(':')[1]);
-      const interimSeconds = parseInt(this.settings.appointment_interim.split(':')[2]); //not used
-      for (let index = 0; index < this.appointments.length; index++) {
-        const appointment = this.appointments[index];
-        if (checkDate === appointment.date) {
-          maxCount++;
-          if (maxCount > max) {
-            this.noTimeMessage();
-          }
-          //!!!!!!!!!!!!!!!!!!!!TODO use moment and change all times!!!!!!!!!!!!!!!!!!!!
-          const startTimeHours = parseInt(appointment.start_time.split(':')[0]);
-          const startTimeMinutes = parseInt(appointment.start_time.split(':')[1]);
-          const startTimeSeconds = parseInt(appointment.start_time.split(':')[2]); //not used
-          const appointmentStart = startTimeHours + (startTimeMinutes / 60);
-          
-          const endTimeHours = parseInt(appointment.end_time.split(':')[0]);
-          const endTimeMinutes = parseInt(appointment.end_time.split(':')[1]);
-          const endTimeSeconds = parseInt(appointment.end_time.split(':')[2]); //not used
-          let appointmentEnd = endTimeHours + interimHours;
-
-          if (endTimeMinutes + interimMinutes >= 60) {
-            appointmentEnd += 1 + ((endTimeMinutes + interimMinutes - 60) / 60) 
-          } else {
-            appointmentEnd += (endTimeMinutes / 60) + (interimMinutes / 60)
-          }
-
-          for (const [key, time] of Object.entries(timeSlots)) {
-            const startTimeSlotHours = parseInt(time.start.split(':')[0]);
-            const startTimeSlotMinutes = parseInt(time.start.split(':')[1]);
-            const startTimeSlotSeconds = parseInt(time.start.split(':')[2]); //not used
-            let timeSlotStart = startTimeSlotHours - interimHours;
-            
-            if (timeSlotStart + interimMinutes >= 60) {
-              timeSlotStart += 1 + ((startTimeSlotMinutes + interimMinutes - 60) / 60)
-            } else {
-              timeSlotStart += (startTimeSlotMinutes / 60) + (interimMinutes / 60)
-            }
-
-            const endTimeSlotHours = parseInt(time.end.split(':')[0]);
-            const endTimeSlotMinutes = parseInt(time.end.split(':')[1]);
-            const endTimeSlotSeconds = parseInt(time.end.split(':')[2]); //not used
-            const timeSlotEnd = endTimeSlotHours + (endTimeSlotMinutes / 60);
-
-            if (appointmentStart <= timeSlotStart && appointmentEnd >= timeSlotEnd) {
-              delete timeSlots[key]
-            }
-          }
-        }
-      }
+      timeSlots = checkAppointments(clickedDate, timeSlots, this.appointments)
     }
 
-//TODO add calendar events
-    // listUpcomingEvents().then(function (dates) {
-      // const checkDate = moment(clicked.toISOString()).utc().format('YYYY-MM-DD');
-      let timeZone = leftPad(_this.settings.time_zone, 2) + ':00';
-      if (parseInt(_this.settings.time_zone) < 0) {
-        timeZone = '-' + timeZone;
-      } else {
-        timeZone = '+' + timeZone;
+    //remove slot from timeslot if in calendar slots
+    if (!isEmpty(global.calendar.accessToken)) {
+      checkCalendar(function(response){
+        timeSlots = response
+        if (!isEmpty(timeSlots)) {
+          _this.renderTimeSlots(clickedDate, timeSlots.filter(Boolean))
+        }
+      }, clickedDate, timeSlots)
+    } else {
+      //render timeslots
+      if( !isEmpty(timeSlots) ){
+        this.renderTimeSlots(clickedDate, timeSlots.filter(Boolean))
       }
-      if (maxCount <= max) {
-        timeSlots.forEach(time => {
-          // for (const [key, value] of Object.entries(dates)) {
-          //   const startDate = moment(value.start).format('YYYY-MM-DD');
-          //   const endDate = moment(value.start).format('YYYY-MM-DD');
-          //   if (moment(checkDate).isBetween(startDate, endDate) 
-          //   || moment(checkDate).isSame(startDate)
-          //   || moment(checkDate).isSame(endDate)) {
-          //     console.log(value)
-          //     const startTime = moment(value.start).format('HH:mm:ss');
-          //     const endTime = moment(value.end).format('HH:mm:ss');
-          //     console.log(startTime)
-          //     console.log(endTime)
-          //     console.log(time)
-          //   }
-          // }
-          let timeButton = document.createElement("BUTTON");
-          let innerStart = time.start.split(':')[0] + ':' + time.start.split(':')[1];
-          let innerEnd = time.end.split(':')[0] + ':' + time.end.split(':')[1];
-          const checkTime = parseFloat(parseInt(time.start.split(':')[0]) + parseFloat(time.start.split(':')[1] / 60));
-
-          setAttributes(timeButton, {
-            class: 'btn btn-outline-dark'
-          });
-
-          timeButton.addEventListener('click', function () {
-            if (isEmpty(document.getElementById('carousel-next'))) {
-              _this.createNextButton()
-            }
-            let focusedButtons = document.querySelectorAll('.btn-focused');
-            if (!isEmpty(focusedButtons)) {
-              [].forEach.call(focusedButtons, function (button) {
-                button.classList.remove("btn-focused");
-              });
-            }
-            this.classList.add('btn-focused');
-            let picked = document.querySelectorAll(
-              '[data-calendar-label="picked-time"]'
-            )[0];
-            picked.innerHTML = ' ' + globalLang.at + ' ' + innerStart + ' - ' + innerEnd;
-            //for ajax call
-            _this.startTime = time.start + ':00';
-            _this.endTime = time.end + ':00';
-          });
-
-          timeButton.innerHTML = innerStart + ' - ' + innerEnd;
-
-          if (checkTime > today.getHours() + 4 && new Date(clickedDate).getDate() === today.getDate()) {
-            create = true;
-          } else if (new Date(clickedDate).getDate() !== today.getDate()) {
-            create = true;
-          }
-
-          if (create === true) {
-            if (checkTime < 12) {
-              document.getElementById('body-morning').appendChild(timeButton);
-              bodyMorning = true;
-            } else if (checkTime >= 12 && checkTime < 17) {
-              document.getElementById('body-afternoon').appendChild(timeButton);
-              bodyAfternoon = true;
-            } else {
-              document.getElementById('body-evening').appendChild(timeButton);
-              bodyEvening = true;
-            }
-          }
-        });
-
-        if (bodyMorning === false) {
-          if (!isEmpty(document.getElementById('collapse-morning'))) {
-            if (document.getElementById('collapse-morning').classList.contains('show')) {
-              //make sure an other collapse is shown if this collapse has no times
-              if (bodyAfternoon !== false) {
-                document.getElementById('collapse-afternoon').classList.add('show');
-              } else if (bodyEvening !== false) {
-                document.getElementById('collapse-evening').classList.add('show');
-              }
-            }
-            document.getElementById('morning').remove();
-          }
-        }
-        if (bodyAfternoon === false) {
-          if (!isEmpty(document.getElementById('collapse-afternoon'))) {
-            if (document.getElementById('collapse-afternoon').classList.contains('show')) {
-              //make sure an other collapse is shown if this collapse has no times
-              if (bodyMorning !== false) {
-                document.getElementById('collapse-morning').classList.add('show');
-              } else if (bodyEvening !== false) {
-                document.getElementById('collapse-evening').classList.add('show');
-              }
-            }
-            document.getElementById('afternoon').remove();
-          }
-        }
-        if (bodyEvening === false) {
-          if (!isEmpty(document.getElementById('collapse-evening'))) {
-            if (document.getElementById('collapse-evening').classList.contains('show')) {
-              //make sure an other collapse is shown if this collapse has no times
-              if (bodyMorning !== false) {
-                document.getElementById('collapse-morning').classList.add('show');
-              } else if (bodyAfternoon !== false) {
-                document.getElementById('collapse-afternoon').classList.add('show');
-              }
-            }
-            document.getElementById('evening').remove();
-          }
-        }
-        if (bodyMorning === false && bodyAfternoon === false && bodyEvening === false) {
-          _this.noTimeMessage();
-        }
-      }
-      document.getElementById('vcal-times-box').classList.remove('hidden');
-      document.getElementById('vcal-times').classList.remove('hidden');
-    // })
+    }
     
+    document.getElementById('vcal-times-box').classList.remove('hidden');
+    document.getElementById('vcal-times').classList.remove('hidden');
+    document.getElementById('loader').classList.remove('is-active');
   },
 
   createNextButton: function () {
@@ -696,7 +530,7 @@ var vanillaCalendar = {
 
         for (let time = start; time + duration <= end; time += duration) {
           timeStartHours = parseInt(Math.floor(time));
-          timeStartMinutes = parseInt(Math.ceil((time % 1) * 60));
+          timeStartMinutes = parseInt(Math.floor((time % 1) * 60));
           if (timeStartMinutes >= 60) {
             timeStartMinutes = timeStartMinutes - 60;
             timeStartHours++;
@@ -752,5 +586,262 @@ var vanillaCalendar = {
       document.getElementById('vcal-times-box').classList.remove('hidden');
       document.getElementById('vcal-times').classList.remove('hidden');
     }
+  },
+
+  renderTimeSlots: function (clickedDate, timeSlots) {
+    const today = new Date();
+    const _this = this;
+    const max = parseInt(this.settings.appointments_a_day);
+    let maxCount = 0;
+    let create = false;
+    //check if body is filled. Otherwise remove body
+    let bodyMorning = false;
+    let bodyAfternoon = false;
+    let bodyEvening = false;
+
+    let timeZone = leftPad(this.settings.time_zone, 2) + ':00';
+    if (parseInt(this.settings.time_zone) < 0) {
+      timeZone = '-' + timeZone;
+    } else {
+      timeZone = '+' + timeZone;
+    }
+    if (maxCount <= max) {
+      timeSlots.forEach(time => {
+        maxCount++;
+        let timeButton = document.createElement("BUTTON");
+        let innerStart = time.start.split(':')[0] + ':' + time.start.split(':')[1];
+        let innerEnd = time.end.split(':')[0] + ':' + time.end.split(':')[1];
+        const checkTime = parseFloat(parseInt(time.start.split(':')[0]) + parseFloat(time.start.split(':')[1] / 60));
+
+        setAttributes(timeButton, {
+          class: 'btn btn-outline-dark'
+        });
+
+        timeButton.addEventListener('click', function () {
+          if (isEmpty(document.getElementById('carousel-next'))) {
+            _this.createNextButton()
+          }
+          let focusedButtons = document.querySelectorAll('.btn-focused');
+          if (!isEmpty(focusedButtons)) {
+            [].forEach.call(focusedButtons, function (button) {
+              button.classList.remove("btn-focused");
+            });
+          }
+          this.classList.add('btn-focused');
+          let picked = document.querySelectorAll(
+            '[data-calendar-label="picked-time"]'
+          )[0];
+          picked.innerHTML = ' ' + globalLang.at + ' ' + innerStart + ' - ' + innerEnd;
+          //for ajax call
+          _this.startTime = time.start + ':00';
+          _this.endTime = time.end + ':00';
+        });
+
+        timeButton.innerHTML = innerStart + ' - ' + innerEnd;
+
+        if (checkTime > today.getHours() + 4 && new Date(clickedDate).getDate() === today.getDate()) {
+          create = true;
+        } else if (new Date(clickedDate).getDate() !== today.getDate()) {
+          create = true;
+        }
+
+        if (create === true) {
+          if (checkTime < 12) {
+            document.getElementById('body-morning').appendChild(timeButton);
+            bodyMorning = true;
+          } else if (checkTime >= 12 && checkTime < 17) {
+            document.getElementById('body-afternoon').appendChild(timeButton);
+            bodyAfternoon = true;
+          } else {
+            document.getElementById('body-evening').appendChild(timeButton);
+            bodyEvening = true;
+          }
+        }
+      });
+
+      if (bodyMorning === false) {
+        if (!isEmpty(document.getElementById('collapse-morning'))) {
+          if (document.getElementById('collapse-morning').classList.contains('show')) {
+            //make sure an other collapse is shown if this collapse has no times
+            if (bodyAfternoon !== false) {
+              document.getElementById('collapse-afternoon').classList.add('show');
+            } else if (bodyEvening !== false) {
+              document.getElementById('collapse-evening').classList.add('show');
+            }
+          }
+          document.getElementById('morning').remove();
+        }
+      }
+      if (bodyAfternoon === false) {
+        if (!isEmpty(document.getElementById('collapse-afternoon'))) {
+          if (document.getElementById('collapse-afternoon').classList.contains('show')) {
+            //make sure an other collapse is shown if this collapse has no times
+            if (bodyMorning !== false) {
+              document.getElementById('collapse-morning').classList.add('show');
+            } else if (bodyEvening !== false) {
+              document.getElementById('collapse-evening').classList.add('show');
+            }
+          }
+          document.getElementById('afternoon').remove();
+        }
+      }
+      if (bodyEvening === false) {
+        if (!isEmpty(document.getElementById('collapse-evening'))) {
+          if (document.getElementById('collapse-evening').classList.contains('show')) {
+            //make sure an other collapse is shown if this collapse has no times
+            if (bodyMorning !== false) {
+              document.getElementById('collapse-morning').classList.add('show');
+            } else if (bodyAfternoon !== false) {
+              document.getElementById('collapse-afternoon').classList.add('show');
+            }
+          }
+          document.getElementById('evening').remove();
+        }
+      }
+      if (bodyMorning === false && bodyAfternoon === false && bodyEvening === false) {
+        this.noTimeMessage();
+      }
+    }
   }
+}
+
+function setCookie(cname, cvalue, exdays) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+  var expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/googleapi.php/";
+}
+
+function checkAppointments(clickedDate, timeSlots, appointments)
+{
+  const interimHours = parseInt(vanillaCalendar.settings.appointment_interim.split(':')[0]);
+  const interimMinutes = parseInt(vanillaCalendar.settings.appointment_interim.split(':')[1]);
+  const interimSeconds = parseInt(vanillaCalendar.settings.appointment_interim.split(':')[2]); //not used
+
+  const clicked = new Date(clickedDate);
+  const max = parseInt(vanillaCalendar.settings.appointments_a_day);
+  let maxCount = 0;
+  //moth +1 because it starts at 0
+  let checkDate = clicked.getFullYear() + '-' + leftPad((clicked.getMonth() + 1), 2) + '-' + clicked.getDate();
+
+  for (let index = 0; index < appointments.length; index++) {
+    const appointment = appointments[index];
+    if (checkDate === appointment.date) {
+      maxCount++;
+      if (maxCount > max) {
+        vanillaCalendar.noTimeMessage();
+        return false;
+      }
+      if (appointment.status !== 'canceled' && appointment.status !== 'deleted'){
+        //!!!!!!!!!!!!!!!!!!!!TODO use moment and change all times!!!!!!!!!!!!!!!!!!!!
+        const startTimeHours = parseInt(appointment.start_time.split(':')[0]);
+        const startTimeMinutes = parseInt(appointment.start_time.split(':')[1]);
+        const startTimeSeconds = parseInt(appointment.start_time.split(':')[2]); //not used
+        const appointmentStart = startTimeHours + (startTimeMinutes / 60);
+
+        const endTimeHours = parseInt(appointment.end_time.split(':')[0]);
+        const endTimeMinutes = parseInt(appointment.end_time.split(':')[1]);
+        const endTimeSeconds = parseInt(appointment.end_time.split(':')[2]); //not used
+        let appointmentEnd = endTimeHours + interimHours;
+
+        if (endTimeMinutes + interimMinutes >= 60) {
+          appointmentEnd += 1 + ((endTimeMinutes + interimMinutes - 60) / 60)
+        } else {
+          appointmentEnd += (endTimeMinutes / 60) + (interimMinutes / 60)
+        }
+
+        timeSlots = deleteTimeSlot(timeSlots, appointmentStart, appointmentEnd)
+      }
+    }
+  }
+  return timeSlots
+}
+
+function checkCalendar(callback, clickedDate, timeSlots)
+{
+  var token_type = global.calendar.token_type + " " + global.calendar.accessToken;
+
+  var queryStart = new Date(clickedDate);
+  queryStart.setHours(6, 0, 0, 0);
+
+  var queryEnd = new Date(clickedDate);
+  queryEnd.setHours(22, 0, 0, 0);
+
+  var queryString = '?timeMin=' + queryStart.toISOString() + '&timeMax=' + queryEnd.toISOString();
+  var url = "https://www.googleapis.com/calendar/v3/calendars/primary/events" + queryString;
+  setCookie('google_calender_access_tocken', token_type, 1);
+
+  $.ajax({
+    type: 'GET',
+    url: url,
+    beforeSend: function (xhr) {
+      xhr.setRequestHeader("Authorization", token_type);
+    },
+    error: function (xhr, errorType, exception) {
+      if (xhr.status && xhr.status == 400) {
+        alert(xhr.responseText);
+      } else {
+        //TODO better error handling
+        alert(globalLang.something_went_wrong);
+      }
+    },
+    success: function (response) {
+      if (!isEmpty(response)) {
+        response.items.map(value => {
+          if (!isEmpty(value.start) && !isEmpty(value.end)) {
+            if (!isEmpty(value.start.date)) {
+              calendarStartItem = moment(value.start.date).utc().toObject()
+            } else {
+              calendarStartItem = moment(value.start.dateTime).utc(value.start.timeZone).toObject()
+            }
+            if (!isEmpty(value.end.date)) {
+              calendarEndItem = moment(value.end.date).utc().toObject()
+            } else {
+              calendarEndItem = moment(value.end.dateTime).utc(value.end.timeZone).toObject()
+            }
+
+            calendarStart = calendarStartItem.hours + (calendarStartItem.minutes / 60)
+            calendarEnd = calendarEndItem.hours + (calendarEndItem.minutes / 60)
+
+            timeSlots = deleteTimeSlot(timeSlots, calendarStart, calendarEnd)
+          }
+        });
+      }
+      callback(timeSlots)
+    }
+  })
+}
+
+function deleteTimeSlot(timeSlots, itemStart, itemEnd) {
+  const interimHours = parseInt(vanillaCalendar.settings.appointment_interim.split(':')[0]);
+  const interimMinutes = parseInt(vanillaCalendar.settings.appointment_interim.split(':')[1]);
+  const interimSeconds = parseInt(vanillaCalendar.settings.appointment_interim.split(':')[2]); //not used
+
+  //place interim before item
+  itemStartHours = parseInt(Math.floor(itemStart));
+  itemStartMinutes = parseInt(Math.floor((itemStart % 1) * 60));
+  if (itemStartMinutes - interimMinutes <= 0) {
+    itemStart = itemStartHours - interimHours - ((itemStartMinutes - interimMinutes + 60) / 60)
+  } else {
+    itemStart = itemStartHours - interimHours + ((itemStartMinutes - interimMinutes) / 60)
+  }
+
+  for (const [key, time] of Object.entries(timeSlots)) {
+    const startTimeSlotHours = parseInt(time.start.split(':')[0]);
+    const startTimeSlotMinutes = parseInt(time.start.split(':')[1]);
+    const startTimeSlotSeconds = parseInt(time.start.split(':')[2]); //not used
+    let timeSlotStart = startTimeSlotHours + (startTimeSlotMinutes / 60);
+
+    const endTimeSlotHours = parseInt(time.end.split(':')[0]);
+    const endTimeSlotMinutes = parseInt(time.end.split(':')[1]);
+    const endTimeSlotSeconds = parseInt(time.end.split(':')[2]); //not used
+    const timeSlotEnd = endTimeSlotHours + (endTimeSlotMinutes / 60);
+
+    if (itemStart >= timeSlotStart && itemStart <= timeSlotEnd
+      || itemEnd >= timeSlotStart && itemEnd <= timeSlotEnd
+      || itemStart <= timeSlotStart && itemEnd >= timeSlotEnd) {
+      delete timeSlots[key]
+    }
+  }
+  return timeSlots;
 }

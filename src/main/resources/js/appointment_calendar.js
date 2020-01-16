@@ -407,45 +407,59 @@ function formSubmit(form) {
     const callback = (function (response) {
         if (!isEmpty(response)) {
             if (response.executed === true) {
-                var api = 'Basic ' + api_key;
-                //Posting value to relation table bizzmail
-                fetch(b_url, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        email: attendeeData.email,
-                        firstname: attendeeData.name,
-                        phonenumber_mobile: attendeeData.phone
-                    }),
-                    headers: {
-                        'Authorization': api,
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(function (res) {
-                    return res.json();
-                })
-                .then(function (data) {
-                    guestID = data.id;
-
-                    // Adding the relation in group
-                    fetch(`${global.b_url}group/add/${groupId}`, {
-                        method: 'POST',
-                        body: JSON.stringify({
-                            relation: guestID
-                        }),
-                        headers: {
-                            'Authorization': api,
-                            'Content-Type': 'application/json'
+                if (!isEmpty(global.calendar.token_type)
+                && !isEmpty(global.calendar.accessToken) ){
+                    //send to google calendar
+                    var token_type = global.calendar.token_type + " " + global.calendar.accessToken;
+    
+                    var start = new Date(vanillaCalendar.datePicked + ' ' + vanillaCalendar.startTime);
+                    var end = new Date(vanillaCalendar.datePicked + ' ' + vanillaCalendar.endTime);
+                    var summary = document.getElementById('summary').innerText;
+                    var description = (!isEmpty(document.getElementById('description'))) ? document.getElementById('description').dataset.content : '';
+    
+                    var url = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
+                    var calendarData = JSON.stringify({
+                        "summary": summary,
+                        "description": description,
+                        "start": {
+                            "dateTime": start.toISOString()
+                        },
+                        "end": {
+                            "dateTime": end.toISOString()
+                        },
+                        "attendees": [
+                            {
+                                "email": inputData.email,
+                                "name": inputData.name,
+                                "phone": inputData.phone,
+                            }
+                        ],
+                        "host": cs_email
+                    })
+    
+                    $.ajax({
+                        type: 'POST',
+                        url: url,
+                        data: calendarData,
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("Authorization", token_type);
+                            xhr.setRequestHeader("Content-Type", 'application/json');
+                        },
+                        error: function (xhr, errorType, exception) {
+                            if (xhr.status && xhr.status == 400) {
+                                alert(xhr.responseText);
+                            } else {
+                                //TODO better error handling
+                                alert(globalLang.something_went_wrong);
+                            }
+                        },
+                        success: function (response) {
+                            if (!isEmpty(response)) {
+                                alert('add to google account');
+                            }
                         }
-                    }).then(function (res) {
-                        return res.json();
-                    }).catch(function (error) {
-                        console.log(error);
-                    });
-                })
-                .catch(function (error) {
-                    console.log(error);
-                });
+                    })
+                }
 
                 //redirect attendee to user redirect url (from general settings)
                 window.location.replace(vanillaCalendar.settings.redirect_url);
@@ -454,6 +468,48 @@ function formSubmit(form) {
             }
         }
     });
+
+    if(groupId != 0){
+        var api = 'Basic ' + api_key;
+        //Posting value to relation table bizzmail
+        fetch(b_url, {
+            method: 'POST',
+            body: JSON.stringify({
+                email: inputData.email,
+                firstname: inputData.name,
+                phonenumber_mobile: inputData.phone
+            }),
+            headers: {
+                'Authorization': api,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(function (res) {
+            return res.json();
+        })
+        .then(function (data) {
+            guestID = data.id;
+
+            // Adding the relation in group
+            fetch(`${global.b_url}group/add/${groupId}`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    relation: guestID
+                }),
+                headers: {
+                    'Authorization': api,
+                    'Content-Type': 'application/json'
+                }
+            }).then(function (res) {
+                return res.json();
+            }).catch(function (error) {
+                console.log(error);
+            });
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
 
     $.ajax({
         type: 'POST',

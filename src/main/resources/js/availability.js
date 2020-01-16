@@ -72,7 +72,7 @@ const defaultEvents = function () {
     return {
         select: function (info) {
             const event = this.addEvent({
-                availability_id: ID(),
+                id: ID(),
                 start: info.start,
                 end: info.end,
                 allDay: info.allDay
@@ -185,7 +185,7 @@ const defaultEvents = function () {
 
                         if (exist === false) {
                             let newEvent = {
-                                availability_id: ID(),
+                                id: ID(),
                                 groupId: groupId,
                                 classNames: ['fc-day-group'],
                                 start: newStart,
@@ -242,10 +242,11 @@ function renderCalendar() {
                 text: globalLang.reset,
                 click: function () {
                     $.confirm({
-                        title: 'Reset recurring availability',
-                        content: 'Are you sure you want to reset all <b>recurring</b> availability?',
+                        title: toFirstUpperCase(globalLang.reset) + ' <b>' + globalLang.recurring + '</b> ' + globalLang.availability,
+                        content: toFirstUpperCase(globalLang.are_you_sure) + ' ' + globalLang.reset_all + ' <b>' + globalLang.recurring + '</b> ' + globalLang.availability + '?',
                         buttons: {
                             confirm: {
+                                text: toFirstUpperCase(globalLang.confirm),
                                 btnClass: 'btn-danger',
                                 action: function () {
                                     let events = calendar.getEvents();
@@ -260,6 +261,7 @@ function renderCalendar() {
                                 }
                             },
                             cancel: {
+                                text: toFirstUpperCase(globalLang.cancel),
                                 btnClass: 'btn-warning',
                                 action: function () {
 
@@ -335,10 +337,11 @@ function renderSpecificCalendar() {
                     text: globalLang.reset,
                     click: function () {
                         $.confirm({
-                            title: 'Reset date-specific availability',
-                            content: 'Are you sure you want to reset all <b>date-specific</b> availability?',
+                            title: toFirstUpperCase(globalLang.reset) + ' <b>' + globalLang.date_specific + '</b> ' + globalLang.availability,
+                            content: toFirstUpperCase(globalLang.are_you_sure) + ' ' + globalLang.reset_all + ' <b>' + globalLang.date_specific + '</b> ' + globalLang.availability + '?',
                             buttons: {
                                 confirm: {
+                                    text: toFirstUpperCase(globalLang.confirm),
                                     btnClass: 'btn-danger',
                                     action: function () {
                                         let events = calendarSpecific.getEvents();
@@ -353,6 +356,7 @@ function renderSpecificCalendar() {
                                     }
                                 },
                                 cancel: {
+                                    text: toFirstUpperCase(globalLang.cancel),
                                     btnClass: 'btn-warning',
                                     action: function () {
 
@@ -408,6 +412,8 @@ function makeModal(info, maxAmount) {
         let amount = document.createElement("INPUT");
         let inputGroupAppend = document.createElement("DIV");
         let buttonDuplicate = document.createElement("BUTTON");
+        let amountInfo = document.createElement("SMALL");
+    let formGroup = document.createElement("DIV");
     let modalFooter = document.createElement("DIV");
         let buttonDelete = document.createElement("BUTTON");
         let buttonCancel = document.createElement("BUTTON");
@@ -467,6 +473,13 @@ function makeModal(info, maxAmount) {
             type: 'button',
             class: 'btn btn-primary'
         });
+        setAttributes(amountInfo, {
+            id: 'amountHelp',
+            class: 'form-text text-muted'
+        })
+    setAttributes(formGroup, {
+        class: 'form-group'
+    })
     setAttributes(modalFooter, {
         id:   'modal-footer',
         class: 'modal-footer'
@@ -485,6 +498,7 @@ function makeModal(info, maxAmount) {
     modalTitle.innerHTML = toFirstUpperCase(globalLang.edit) + ' ' + globalLang.availability;
     closeIcon.innerHTML = '&times;';
     buttonDuplicate.innerHTML = toFirstUpperCase(globalLang.duplicate);
+    amountInfo.innerHTML = toFirstUpperCase(globalLang.duplicate_following_day);
     buttonDelete.innerHTML = toFirstUpperCase(globalLang.delete);
     buttonCancel.innerHTML = toFirstUpperCase(globalLang.cancel);
 
@@ -496,7 +510,11 @@ function makeModal(info, maxAmount) {
     inputGroupAppend.appendChild(buttonDuplicate);
     inputGroup.appendChild(amount);
     inputGroup.appendChild(inputGroupAppend);
-    modalBody.appendChild(inputGroup);
+
+    formGroup.appendChild(inputGroup);
+    formGroup.appendChild(amountInfo);
+
+    modalBody.appendChild(formGroup);
 
     modalFooter.appendChild(buttonDelete);
     modalFooter.appendChild(buttonCancel);
@@ -561,8 +579,12 @@ function updateCalendar(calendarId, events, action) {
 
     const callback = (function (response) {
         if (!isEmpty(response)) {
-            //TODO better feedback
-            console.log(response);
+            if (isEmpty(document.getElementsByClassName('jconfirm')) ){
+                $.alert({
+                    title: toFirstUpperCase((isEmpty(globalLang[action])) ? action : globalLang[action]) + ' ' + globalLang.availability,
+                    content: toFirstUpperCase((isEmpty(globalLang[action])) ? action : globalLang[action]) + ' ' + globalLang.availability + ' ' + globalLang.succeeded + '.'
+                })
+            }
         }
     });
 
@@ -582,3 +604,11 @@ function updateCalendar(calendarId, events, action) {
         success: callback
     });
 }
+
+//jQuery
+$(function () {
+    $('[data-toggle="popover"]').popover()
+    $('.popover-dismiss').popover({
+        trigger: 'focus'
+    })
+})
